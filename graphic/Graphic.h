@@ -26,6 +26,20 @@ public:
   void start();
 
   Graphic ( );
+private:
+  bool _initialize(HWND renderHwnd);
+  void _shutdown();
+  void _sendKill();
+
+  bool _createDeviceSwapChain(HWND renderHwnd);
+
+private:
+  ID3D11Device*           _device;
+  ID3D11DeviceContext*    _immediateContext;
+  IDXGISwapChain*         _swapChain;
+
+  int	_sizeX;
+  int	_sizeY;
 };
 
 }
