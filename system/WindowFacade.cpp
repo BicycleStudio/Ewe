@@ -232,6 +232,8 @@ void window_facade::WindowFacade::_sendHwnd() {
     command_manager::ID::WINDOW_FACADE, command_manager::ID::GRAPHIC,
     command_manager::CommandType::INITIALIZE);
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hwnd);
+  hwndToGraphic.args[1] = _width;
+  hwndToGraphic.args[2] = _height;
   _send(hwndToGraphic);
 
   command_manager::Command hwndToIO = command_manager::Command(
@@ -261,6 +263,8 @@ void window_facade::WindowFacade::pp_sendKill() {
   _send(cmd);
 }
 void window_facade::WindowFacade::pp_sendResize(int width, int height) {
+  _width = width;
+  _height = height;
   command_manager::Command commandResize = command_manager::Command(
     command_manager::ID::WINDOW_FACADE,
     command_manager::ID::GRAPHIC,

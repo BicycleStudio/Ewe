@@ -27,19 +27,28 @@ public:
 
   Graphic ( );
 private:
-  bool _initialize(HWND renderHwnd);
+  bool _initialize(HWND renderHwnd, int, int);
   void _shutdown();
   void _sendKill();
 
   bool _createDeviceSwapChain(HWND renderHwnd);
+  bool _createRTV();
+  bool _resize(int sizeX, int sizeY);
+  bool _resizeRecreate(int sizeX, int sizeY);
+  void _clearContext();
 
 private:
   ID3D11Device*           _device;
   ID3D11DeviceContext*    _immediateContext;
   IDXGISwapChain*         _swapChain;
+  ID3D11RenderTargetView* _renderTargetView;
+  ID3D11Texture2D*				_backBuffer;
+  ID3D11DepthStencilView* _depthStencilView;
+  ID3D11Texture2D*        _depthStencil;
 
   int	_sizeX;
   int	_sizeY;
+  bool _initialized;
 };
 
 }

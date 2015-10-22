@@ -8,6 +8,8 @@ using std::cout;
 static const int graphicSleep = 100;
 // need for correct use dx in big sizes
 static const int veryBigSize = 2000;
+// What you think about this macros? :)
+#define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 
 command_manager::ID graphic::Graphic::id() {
   return command_manager::ID::GRAPHIC;
@@ -17,6 +19,13 @@ graphic::Graphic::Graphic ( ) {
   _device = 0;
   _immediateContext = 0;
   _swapChain = 0;
+
+  _renderTargetView = 0;
+  _backBuffer = 0;
+  _depthStencilView = 0;
+  _depthStencil = 0;
+
+  _initialized = false;
 }
 
 void graphic::Graphic::stop() {
@@ -30,13 +39,20 @@ void graphic::Graphic::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) { 
   case CommandType::INITIALIZE: 
-    cout << "Graphic init\thwnd = " << c.args[0] << "\n"; 
-    if (!_initialize(reinterpret_cast<HWND> (c.args[0]))) _sendKill();
+    cout << "Graphic init\thwnd = " << c.args[0] << "\tsizeX = " << c.args[1] << "\tsizeY = " << c.args[2] <<"\n";
+    if (!_initialize(reinterpret_cast<HWND> (c.args[0]), c.args[1], c.args[2])) _sendKill();
+    _initialized = true;
     cout << "Graphic init [OK]\n";
     break;
   case CommandType::PAUSE: cout << "Graphic pause"; break;
   case CommandType::RESUME: cout << "Graphic resume"; break;
-  case CommandType::RESIZE: cout << "Graphic resize\tx = " << c.args[0] << " y = " << c.args[1] << "\n"; break;
+  case CommandType::RESIZE: 
+    if (!_initialized) break;
+    
+    cout << "Graphic resize\tx = " << c.args[0] << " y = " << c.args[1] << "\n";
+    if (!_resizeRecreate(c.args[0], c.args[1]))
+      _sendKill();
+    break;
   default: break;
   }
   return;
@@ -53,13 +69,14 @@ void graphic::Graphic::start() {
   }
 }
 
-bool graphic::Graphic::_initialize(HWND renderHwnd) {
+bool graphic::Graphic::_initialize(HWND renderHwnd, int sizeX, int sizeY) {
   // a little hack. first init of dx must be very BIG
   if (!_createDeviceSwapChain(renderHwnd)) return false;
-  // 0. resize swapChain to correct size
+  if (!_resize(sizeX, sizeY)) return false;
 
-  // TODO: 
   // 1. create render target view
+  if (!_createRTV()) return false;
+  // TODO: 
   // 2. create depth stencil view & depth stencil states { enable, disable ( for techniques like skybox ) }
   // 3. create rasterizer states { Solid, SolidNonCull( transparent objects ), Wireframe }
   // 4. create sampler states { Linear, ForDeffered }
@@ -117,8 +134,21 @@ bool graphic::Graphic::_createDeviceSwapChain(HWND renderHwnd) {
     if (SUCCEEDED(hr))			break;
   }
   if (FAILED(hr)) { 
-    // TODO: Log "DX 11 can't initialize on this machine"
+    // TODO: Log "Graphic: DX 11 can't initialize on this machine"
     return false; 
+  }
+  return true;
+}
+bool graphic::Graphic::_createRTV() {
+  HRESULT hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer);
+  if (FAILED(hr)) {
+    // TODO: Log "Graphic: can't get buffer from swapChain!"
+    return false;
+  }
+  hr = _device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView);
+  if (FAILED(hr)) {
+    // TODO: Log "Graphic: can't create renderTargetView from backBuffer!"
+    return false;
   }
   return true;
 }
@@ -128,18 +158,37 @@ void graphic::Graphic::_sendKill() {
     command_manager::CommandType::KILL);
   commandManager_->push(cmd);
 }
-
 void graphic::Graphic::_shutdown() {
-  if (_swapChain) { 
-    _swapChain->Release(); 
-    _swapChain = 0; 
+  _clearContext();
+  SAFE_RELEASE(_swapChain);
+  SAFE_RELEASE(_immediateContext);
+  SAFE_RELEASE(_device);
+}
+bool graphic::Graphic::_resize(int sizeX, int sizeY) {
+  _sizeX = sizeX; _sizeY = sizeY;
+  if (_sizeX == 0) _sizeX = 1;
+  if (_sizeY == 0) _sizeY = 1;
+  _clearContext();
+
+  HRESULT hr = _swapChain->ResizeBuffers(1, _sizeX, _sizeY, DXGI_FORMAT_UNKNOWN, 0);
+  if (FAILED(hr)) {
+    // TODO: Log "Graphic: can't resize buffers!"
+    return false;
   }
-  if (_immediateContext) { 
-    _immediateContext->Release(); 
-    _immediateContext = 0; 
-  }
-  if (_device) { 
-    _device->Release(); 
-    _device = 0; 
-  }
+  return true;
+}
+void graphic::Graphic::_clearContext() {
+  _immediateContext->ClearState();
+  _immediateContext->OMSetRenderTargets(0, NULL, NULL);
+  SAFE_RELEASE(_renderTargetView);
+  SAFE_RELEASE(_backBuffer);
+  SAFE_RELEASE(_depthStencilView);
+  SAFE_RELEASE(_depthStencil);
+  // release rtv, rt, dsv, ds
+}
+bool graphic::Graphic::_resizeRecreate(int sizeX, int sizeY) {
+  if (!_resize(sizeX, sizeY)) return false;
+  if (!_createRTV()) return false;
+
+  return true;
 }
