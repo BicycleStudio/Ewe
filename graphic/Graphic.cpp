@@ -6,10 +6,7 @@
 
 using std::cout;
 static const int graphicSleep = 100;
-// need for correct use dx in big sizes
-static const int veryBigSize = 2000;
 static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
-// What you think about this macros? :)
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 
 command_manager::ID graphic::Graphic::id() {
@@ -79,7 +76,9 @@ void graphic::Graphic::start() {
 }
 
 bool graphic::Graphic::_initialize(HWND renderHwnd, int sizeX, int sizeY) {
-  // a little hack. first init of dx must be very BIG
+  _sizeX = sizeX;
+  _sizeY = sizeY;
+
   if (!_createDeviceSwapChain(renderHwnd)) return false;
   if (!_resize(sizeX, sizeY)) return false;
 
@@ -124,8 +123,8 @@ bool graphic::Graphic::_createDeviceSwapChain(HWND renderHwnd) {
   ZeroMemory(&sd, sizeof(sd));
   sd.BufferCount = 2;
   // First init with bigSize, after call resize with correct size
-  sd.BufferDesc.Width = veryBigSize;
-  sd.BufferDesc.Height = veryBigSize;
+  sd.BufferDesc.Width = _sizeX;
+  sd.BufferDesc.Height = _sizeY;
   sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
   sd.BufferDesc.RefreshRate.Numerator = 60;
   sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -219,7 +218,6 @@ void graphic::Graphic::_clearContext() {
   SAFE_RELEASE(_backBuffer);
   SAFE_RELEASE(_depthStencilView);
   SAFE_RELEASE(_depthStencil);
-  // release rtv, rt, dsv, ds
 }
 bool graphic::Graphic::_resizeRecreate(int sizeX, int sizeY) {
   if (!_resize(sizeX, sizeY)) return false;

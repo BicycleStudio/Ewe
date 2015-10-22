@@ -1,13 +1,7 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 
-// Safe disable dx default warnings
-#pragma warning(push)
-#pragma warning(disable:4005)
-
-#include <D3DX11.h>
-#include <D3Dcompiler.h>
-#include <xnamath.h>
+#include "DependenciesDX.h"
 
 #include <memory>
 #include <queue>
@@ -43,21 +37,20 @@ private:
   void _endScene();
 
 private:
-  ID3D11Device*           _device;
-  ID3D11DeviceContext*    _immediateContext;
-  IDXGISwapChain*         _swapChain;
+  ID3D11Device* _device;
+  ID3D11DeviceContext* _immediateContext;
+  IDXGISwapChain* _swapChain;
   ID3D11RenderTargetView* _renderTargetView;
-  ID3D11Texture2D*				_backBuffer;
-  ID3D11DepthStencilView* _depthStencilView;
-  ID3D11Texture2D*        _depthStencil;
+  ID3D11Texture2D* _backBuffer;
+  ID3D11DepthStencilView*_depthStencilView;
+  ID3D11Texture2D* _depthStencil;
 
-  int	    _sizeX;
-  int   	_sizeY;
-  bool    _initialized;
-  float*  _sceneColor;
+  int _sizeX;
+  int _sizeY;
+  bool _initialized;
+  float* _sceneColor;
 };
 
 }
 
-#pragma warning(pop)
 #endif // GRAPHIC_H_

@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
+    <ClInclude Include="DependenciesDX.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="GraphicInformer.h" />
     <ClInclude Include="GraphicSupport.h" />
