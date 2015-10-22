@@ -192,10 +192,12 @@ void graphic::Graphic::_sendKill() {
   commandManager_->push(cmd);
 }
 void graphic::Graphic::_shutdown() {
-  _clearContext();
+  if (_initialized)
+    _clearContext();
   SAFE_RELEASE(_swapChain);
   SAFE_RELEASE(_immediateContext);
   SAFE_RELEASE(_device);
+  _initialized = false;
 }
 bool graphic::Graphic::_resize(int sizeX, int sizeY) {
   _sizeX = sizeX; _sizeY = sizeY;
