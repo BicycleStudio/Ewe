@@ -33,6 +33,7 @@ private:
 
   bool _createDeviceSwapChain(HWND renderHwnd);
   bool _createRTV();
+  bool _createDSV();
   bool _resize(int sizeX, int sizeY);
   bool _resizeRecreate(int sizeX, int sizeY);
   void _clearContext();

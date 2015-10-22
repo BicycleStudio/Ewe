@@ -74,10 +74,9 @@ bool graphic::Graphic::_initialize(HWND renderHwnd, int sizeX, int sizeY) {
   if (!_createDeviceSwapChain(renderHwnd)) return false;
   if (!_resize(sizeX, sizeY)) return false;
 
-  // 1. create render target view
   if (!_createRTV()) return false;
+  if (!_createDSV()) return false;
   // TODO: 
-  // 2. create depth stencil view & depth stencil states { enable, disable ( for techniques like skybox ) }
   // 3. create rasterizer states { Solid, SolidNonCull( transparent objects ), Wireframe }
   // 4. create sampler states { Linear, ForDeffered }
   // 5. init all shaders
@@ -152,6 +151,31 @@ bool graphic::Graphic::_createRTV() {
   }
   return true;
 }
+bool graphic::Graphic::_createDSV() {
+  D3D11_TEXTURE2D_DESC descDepth;
+  ZeroMemory(&descDepth, sizeof(descDepth));
+  descDepth.Width = _sizeX;	descDepth.Height = _sizeY;
+  descDepth.MipLevels = 1;	descDepth.ArraySize = 1;
+  descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+  descDepth.SampleDesc.Count = 1;	descDepth.SampleDesc.Quality = 0;
+  descDepth.Usage = D3D11_USAGE_DEFAULT;	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+  descDepth.CPUAccessFlags = 0;	descDepth.MiscFlags = 0;
+  HRESULT hr = _device->CreateTexture2D(&descDepth, NULL, &_depthStencil);
+  if (FAILED(hr)) {
+    // TODO: Log "Graphic: can't create depthStencil!"
+    return false;
+  }
+
+  D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+  ZeroMemory(&descDSV, sizeof(descDSV));	descDSV.Format = descDepth.Format;
+  descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;	descDSV.Texture2D.MipSlice = 0;
+  hr = _device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView);
+  if (FAILED(hr)) {
+    // TODO: Log "Graphic: can't create depthStencilView from depthStencil!"
+    return false;
+  }
+  return true;
+}
 void graphic::Graphic::_sendKill() {
   command_manager::Command cmd = command_manager::Command(
     id(), command_manager::ID::THREAD_MANAGER,
@@ -189,6 +213,7 @@ void graphic::Graphic::_clearContext() {
 bool graphic::Graphic::_resizeRecreate(int sizeX, int sizeY) {
   if (!_resize(sizeX, sizeY)) return false;
   if (!_createRTV()) return false;
+  if (!_createDSV()) return false;
 
   return true;
 }
