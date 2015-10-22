@@ -8,6 +8,7 @@ using std::cout;
 static const int graphicSleep = 100;
 // need for correct use dx in big sizes
 static const int veryBigSize = 2000;
+static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
 // What you think about this macros? :)
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 
@@ -26,6 +27,8 @@ graphic::Graphic::Graphic ( ) {
   _depthStencil = 0;
 
   _initialized = false;
+
+  _sceneColor = new float[4]{sceneColor[0], sceneColor[1], sceneColor[2], sceneColor[3]};
 }
 
 void graphic::Graphic::stop() {
@@ -65,6 +68,12 @@ void graphic::Graphic::start() {
     auto a = std::chrono::milliseconds(graphicSleep);
     std::this_thread::sleep_for (a);
 
+    if (_initialized) {
+      _beginScene();
+      // TODO: Render objects
+      _endScene();
+    }
+
     processCommands ( );
   }
 }
@@ -81,8 +90,8 @@ bool graphic::Graphic::_initialize(HWND renderHwnd, int sizeX, int sizeY) {
   // 4. create sampler states { Linear, ForDeffered }
   // 5. init all shaders
 
-  // 6. set view port & render targets
-  // 7. set projection matrix
+  _setRenderTargets();
+  // 6. set projection matrix
 
   return true;
 }
@@ -215,5 +224,26 @@ bool graphic::Graphic::_resizeRecreate(int sizeX, int sizeY) {
   if (!_createRTV()) return false;
   if (!_createDSV()) return false;
 
+  _setRenderTargets();
+
+  // TODO: set projection matrix
   return true;
+}
+void graphic::Graphic::_setRenderTargets() {
+  D3D11_VIEWPORT vp;
+  vp.Width = (FLOAT)_sizeX;
+  vp.Height = (FLOAT)_sizeY;
+  vp.MinDepth = 0.0f;
+  vp.MaxDepth = 1.0f;
+  vp.TopLeftX = 0;
+  vp.TopLeftY = 0;
+  _immediateContext->RSSetViewports(1, &vp);
+  _immediateContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+}
+void graphic::Graphic::_beginScene() {
+  _immediateContext->ClearRenderTargetView(_renderTargetView, _sceneColor);
+  _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+void graphic::Graphic::_endScene() {
+  _swapChain->Present(0, 0);
 }

@@ -37,6 +37,10 @@ private:
   bool _resize(int sizeX, int sizeY);
   bool _resizeRecreate(int sizeX, int sizeY);
   void _clearContext();
+  void _setRenderTargets();
+
+  void _beginScene();
+  void _endScene();
 
 private:
   ID3D11Device*           _device;
@@ -47,9 +51,10 @@ private:
   ID3D11DepthStencilView* _depthStencilView;
   ID3D11Texture2D*        _depthStencil;
 
-  int	_sizeX;
-  int	_sizeY;
-  bool _initialized;
+  int	    _sizeX;
+  int   	_sizeY;
+  bool    _initialized;
+  float*  _sceneColor;
 };
 
 }
