@@ -1,6 +1,14 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 
+// Safe disable dx default warnings
+#pragma warning(push)
+#pragma warning(disable:4005)
+
+#include <D3DX11.h>
+#include <D3Dcompiler.h>
+#include <xnamath.h>
+
 #include <memory>
 #include <queue>
 
@@ -22,4 +30,5 @@ public:
 
 }
 
+#pragma warning(pop)
 #endif // GRAPHIC_H_
