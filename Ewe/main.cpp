@@ -17,11 +17,11 @@ int main ( ) {
   io::IO io;
   sound::Sound sound;
   
-  tm.add(window);
   tm.add(&graphic);
   tm.add(&io);
   tm.add(&logic);
   tm.add(&sound);
+  tm.add(window);
 
   tm.start();
 

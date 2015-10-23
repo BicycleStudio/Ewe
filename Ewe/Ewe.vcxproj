@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\command_manager;$(SolutionDir)\data;$(SolutionDir)\utils;$(SolutionDir)\thread_manager;$(SolutionDir)\patterns;$(SolutionDir)\graphic;$(SolutionDir)\logic;$(SolutionDir)\io;$(SolutionDir)\sound;$(SolutionDir)\system;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)\command_manager;$(SolutionDir)\data;$(SolutionDir)\utils;$(SolutionDir)\thread_manager;$(SolutionDir)\patterns;$(SolutionDir)\graphic;$(SolutionDir)\logic;$(SolutionDir)\io;$(SolutionDir)\sound;$(SolutionDir)\system;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
