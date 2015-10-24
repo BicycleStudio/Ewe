@@ -16,8 +16,14 @@
     <Filter Include="src">
       <UniqueIdentifier>{714274ba-85fe-45dc-a1ad-7458861867e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\directXFacade">
+    <Filter Include="src\graphicFacade">
+      <UniqueIdentifier>{05559568-61bd-47bd-8a1b-b79b65a76f0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphicFacade\directXFacade">
       <UniqueIdentifier>{964b1683-4dc9-4c50-8ce6-ed386bf66304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphicFacade\openGLFacade">
+      <UniqueIdentifier>{d025dc33-5579-4ffd-9fb0-d5aa442dbd8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,7 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DependenciesDX.h">
-      <Filter>src\directXFacade</Filter>
+      <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies.h">
       <Filter>src</Filter>
@@ -40,7 +46,10 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="DirectXFacade.h">
-      <Filter>src\directXFacade</Filter>
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicFacade.h">
+      <Filter>src\graphicFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -48,7 +57,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="DirectXFacade.cpp">
-      <Filter>src\directXFacade</Filter>
+      <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

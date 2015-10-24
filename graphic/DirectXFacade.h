@@ -2,24 +2,21 @@
 #define DIRECTX_FACADE_H_
 
 #include "DependenciesDX.h"
+#include "GraphicFacade.h"
 
 namespace graphic {
 
-  class DirectXFacade {
+  class DirectXFacade : public GraphicFacade  {
   public:
     DirectXFacade();
 
   protected:
-    bool _initializeGraphic(HWND, int, int);
+    bool _initializeGraphic(int hwnd, int, int);
     bool _resizeBuffers(int, int);
     void _beginScene();
     void _endScene();
     void _shutdown();
     
-    bool _initialized;
-    int _sizeX;
-    int _sizeY;
-
   private:
     bool _createDeviceSwapChain(HWND renderHwnd);
     bool _createRTV();

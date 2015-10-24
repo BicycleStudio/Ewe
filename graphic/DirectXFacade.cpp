@@ -14,11 +14,11 @@ graphic::DirectXFacade::DirectXFacade() {
   _depthStencil = 0;
 }
 
-bool graphic::DirectXFacade::_initializeGraphic(HWND renderHwnd, int sizeX, int sizeY) {
+bool graphic::DirectXFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
   _sizeX = sizeX;
   _sizeY = sizeY;
 
-  if (!_createDeviceSwapChain(renderHwnd)) return false;
+  if (!_createDeviceSwapChain(reinterpret_cast<HWND> (hwnd))) return false;
   if (!_resizeBuffers(sizeX, sizeY)) return false;
 
   // TODO: 

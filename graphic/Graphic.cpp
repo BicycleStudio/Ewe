@@ -32,7 +32,7 @@ void graphic::Graphic::processCommand (command_manager::Command& c) {
   switch (c.commandType) { 
   case CommandType::INITIALIZE: 
     cout << "Graphic init\thwnd = " << c.args[0] << "\tsizeX = " << c.args[1] << "\tsizeY = " << c.args[2] <<"\n";
-    if (!_initialize(reinterpret_cast<HWND> (c.args[0]), c.args[1], c.args[2])) _sendKill();
+    if (!_initializeGraphic(c.args[0], c.args[1], c.args[2])) _sendKill();
     _initialized = true;
     cout << "Graphic init [OK]\n";
     break;
@@ -65,12 +65,6 @@ void graphic::Graphic::start() {
 
     processCommands ( );
   }
-}
-
-bool graphic::Graphic::_initialize(HWND renderHwnd, int sizeX, int sizeY) {
-  if (!_initializeGraphic(renderHwnd, sizeX, sizeY)) 
-    return false;
-  return true;
 }
 
 void graphic::Graphic::_sendKill() {
