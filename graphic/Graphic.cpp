@@ -42,7 +42,7 @@ void graphic::Graphic::processCommand (command_manager::Command& c) {
     if (!_initialized) break;
     
     cout << "Graphic resize\tx = " << c.args[0] << " y = " << c.args[1] << "\n";
-    if (!_resize(c.args[0], c.args[1]))
+    if (!_resizeBuffers(c.args[0], c.args[1]))
       _sendKill();
     break;
   default: break;
@@ -72,10 +72,4 @@ void graphic::Graphic::_sendKill() {
     id(), command_manager::ID::THREAD_MANAGER,
     command_manager::CommandType::KILL);
   commandManager_->push(cmd);
-}
-
-bool graphic::Graphic::_resize(int sizeX, int sizeY) {
-  if (!_resizeBuffers(sizeX, sizeY))
-    return false;
-  return true;
 }

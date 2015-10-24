@@ -34,8 +34,6 @@ namespace graphic {
     Graphic ( );
   private:
     void _sendKill();
-
-    bool _resize(int sizeX, int sizeY);
   };
 
 }
