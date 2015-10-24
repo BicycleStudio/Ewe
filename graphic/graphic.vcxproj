@@ -82,15 +82,18 @@
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="DependenciesDX.h" />
+    <ClInclude Include="DependenciesGL.h" />
     <ClInclude Include="DirectXFacade.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="GraphicFacade.h" />
     <ClInclude Include="GraphicInformer.h" />
     <ClInclude Include="GraphicSupport.h" />
+    <ClInclude Include="OpenGLFacade.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectXFacade.cpp" />
     <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="OpenGLFacade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\data\data.vcxproj">

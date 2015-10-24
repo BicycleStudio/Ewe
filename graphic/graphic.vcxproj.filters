@@ -51,6 +51,12 @@
     <ClInclude Include="GraphicFacade.h">
       <Filter>src\graphicFacade</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGLFacade.h">
+      <Filter>src\graphicFacade\openGLFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DependenciesGL.h">
+      <Filter>src\graphicFacade\openGLFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic.cpp">
@@ -58,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="DirectXFacade.cpp">
       <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLFacade.cpp">
+      <Filter>src\graphicFacade\openGLFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

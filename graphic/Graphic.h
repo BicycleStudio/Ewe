@@ -1,11 +1,11 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 
-#define DX
+#define __DX_GRAPHIC
 
-#ifdef DX
+#if defined(__DX_GRAPHIC)
 #include "DirectXFacade.h"
-#elif GL
+#elif defined(__GL_GRAPHIC)
 #include "OpenGLFacade.h"
 #endif
 
@@ -19,9 +19,9 @@
 namespace graphic {
 
   class Graphic : public thread_manager::ThreadSubject, private GraphicSupport, 
-#ifdef DX
+#if defined(__DX_GRAPHIC)
     public DirectXFacade
-#elif GL
+#elif defined(__GL_GRAPHIC)
     public OpenGLFacade
 #endif
   {
