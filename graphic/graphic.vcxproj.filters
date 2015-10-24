@@ -13,30 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{714274ba-85fe-45dc-a1ad-7458861867e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\directXFacade">
+      <UniqueIdentifier>{964b1683-4dc9-4c50-8ce6-ed386bf66304}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphic.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicInformer.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="DependenciesDX.h">
+      <Filter>src\directXFacade</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicInformer.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="GraphicSupport.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="DependenciesDX.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="DirectXFacade.h">
+      <Filter>src\directXFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXFacade.cpp">
+      <Filter>src\directXFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

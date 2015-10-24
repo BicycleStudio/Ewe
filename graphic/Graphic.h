@@ -1,7 +1,7 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 
-#include "DependenciesDX.h"
+#include "DirectXFacade.h"
 
 #include <memory>
 #include <queue>
@@ -12,6 +12,7 @@
 
 namespace graphic {
 
+<<<<<<< HEAD
 class Graphic : public thread_manager::ThreadSubject, private GraphicSupport {
   void processCommand (command_manager::Command& c);
 public:
@@ -52,6 +53,22 @@ private:
   bool _initialized;
   float* _sceneColor;
 };
+=======
+  class Graphic : public thread_manager::ThreadSubject, private GraphicSupport, public DirectXFacade {
+    void processCommand (command_manager::Command& c);
+  public:
+    command_manager::ID id();
+    void stop();
+    void start();
+
+    Graphic ( );
+  private:
+    bool _initialize(HWND renderHwnd, int, int);
+    void _sendKill();
+
+    bool _resize(int sizeX, int sizeY);
+  };
+>>>>>>> DirectXFacade, Graphic implements this facade
 
 }
 
