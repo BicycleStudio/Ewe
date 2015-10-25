@@ -3,6 +3,7 @@
 #include <CommandManager.h>
 #include <iostream>
 using std::cout;
+#define __DX_GRAPHIC
 
 static const int windowFacadeSleep = 100;
 static const std::string fullScreenString = "Start fullscreen?";
@@ -31,7 +32,6 @@ window_facade::WindowFacade::WindowFacade() {
   _minimized = false;
 
   _hDC = 0;
-  _hRC = 0;
   _hWnd = 0;
 }
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
@@ -259,31 +259,11 @@ bool window_facade::WindowFacade::_additionalInitialize() {
     return false;
   }
 
-  if (!(_hRC = wglCreateContext(_hDC))) {
-    _shutdown();
-    // TODO: Log "WindowFacade: Can't Create A GL Rendering Context."
-    return false;
-  }
-
-  if (!wglMakeCurrent(_hDC, _hRC)) {
-    _shutdown();
-    // TODO: Log "WindowFacade: Can't Activate The GL Rendering Context."
-    return false;
-  }
 }
 void window_facade::WindowFacade::_shutdown() {
   if (_fullscreen) {
     ChangeDisplaySettings(NULL, 0);
     ShowCursor(false);
-  }
-  if (_hRC) {
-    if (!wglMakeCurrent(NULL, NULL))
-      ;
-    // TODO: Log "WindowFacade: Release Of DC And RC Failed."
-    if (!wglDeleteContext(_hRC))
-      ;
-    // TODO: Log "WindowFacade: Release Rendering Context Failed."
-    _hRC = NULL;
   }
   if (_hDC && !ReleaseDC(_hWnd, _hDC)) {
     // TODO: Log "WindowFacade: Release Device Context Failed."
@@ -308,7 +288,11 @@ void window_facade::WindowFacade::_sendHwnd() {
   command_manager::Command hwndToGraphic = command_manager::Command(
     command_manager::ID::WINDOW_FACADE, command_manager::ID::GRAPHIC,
     command_manager::CommandType::INITIALIZE);
+#if defined(__DX_GRAPHIC)
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hwnd);
+#elif defined(__GL_GRAPHIC)
+  hwndToGraphic.args[0] = reinterpret_cast<int>(_hDC);
+#endif
   hwndToGraphic.args[1] = _width;
   hwndToGraphic.args[2] = _height;
   _send(hwndToGraphic);

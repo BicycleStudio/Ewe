@@ -5,10 +5,23 @@ static const int bitDepth = 16;
 
 graphic::OpenGLFacade::OpenGLFacade() {
   _hDC = 0;
+  _hRC = 0;
 }
 
 bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
   _hDC = reinterpret_cast<HDC>(hdc);
+
+  if (!(_hRC = wglCreateContext(_hDC))) {
+    _shutdown();
+    // TODO: Log "WindowFacade: Can't Create A GL Rendering Context."
+    return false;
+  }
+
+  if (!wglMakeCurrent(_hDC, _hRC)) {
+    _shutdown();
+    // TODO: Log "WindowFacade: Can't Activate The GL Rendering Context."
+    return false;
+  }
 
   glShadeModel(GL_SMOOTH);
   glClearColor(sceneColor[0], sceneColor[1], sceneColor[2], sceneColor[3]);
@@ -21,7 +34,15 @@ bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
 }
 
 void graphic::OpenGLFacade::_shutdown() {
-
+  if (_hRC) {
+    if (!wglMakeCurrent(NULL, NULL))
+      ;
+    // TODO: Log "WindowFacade: Release Of DC And RC Failed."
+    if (!wglDeleteContext(_hRC))
+      ;
+    // TODO: Log "WindowFacade: Release Rendering Context Failed."
+    _hRC = NULL;
+  }
 }
 
 bool graphic::OpenGLFacade::_resizeBuffers(int width, int height) {
