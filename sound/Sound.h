@@ -4,14 +4,18 @@
 #include "Dependencies.h"
 
 #include <ThreadManager.h>
+#include <Logger.h>
 
 namespace sound {
 
 class Sound : public thread_manager::ThreadSubject {
+  utils::Logger* log;
+
   void processCommand (command_manager::Command& c);
 public:
   command_manager::ID id();
-  sound::Sound::Sound();
+  Sound();
+  ~Sound();
 
   void stop();
   void start();

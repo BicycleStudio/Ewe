@@ -10,26 +10,35 @@ command_manager::ID sound::Sound::id() {
 }
 
 sound::Sound::Sound() {
+  log = new utils::Logger(typeid(*this).name());
+}
+
+sound::Sound::~Sound() {
+  delete log;
 }
 
 void sound::Sound::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
-  case CommandType::PAUSE: cout << "Sound pause"; break;
-  case CommandType::RESUME: cout << "Sound resume"; break;
+  case CommandType::PAUSE:
+    log->info("Sound pause");
+    break;
+  case CommandType::RESUME:
+    log->info("Sound resume");
+    break;
   default: break;
   }
   return;
 }
 
 void sound::Sound::stop() {
-  cout << "Sound thread was stopped\n";
+  log->info("Sound thread was stopped");
 
   this->_willStop = true;
 }
 
 void sound::Sound::start() {
-  cout << "Sound thread was started\n";
+  log->info("Sound thread was started");
 
   while (!this->_willStop) {
     auto a = std::chrono::milliseconds(soundSleep);
