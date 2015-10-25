@@ -8,6 +8,7 @@
 
 #include <ThreadManager.h>
 #include <GraphicInformer.h>
+#include <Logger.h>
 
 namespace io {
 
@@ -16,11 +17,14 @@ namespace io {
     public DirectInputFacade
   #endif
   {
+    utils::Logger* log;
+
     graphic::GraphicInformer graphicInformer;
     void processCommand (command_manager::Command& c);
   public:
     command_manager::ID id();
     IO();
+    ~IO();
 
     void stop();
     void start();
