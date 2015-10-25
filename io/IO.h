@@ -11,7 +11,7 @@
 
 namespace io {
 
-  class IO : public thread_manager::ThreadSubject,
+  class IO : public thread_manager::ThreadSubjectWithKill,
   #if defined(__DIRECT_INPUT)
     public DirectInputFacade
   #endif
@@ -26,9 +26,6 @@ namespace io {
     void start();
     void pause();
     void resume();
-
-  private:
-    void _sendKill();
   };
 
 }

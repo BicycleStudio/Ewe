@@ -71,10 +71,3 @@ void io::IO::processCommand(command_manager::Command& c) {
   }
   return;
 }
-
-void io::IO::_sendKill() {
-  command_manager::Command cmd = command_manager::Command(
-    id(), command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::KILL);
-  commandManager_->push(cmd);
-}

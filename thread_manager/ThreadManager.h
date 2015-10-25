@@ -34,6 +34,10 @@ public:
   virtual void resume ( ) = 0;
 };
 
+class ThreadSubjectWithKill : public ThreadSubject {
+protected:
+  void _sendKill();
+};
 class ThreadManager {
 private:
   std::vector<ThreadSubject*> subjects_;

@@ -262,10 +262,7 @@ void window_facade::WindowFacade::pp_sendResume() {
   _send(commandResume);
 }
 void window_facade::WindowFacade::pp_sendKill() {
-  command_manager::Command cmd = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE, command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::KILL);
-  _send(cmd);
+  _sendKill();
 }
 void window_facade::WindowFacade::pp_sendResize(int width, int height) {
   _width = width;

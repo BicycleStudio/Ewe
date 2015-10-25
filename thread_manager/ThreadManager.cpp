@@ -24,6 +24,13 @@ std::shared_ptr<std::queue<command_manager::Command>> thread_manager::ThreadSubj
   return this->commands_;
 }
 
+void thread_manager::ThreadSubjectWithKill::_sendKill() {
+  command_manager::Command commandKill = command_manager::Command(
+    this->id(), command_manager::ID::THREAD_MANAGER,
+    command_manager::CommandType::KILL);
+  commandManager_->push(commandKill);
+}
+
 thread_manager::ThreadManager::ThreadManager ( ) {
   this->commands_ = std::make_shared<std::queue<command_manager::Command>>();
   this->commandManager_.addQueue (

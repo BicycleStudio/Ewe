@@ -6,7 +6,7 @@
 
 namespace window_facade {
 
-  class WindowFacade : public thread_manager::ThreadSubject {
+  class WindowFacade : public thread_manager::ThreadSubjectWithKill {
     void processCommand(command_manager::Command& c);
   public:
     static WindowFacade* getInstance();
