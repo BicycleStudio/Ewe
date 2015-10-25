@@ -19,9 +19,12 @@ sound::Sound::~Sound() {
 
 void sound::Sound::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
+  // TODO: process coommand
+  /*
   switch (c.commandType) {
   default: break;
   }
+  */
   return;
 }
 

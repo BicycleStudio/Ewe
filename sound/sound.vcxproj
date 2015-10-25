@@ -81,9 +81,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
+    <ClInclude Include="DependenciesDSound.h" />
+    <ClInclude Include="DirectSoundFacade.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundFacade.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DirectSoundFacade.cpp" />
     <ClCompile Include="Sound.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
