@@ -6,13 +6,15 @@
 
 namespace window_facade {
 
-  class WindowFacade : public thread_manager::ThreadSubject {
+  class WindowFacade : public thread_manager::ThreadSubjectWithKill {
     void processCommand(command_manager::Command& c);
   public:
     static WindowFacade* getInstance();
     command_manager::ID id();
     void stop();
     void start();
+    void pause();
+    void resume();
 
     // This methods only for self call! WndProc hack
     // pp_ prefix means pseudoprivate

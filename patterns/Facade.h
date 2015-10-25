@@ -3,7 +3,9 @@
 
 namespace patterns {
 
-  class Facade;
+  class Facade {
+
+  };
 
 }
 

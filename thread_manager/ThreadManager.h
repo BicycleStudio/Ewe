@@ -17,7 +17,8 @@ protected:
   void processCommands ( );
   virtual void processCommand (command_manager::Command& c) = 0;
 
-  bool willStop;
+  bool _willStop;
+  bool _paused;
 public:
   ThreadSubject();
 
@@ -28,11 +29,15 @@ public:
   virtual void start ( ) = 0;
   
   void bind(command_manager::CommandManager*);
-  // TODO:
-  //virtual void pause ( ) = 0;
-  //virtual void unpause ( ) = 0;
+
+  virtual void pause ( ) = 0;
+  virtual void resume ( ) = 0;
 };
 
+class ThreadSubjectWithKill : public ThreadSubject {
+protected:
+  void _sendKill();
+};
 class ThreadManager {
 private:
   std::vector<ThreadSubject*> subjects_;
@@ -46,6 +51,8 @@ public:
   void add(ThreadSubject *);
   void start();
   void stop();
+  void pause();
+  void resume();
 
   void listen ( );
 };

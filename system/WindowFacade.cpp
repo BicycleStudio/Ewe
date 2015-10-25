@@ -33,11 +33,17 @@ window_facade::WindowFacade::WindowFacade() {
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
   commandManager_->push(c);
 }
+void window_facade::WindowFacade::pause() {
+  this->_paused = true;
+}
+void window_facade::WindowFacade::resume() {
+  this->_paused = false;
+}
 void window_facade::WindowFacade::stop() {
   cout << "WindowFacade thread was stopped\n";
 
   _shutdown();
-  this->willStop = true;
+  this->_willStop = true;
 }
 void window_facade::WindowFacade::processCommand(command_manager::Command& c) {
   using command_manager::CommandType;
@@ -58,7 +64,7 @@ void window_facade::WindowFacade::start() {
 
   MSG msg_;
 
-  while (!this->willStop) {
+  while (!this->_willStop) {
     auto a = std::chrono::milliseconds(windowFacadeSleep);
     std::this_thread::sleep_for(a);
 
@@ -84,9 +90,8 @@ void window_facade::WindowFacade::_generateCommandProcessors() {
       WindowFacade::getInstance()->pp_setMinimized(true);
       WindowFacade::getInstance()->pp_sendPause();
       break;
-    case 1:   // When activated from minimize
+    case SC_RESTORE:  
       WindowFacade::getInstance()->pp_setMinimized(false);
-      WindowFacade::getInstance()->pp_sendResume();
       break;
     case SC_SCREENSAVE:
     case SC_MONITORPOWER: return true;
@@ -246,7 +251,7 @@ void window_facade::WindowFacade::pp_sendPause() {
   command_manager::Command commandPause = command_manager::Command(
     command_manager::ID::WINDOW_FACADE,
     command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::RESUME);
+    command_manager::CommandType::PAUSE);
   _send(commandPause);
 }
 void window_facade::WindowFacade::pp_sendResume() {
@@ -257,10 +262,7 @@ void window_facade::WindowFacade::pp_sendResume() {
   _send(commandResume);
 }
 void window_facade::WindowFacade::pp_sendKill() {
-  command_manager::Command cmd = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE, command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::KILL);
-  _send(cmd);
+  _sendKill();
 }
 void window_facade::WindowFacade::pp_sendResize(int width, int height) {
   _width = width;

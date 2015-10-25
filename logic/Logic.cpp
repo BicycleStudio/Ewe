@@ -25,16 +25,24 @@ void logic::Logic::processCommand (command_manager::Command& c) {
 void logic::Logic::stop() {
   cout << "Logic thread was stopped\n";
 
-  this->willStop = true;
+  this->_willStop = true;
 }
 
 void logic::Logic::start() {
   cout << "Logic thread was started\n";
 
-  while (!this->willStop) {
+  while (!this->_willStop) {
     auto a = std::chrono::milliseconds(logicSleep);
     std::this_thread::sleep_for (a);
 
     processCommands ();
   }
+}
+
+void logic::Logic::pause() {
+  this->_paused = true;
+}
+
+void logic::Logic::resume() {
+  this->_paused = false;
 }
