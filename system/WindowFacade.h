@@ -34,10 +34,12 @@ namespace window_facade {
     void _sendHwnd();
     void _send(command_manager::Command& c);
     bool _initialize();
+    bool _additionalInitialize();
     void _shutdown();
 
     std::map<UINT, std::function<bool(WPARAM, LPARAM)>> _commandProcessors;
     HWND  _hwnd;
+    HDC   _hDC;
     int   _width;
     int   _height;
 

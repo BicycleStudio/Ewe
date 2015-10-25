@@ -1,0 +1,23 @@
+#ifndef GRAPHIC_FACADE_H_
+#define GRAPHIC_FACADE_H_
+
+#include <Facade.h>
+
+namespace graphic {
+
+  class GraphicFacade : public patterns::Facade {
+  protected:
+    virtual bool _initializeGraphic(int hwnd, int, int) = 0;
+    virtual bool _resizeBuffers(int, int) = 0;
+    virtual  void _beginScene() = 0;
+    virtual void _endScene() = 0;
+    virtual void _shutdown() = 0;
+    
+    bool _initialized;
+    int _sizeX;
+    int _sizeY;
+  };
+
+}
+
+#endif //GRAPHIC_FACADE_H_

@@ -1,7 +1,13 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 
-#include "DependenciesDX.h"
+#define __DX_GRAPHIC
+
+#if defined(__DX_GRAPHIC)
+#include "DirectXFacade.h"
+#elif defined(__GL_GRAPHIC)
+#include "OpenGLFacade.h"
+#endif
 
 #include <memory>
 #include <queue>
@@ -12,46 +18,23 @@
 
 namespace graphic {
 
-class Graphic : public thread_manager::ThreadSubject, private GraphicSupport {
-  void processCommand (command_manager::Command& c);
-public:
-  command_manager::ID id();
-  void stop();
-  void start();
-  void pause();
-  void resume();
+  class Graphic : public thread_manager::ThreadSubjectWithKill, private GraphicSupport, 
+#if defined(__DX_GRAPHIC)
+    public DirectXFacade
+#elif defined(__GL_GRAPHIC)
+    public OpenGLFacade
+#endif
+  {
+    void processCommand (command_manager::Command& c);
+  public:
+    command_manager::ID id();
+    void stop();
+    void start();
+    void pause();
+    void resume();
 
-  Graphic ( );
-private:
-  bool _initialize(HWND renderHwnd, int, int);
-  void _shutdown();
-  void _sendKill();
-
-  bool _createDeviceSwapChain(HWND renderHwnd);
-  bool _createRTV();
-  bool _createDSV();
-  bool _resize(int sizeX, int sizeY);
-  bool _resizeRecreate(int sizeX, int sizeY);
-  void _clearContext();
-  void _setRenderTargets();
-
-  void _beginScene();
-  void _endScene();
-
-private:
-  ID3D11Device* _device;
-  ID3D11DeviceContext* _immediateContext;
-  IDXGISwapChain* _swapChain;
-  ID3D11RenderTargetView* _renderTargetView;
-  ID3D11Texture2D* _backBuffer;
-  ID3D11DepthStencilView*_depthStencilView;
-  ID3D11Texture2D* _depthStencil;
-
-  int _sizeX;
-  int _sizeY;
-  bool _initialized;
-  float* _sceneColor;
-};
+    Graphic ( );
+  };
 
 }
 
