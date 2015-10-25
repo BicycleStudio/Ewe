@@ -12,13 +12,12 @@ command_manager::ID io::IO::id() {
 
 io::IO::IO() { 
   _initialized = false;
-  _paused = false;
 }
 
 void io::IO::start() {
   cout << "IO thread was started\n";
 
-  while (!this->willStop) {
+  while (!this->_willStop) {
     auto a = std::chrono::milliseconds(ioSleep);
     std::this_thread::sleep_for(a);
 
@@ -38,7 +37,7 @@ void io::IO::stop() {
   cout << "IO thread was stopped\n";
   _shutdown();
 
-  this->willStop = true;
+  this->_willStop = true;
 }
 
 void io::IO::pause() {

@@ -13,8 +13,8 @@ namespace window_facade {
     command_manager::ID id();
     void stop();
     void start();
-    void pause() {};
-    void resume() {};
+    void pause();
+    void resume();
 
     // This methods only for self call! WndProc hack
     // pp_ prefix means pseudoprivate

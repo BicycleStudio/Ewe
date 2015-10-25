@@ -4,7 +4,8 @@ static const int threadManagerSleep = 100;
 
 thread_manager::ThreadSubject::ThreadSubject() { 
   this->commands_ = std::make_shared<std::queue<command_manager::Command>>();
-  this->willStop = false;
+  this->_willStop = false;
+  this->_paused = false;
 }
 
 void thread_manager::ThreadSubject::processCommands ( ) {

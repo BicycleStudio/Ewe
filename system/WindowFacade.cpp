@@ -33,11 +33,17 @@ window_facade::WindowFacade::WindowFacade() {
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
   commandManager_->push(c);
 }
+void window_facade::WindowFacade::pause() {
+  this->_paused = true;
+}
+void window_facade::WindowFacade::resume() {
+  this->_paused = false;
+}
 void window_facade::WindowFacade::stop() {
   cout << "WindowFacade thread was stopped\n";
 
   _shutdown();
-  this->willStop = true;
+  this->_willStop = true;
 }
 void window_facade::WindowFacade::processCommand(command_manager::Command& c) {
   using command_manager::CommandType;
@@ -58,7 +64,7 @@ void window_facade::WindowFacade::start() {
 
   MSG msg_;
 
-  while (!this->willStop) {
+  while (!this->_willStop) {
     auto a = std::chrono::milliseconds(windowFacadeSleep);
     std::this_thread::sleep_for(a);
 
@@ -86,7 +92,6 @@ void window_facade::WindowFacade::_generateCommandProcessors() {
       break;
     case SC_RESTORE:  
       WindowFacade::getInstance()->pp_setMinimized(false);
-      //WindowFacade::getInstance()->pp_sendResume();
       break;
     case SC_SCREENSAVE:
     case SC_MONITORPOWER: return true;

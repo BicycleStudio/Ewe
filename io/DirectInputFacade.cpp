@@ -1,8 +1,6 @@
 #include "DirectInputFacade.h"
 
-// Again this macro ...
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
-// New macro )) i think, nice
 #define CHECK_HRESULT(hres,msg) { if(FAILED(hres)) { /* TODO: log msg*/ return false; } }
 
 io::DirectInputFacade::DirectInputFacade() {
@@ -44,11 +42,16 @@ void io::DirectInputFacade::_shutdown() {
   _initialized = false;
 }
 
-bool io::DirectInputFacade::_update() {
-  CHECK_HRESULT(_mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&_mouseState), "IO: update mouse fails.");
-  CHECK_HRESULT(_keyboard->GetDeviceState(sizeof(_keyState), (LPVOID)&_keyState), "IO: update keys fails.");
+void io::DirectInputFacade::_update() {
+  HRESULT hres = _mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&_mouseState);
+  if (FAILED(hres))
+    /* TODO: log "IO: LOG_LVL_WARN! update mouse fails."*/
+    return;
 
-  return true;
+  hres = _keyboard->GetDeviceState(sizeof(_keyState), (LPVOID)&_keyState);
+  if (FAILED(hres))
+    /* TODO: log "IO: LOG_LVL_WARN! update keys fails."*/
+    return;
 }
 
 bool io::DirectInputFacade::_acquire() {

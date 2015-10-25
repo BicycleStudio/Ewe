@@ -18,8 +18,8 @@ public:
   command_manager::ID id();
   void stop();
   void start();
-  void pause() {};
-  void resume() {};
+  void pause();
+  void resume();
 
   Graphic ( );
 private:

@@ -32,9 +32,14 @@ void graphic::Graphic::stop() {
   cout << "Graphic thread was stopped\n";
   _shutdown();
 
-  this->willStop = true;
+  this->_willStop = true;
 }
-
+void graphic::Graphic::pause() {
+  this->_paused = true;
+}
+void graphic::Graphic::resume() {
+  this->_paused = false;
+}
 void graphic::Graphic::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) { 
@@ -61,11 +66,11 @@ void graphic::Graphic::processCommand (command_manager::Command& c) {
 void graphic::Graphic::start() {
   cout << "Graphic thread was started\n";
 
-  while (!this->willStop) {
+  while (!this->_willStop) {
     auto a = std::chrono::milliseconds(graphicSleep);
     std::this_thread::sleep_for (a);
 
-    if (_initialized) {
+    if (_initialized && !_paused) {
       _beginScene();
       // TODO: Render objects
       _endScene();

@@ -25,16 +25,24 @@ void sound::Sound::processCommand (command_manager::Command& c) {
 void sound::Sound::stop() {
   cout << "Sound thread was stopped\n";
 
-  this->willStop = true;
+  this->_willStop = true;
 }
 
 void sound::Sound::start() {
   cout << "Sound thread was started\n";
 
-  while (!this->willStop) {
+  while (!this->_willStop) {
     auto a = std::chrono::milliseconds(soundSleep);
     std::this_thread::sleep_for (a);
 
     processCommands ();
   }
+}
+
+void sound::Sound::pause() {
+  this->_paused = true;
+}
+
+void sound::Sound::resume() {
+  this->_paused = false;
 }

@@ -17,7 +17,8 @@ protected:
   void processCommands ( );
   virtual void processCommand (command_manager::Command& c) = 0;
 
-  bool willStop;
+  bool _willStop;
+  bool _paused;
 public:
   ThreadSubject();
 

@@ -10,7 +10,7 @@ namespace io  {
     virtual bool _initialize(int hwnd) = 0;
     virtual void _shutdown() = 0;
     virtual bool _acquire() = 0;
-    virtual bool _update() = 0;
+    virtual void _update() = 0;
 
     bool _initialized;
 

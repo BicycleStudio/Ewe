@@ -15,8 +15,8 @@ public:
 
   void stop();
   void start();
-  void pause() {};
-  void resume() {};
+  void pause();
+  void resume();
 };
 
 }

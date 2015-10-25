@@ -29,7 +29,6 @@ namespace io {
 
   private:
     void _sendKill();
-    bool _paused;
   };
 
 }

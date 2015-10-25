@@ -15,7 +15,7 @@ namespace io {
     bool _initialize(int hwnd);
     void _shutdown();
     bool _acquire();
-    bool _update();
+    void _update();
     bool _pressed(int key);
 
   private:
