@@ -19,9 +19,12 @@ logic::Logic::~Logic() {
 
 void logic::Logic::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
+  // TODO: process coommand
+  /*
   switch (c.commandType) {
   default: break;
   }
+  */
   return;
 }
 

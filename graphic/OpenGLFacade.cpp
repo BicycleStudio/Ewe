@@ -35,11 +35,9 @@ bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
 
 void graphic::OpenGLFacade::_shutdown() {
   if (_hRC) {
-    if (!wglMakeCurrent(NULL, NULL))
-      ;
+    if (!wglMakeCurrent(NULL, NULL)) { }
     // TODO: Log "Graphic: Release Of DC And RC Failed."
-    if (!wglDeleteContext(_hRC))
-      ;
+    if (!wglDeleteContext(_hRC)) { }
     // TODO: Log "Graphic: Release Rendering Context Failed."
     _hRC = NULL;
   }
