@@ -20,12 +20,6 @@ sound::Sound::~Sound() {
 void sound::Sound::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
-  case CommandType::PAUSE:
-    log->info("Sound pause");
-    break;
-  case CommandType::RESUME:
-    log->info("Sound resume");
-    break;
   default: break;
   }
   return;
@@ -49,9 +43,11 @@ void sound::Sound::start() {
 }
 
 void sound::Sound::pause() {
+  log->info("Sound pause");
   this->_paused = true;
 }
 
 void sound::Sound::resume() {
+  log->info("Sound resume");
   this->_paused = false;
 }

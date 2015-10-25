@@ -20,12 +20,6 @@ logic::Logic::~Logic() {
 void logic::Logic::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
-  case CommandType::PAUSE:
-    log->info("Logic pause");
-    break;
-  case CommandType::RESUME:
-    log->info("Logic resume");
-    break;
   default: break;
   }
   return;
@@ -49,9 +43,11 @@ void logic::Logic::start() {
 }
 
 void logic::Logic::pause() {
+  log->info("Logic pause");
   this->_paused = true;
 }
 
 void logic::Logic::resume() {
+  log->info("Logic resume");
   this->_paused = false;
 }
