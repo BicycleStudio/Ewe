@@ -1,0 +1,1 @@
+Logger need this catalog to save log data.

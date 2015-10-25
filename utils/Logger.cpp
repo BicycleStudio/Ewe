@@ -14,13 +14,24 @@ using std::cerr;
 using std::cout;
 using std::endl;
 using std::ofstream;
+using std::ios_base;
 using std::vector;
 using std::string;
 using std::pair;
 using std::for_each;
 
+utils::LoggerConfig::LoggerConfig() {
+  files = logFiles;
+  logLevel = LOG_LVL_WARN;
+  showDate = true;
+}
+
 utils::Logger::Logger(std::string className, LoggerConfig config) : _className(className) {
-  for (auto p : config.files) this->_files[p.first].push_back(p.second);  
+  for (auto p : config.files) {
+    auto lvl = p.first;
+    for (int i = static_cast<int>(lvl); i < static_cast<int>(LOG_LVL_MAX); i++)
+      this->_files[static_cast<LOG_LEVEL>(i)].push_back(p.second);
+  }
   this->_logLevel = config.logLevel;
   this->_showDate = config.showDate;
 }
@@ -28,7 +39,7 @@ utils::Logger::Logger(std::string className, LoggerConfig config) : _className(c
 utils::Logger::~Logger() { }
 
 
-bool utils::Logger::_accept(LEVEL lvl) {
+bool utils::Logger::_accept(LOG_LEVEL lvl) {
   return static_cast<int>(this->_logLevel) <= static_cast<int>(lvl);
 }
 
@@ -38,42 +49,42 @@ string utils::Logger::_date() {
     const size_t size = 100;
     char buf[size];
     ctime_s(buf, size, &_);
-    return string(buf);
+    auto res = string(buf);
+    res = res.substr(0, res.size() - 2);
+    return res;
   }
   else return string();
 }
 
-void utils::Logger::debug(std::string message) {
-  static vector<string> files = this->_files[LEVEL::DEBUG];
-  if (_accept(LEVEL::DEBUG)) {
-    clog << _date() << " [DEBUG] " << this->_className << " " << message << endl;
+void utils::Logger::print(std::string& message, LOG_LEVEL lvl, std::string& lvl_s, std::ostream& stream) {
+  static vector<string> files = this->_files[lvl];
+  if (_accept(lvl)) {
+    auto _message = _date() + " [" + lvl_s + "] " + this->_className + " :: " + message;
+    stream << _message << endl;
+    for (auto file = files.begin(); file != files.end(); file ++) {
+      ofstream of(*file, ios_base::app);
+      of << _message << endl;
+      of.close();
+    }
   }
+}
+
+void utils::Logger::debug(std::string message) {
+  this->print(message, LOG_LVL_DEBUG, string("DEBUG"), clog);
 }
 
 void utils::Logger::info(std::string message)  {
-  static vector<string> files = this->_files[LEVEL::INFO];
-  if (_accept(LEVEL::INFO)) {
-    cout << _date() << " [INFO] " << this->_className << " " << message << endl;
-  }
+  this->print(message, LOG_LVL_INFO, string("INFO"), cout);
 }
 
 void utils::Logger::warn(std::string message)  {
-  static vector<string> files = this->_files[LEVEL::WARN];
-  if (_accept(LEVEL::WARN)) {
-    clog << _date() << " [WARN] " << this->_className << " " << message << endl;
-  }
+  this->print(message, LOG_LVL_WARN, string("WARN"), clog);
 }
 
 void utils::Logger::error(std::string message) {
-  static vector<string> files = this->_files[LEVEL::ERROR];
-  if (_accept(LEVEL::ERROR)) {
-    cerr << _date() << " [ERROR] " << this->_className << " " << message << endl;
-  }
+  this->print(message, LOG_LVL_ERROR, string("ERROR"), cerr);
 }
 
 void utils::Logger::fatal(std::string message) {
-  static vector<string> files = this->_files[LEVEL::FATAL];
-  if (_accept(LEVEL::FATAL)) {
-    cerr << _date() << " [FATAL] " << this->_className << " " << message << endl;
-  }
+  this->print(message, LOG_LVL_FATAL, string("FATAL"), cerr);
 }

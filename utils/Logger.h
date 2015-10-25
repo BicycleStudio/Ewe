@@ -4,52 +4,47 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <memory>
 
 namespace utils {
-  const enum LEVEL {
-    DEBUG = 0,
-    WARN,
-    INFO,
-    ERROR,
-    FATAL
+  const enum LOG_LEVEL {
+    LOG_LVL_DEBUG = 0,
+    LOG_LVL_WARN,
+    LOG_LVL_INFO,
+    LOG_LVL_ERROR,
+    LOG_LVL_FATAL,
+    LOG_LVL_MAX
   };
 
-  using logfilemap = std::vector<std::pair<LEVEL, std::string>>;
-  using _logfilemap = std::map<LEVEL, std::vector<std::string>>;
+  using logfilevec = std::vector<std::pair<LOG_LEVEL, std::string>>;
+  using logfilemap = std::map<LOG_LEVEL, std::vector<std::string>>;
 
-  const logfilemap logFiles = {
-    { LEVEL::DEBUG, "../logs/Ewe.log" }
+  const logfilevec logFiles = {
+    { LOG_LVL_DEBUG, "../logs/Ewe.log" }
   };
 
   class LoggerConfig {
   public:
-    logfilemap files;
-    LEVEL logLevel;
+    logfilevec files;
+    LOG_LEVEL logLevel;
     bool showDate;
-  };
 
-  class DefaultLoggerConfig : public LoggerConfig {
-  public:
-    DefaultLoggerConfig() {
-      files = logFiles;
-      logLevel = LEVEL::WARN;
-      showDate = true;
-    }
+    LoggerConfig();
   };
 
   class Logger {
   private:
-    LEVEL _logLevel;
-    _logfilemap _files;
+    LOG_LEVEL _logLevel;
+    logfilemap _files;
     bool _showDate;
 
     std::string _className;
 
-    bool _accept(LEVEL lvl);
+    bool _accept(LOG_LEVEL lvl);
     std::string _date();
+
+    void print(std::string& message, LOG_LEVEL lvl, std::string& lvl_s, std::ostream& stream);
   public:
-    Logger(std::string className, LoggerConfig config = DefaultLoggerConfig());
+    Logger(std::string className, LoggerConfig config = LoggerConfig());
     ~Logger();
 
     void debug(std::string message);
