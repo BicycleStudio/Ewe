@@ -32,7 +32,7 @@ window_facade::WindowFacade::WindowFacade() {
   _minimized = false;
 
   _hDC = 0;
-  _hWnd = 0;
+  _hwnd = 0;
 }
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
   commandManager_->push(c);
@@ -210,7 +210,9 @@ bool window_facade::WindowFacade::_initialize() {
     // TODO: Log error
     return false;
   }
-
+#ifdef __GL_GRAPHIC
+  _additionalInitialize();
+#endif
   ShowWindow(_hwnd, SW_SHOW);
   SetForegroundWindow(_hwnd);
   SetFocus(_hwnd);
@@ -241,7 +243,7 @@ bool window_facade::WindowFacade::_additionalInitialize() {
     0, 0, 0               // Layer Masks Ignored
   };
 
-  if (!(_hDC = GetDC(_hWnd))) {
+  if (!(_hDC = GetDC(_hwnd))) {
     _shutdown();
     // TODO: Log "WindowFacade: Can't Create A GL Device Context."
     return false;
@@ -258,14 +260,14 @@ bool window_facade::WindowFacade::_additionalInitialize() {
     // TODO: Log "WindowFacade: Can't Set The PixelFormat."
     return false;
   }
-
+  return true;
 }
 void window_facade::WindowFacade::_shutdown() {
   if (_fullscreen) {
     ChangeDisplaySettings(NULL, 0);
     ShowCursor(false);
   }
-  if (_hDC && !ReleaseDC(_hWnd, _hDC)) {
+  if (_hDC && !ReleaseDC(_hwnd, _hDC)) {
     // TODO: Log "WindowFacade: Release Device Context Failed."
     ;
     _hDC = NULL;

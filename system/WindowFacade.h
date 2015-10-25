@@ -39,7 +39,7 @@ namespace window_facade {
 
     std::map<UINT, std::function<bool(WPARAM, LPARAM)>> _commandProcessors;
     HWND  _hwnd;
-    HDC     _hDC;
+    HDC   _hDC;
     int   _width;
     int   _height;
 

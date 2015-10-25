@@ -13,13 +13,13 @@ bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
 
   if (!(_hRC = wglCreateContext(_hDC))) {
     _shutdown();
-    // TODO: Log "WindowFacade: Can't Create A GL Rendering Context."
+    // TODO: Log "Graphic: Can't Create A GL Rendering Context."
     return false;
   }
 
   if (!wglMakeCurrent(_hDC, _hRC)) {
     _shutdown();
-    // TODO: Log "WindowFacade: Can't Activate The GL Rendering Context."
+    // TODO: Log "Graphic: Can't Activate The GL Rendering Context."
     return false;
   }
 
@@ -37,10 +37,10 @@ void graphic::OpenGLFacade::_shutdown() {
   if (_hRC) {
     if (!wglMakeCurrent(NULL, NULL))
       ;
-    // TODO: Log "WindowFacade: Release Of DC And RC Failed."
+    // TODO: Log "Graphic: Release Of DC And RC Failed."
     if (!wglDeleteContext(_hRC))
       ;
-    // TODO: Log "WindowFacade: Release Rendering Context Failed."
+    // TODO: Log "Graphic: Release Rendering Context Failed."
     _hRC = NULL;
   }
 }
