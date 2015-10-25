@@ -4,12 +4,17 @@
 #include <ThreadManager.h>
 #include <Windows.h>
 
+#include <Logger.h>
+
 namespace window_facade {
 
   class WindowFacade : public thread_manager::ThreadSubjectWithKill {
+    utils::Logger* log;
+
     void processCommand(command_manager::Command& c);
   public:
     static WindowFacade* getInstance();
+    ~WindowFacade();
     command_manager::ID id();
     void stop();
     void start();

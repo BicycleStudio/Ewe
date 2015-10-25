@@ -23,6 +23,8 @@ window_facade::WindowFacade* window_facade::WindowFacade::getInstance() {
   return facade;
 }
 window_facade::WindowFacade::WindowFacade() {
+  log = new utils::Logger(typeid(*this).name());
+
   _name = appName;
   _wndClassName = wndClassName;
   _width = windowWidth;
@@ -34,6 +36,11 @@ window_facade::WindowFacade::WindowFacade() {
   _hDC = 0;
   _hwnd = 0;
 }
+
+window_facade::WindowFacade::~WindowFacade() {
+  delete log;
+}
+
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
   commandManager_->push(c);
 }
@@ -44,7 +51,7 @@ void window_facade::WindowFacade::resume() {
   this->_paused = false;
 }
 void window_facade::WindowFacade::stop() {
-  cout << "WindowFacade thread was stopped\n";
+  log->info("WindowFacade thread was stopped\n");
 
   _shutdown();
   this->_willStop = true;
@@ -52,14 +59,15 @@ void window_facade::WindowFacade::stop() {
 void window_facade::WindowFacade::processCommand(command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
-  case CommandType::PAUSE: cout << "WindowFacade pause"; break;
-  case CommandType::RESUME: cout << "WindowFacade resume"; break;
+  case CommandType::PAUSE: log->info("WindowFacade pause"); break;
+  case CommandType::RESUME: log->info("WindowFacade resume"); break;
   default: break;
   }
   return;
 }
 void window_facade::WindowFacade::start() {
-  cout << "WindowFacade thread was started\n";
+  log->info("WindowFacade thread was started");
+
   if (!_initialize()) {
     pp_sendKill();
     return;
@@ -156,7 +164,7 @@ bool window_facade::WindowFacade::_initialize() {
   wc_.lpszClassName = _wndClassName.c_str();
 
   if (!RegisterClass(&wc_)) {
-    // TODO: Log error
+    log->fatal("RegisterClass was failed");
     return false;
   }
   if (_fullscreen) {
@@ -178,7 +186,7 @@ bool window_facade::WindowFacade::_initialize() {
         windowRect_.bottom = (long)_height;
       }
       else {
-        // TODO: Log error
+        log->fatal("ChangeDisplaySettings was failed");
         return false;
       }
     }
@@ -207,7 +215,7 @@ bool window_facade::WindowFacade::_initialize() {
     hInstance_,
     NULL))) {
     _shutdown();
-    // TODO: Log error
+    log->fatal("CreateWindowEx was failed");
     return false;
   }
 #ifdef __GL_GRAPHIC
@@ -273,11 +281,11 @@ void window_facade::WindowFacade::_shutdown() {
     _hDC = NULL;
   }
   if (_hwnd && !DestroyWindow(_hwnd)) {
-    // TODO: Log error
+    log->fatal("DestroyWindow was failed");
     _hwnd = NULL;
   }
   if (!UnregisterClass(_wndClassName.c_str(), GetModuleHandle(NULL))) {
-    // TODO: Log error
+    log->fatal("UnregisterClass was failed");
   }
 }
 void window_facade::WindowFacade::pp_setMinimized(bool minimized) {
