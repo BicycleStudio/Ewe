@@ -12,10 +12,16 @@ command_manager::ID io::IO::id() {
 
 io::IO::IO() { 
   _initialized = false;
+
+  log = new utils::Logger(typeid(*this).name());
+}
+
+io::IO::~IO() {
+  delete log;
 }
 
 void io::IO::start() {
-  cout << "IO thread was started\n";
+  log->info("IO thread was started");
 
   while (!this->_willStop) {
     auto a = std::chrono::milliseconds(ioSleep);
@@ -34,14 +40,14 @@ void io::IO::start() {
 }
 
 void io::IO::stop() {
-  cout << "IO thread was stopped\n";
+  log->info("IO thread was stopped");
   _shutdown();
 
   this->_willStop = true;
 }
 
 void io::IO::pause() {
-  cout << "IO thread was paused\n";
+  log->info("IO thread was paused");
   _paused = true;
 }
 
@@ -51,21 +57,25 @@ void io::IO::resume() {
   if (_initialized && !_acquire())
     _sendKill();
 
-  cout << "IO thread was resumed\n";
+  log->info("IO thread was resumed");
 }
 
 void io::IO::processCommand(command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   case CommandType::INITIALIZE: 
-    cout << "IO initialize start...\n"; 
-    if (!_initialize(c.args[0])) 
+    log->info("IO initialize start...");
+    if (!_initialize(c.args[0])) {
+      log->fatal("_initialize error");
       _sendKill();
+    }
 
-    if (_initialized && !_acquire())
+    if (_initialized && !_acquire()) {
+      log->fatal("_acquire error");
       _sendKill();
+    }
 
-    cout << "IO initialize [OK]\n";
+    log->info("IO initialize [OK]");
     break;
   default: break;
   }

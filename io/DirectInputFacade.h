@@ -1,6 +1,8 @@
 #ifndef DIRECT_INPUT_FACADE_H_
 #define DIRECT_INPUT_FACADE_H_
 
+#include <Logger.h>
+
 #include "DependenciesDInput.h"
 #include "Dependencies.h"
 #include "IOFacade.h"
@@ -8,8 +10,11 @@
 namespace io {
 
   class DirectInputFacade : public IOFacade {
+    utils::Logger* log;
+
   public:
     DirectInputFacade();
+    ~DirectInputFacade();
 
   protected:
     bool _initialize(int hwnd);

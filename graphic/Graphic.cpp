@@ -36,8 +36,6 @@ void graphic::Graphic::processCommand (command_manager::Command& c) {
     _initialized = true;
     cout << "Graphic init [OK]\n";
     break;
-  case CommandType::PAUSE: cout << "Graphic pause"; break;
-  case CommandType::RESUME: cout << "Graphic resume"; break;
   case CommandType::RESIZE: 
     if (!_initialized) break;
     

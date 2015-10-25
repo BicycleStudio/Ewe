@@ -1,33 +1,38 @@
 #include "DirectInputFacade.h"
 
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
-#define CHECK_HRESULT(hres,msg) { if(FAILED(hres)) { /* TODO: log msg*/ return false; } }
+#define CHECK_HRESULT(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 
 io::DirectInputFacade::DirectInputFacade() {
+  log = new utils::Logger(typeid(*this).name());
   _device = 0;
   _keyboard = 0;
   _mouse = 0;
+}
+
+io::DirectInputFacade::~DirectInputFacade() {
+  delete log;
 }
 
 bool io::DirectInputFacade::_initialize(int hwnd) {
   HWND hwnd_ = reinterpret_cast<HWND> (hwnd);
   
   CHECK_HRESULT(DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&_device, NULL), 
-    "IO: Can't create Direct Input.");
+    "Can't create Direct Input.");
 
   CHECK_HRESULT(_device->CreateDevice(GUID_SysMouse, &_mouse, NULL), 
-    "IO: Can't create mouse.");
+    "Can't create mouse.");
   CHECK_HRESULT(_mouse->SetDataFormat(&c_dfDIMouse), 
-    "IO: Can't set mouse Data Format.");
+    "Can't set mouse Data Format.");
   CHECK_HRESULT(_mouse->SetCooperativeLevel(hwnd_, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND), 
-    "IO: Can't set mouse Cooperative Level.");
+    "Can't set mouse Cooperative Level.");
 
   CHECK_HRESULT(_device->CreateDevice(GUID_SysKeyboard, &_keyboard, NULL), 
-    "IO: Can't create keys.");
+    "Can't create keys.");
   CHECK_HRESULT(_keyboard->SetDataFormat(&c_dfDIKeyboard), 
-    "IO: Can't set keys Data Format.");
+    "Can't set keys Data Format.");
   CHECK_HRESULT(_keyboard->SetCooperativeLevel(hwnd_, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND), 
-    "IO: Can't set keys Cooperative Level.");
+    "Can't set keys Cooperative Level.");
 
   _initialized = true;
 
@@ -45,18 +50,18 @@ void io::DirectInputFacade::_shutdown() {
 void io::DirectInputFacade::_update() {
   HRESULT hres = _mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&_mouseState);
   if (FAILED(hres))
-    /* TODO: log "IO: LOG_LVL_WARN! update mouse fails."*/
+    log->warn("update mouse fails.");
     return;
 
   hres = _keyboard->GetDeviceState(sizeof(_keyState), (LPVOID)&_keyState);
   if (FAILED(hres))
-    /* TODO: log "IO: LOG_LVL_WARN! update keys fails."*/
+    log->warn("update keyboard fails.");
     return;
 }
 
 bool io::DirectInputFacade::_acquire() {
-  CHECK_HRESULT(_mouse->Acquire(), "IO: mouse acquire fails.");
-  CHECK_HRESULT(_keyboard->Acquire(), "IO: keys acquire fails.");
+  CHECK_HRESULT(_mouse->Acquire(), "mouse acquire fails.");
+  CHECK_HRESULT(_keyboard->Acquire(), "keys acquire fails.");
 
   return true;
 }
