@@ -10,26 +10,35 @@ command_manager::ID logic::Logic::id() {
 }
 
 logic::Logic::Logic() {
+  log = new utils::Logger(typeid(*this).name());
+}
+
+logic::Logic::~Logic() {
+  delete log;
 }
 
 void logic::Logic::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
-  case CommandType::PAUSE: cout << "Logic pause"; break;
-  case CommandType::RESUME: cout << "Logic resume"; break;
+  case CommandType::PAUSE:
+    log->info("Logic pause");
+    break;
+  case CommandType::RESUME:
+    log->info("Logic resume");
+    break;
   default: break;
   }
   return;
 }
 
 void logic::Logic::stop() {
-  cout << "Logic thread was stopped\n";
+  log->info("Logic thread was stopped");
 
   this->_willStop = true;
 }
 
 void logic::Logic::start() {
-  cout << "Logic thread was started\n";
+  log->info("Logic thread was started");
 
   while (!this->_willStop) {
     auto a = std::chrono::milliseconds(logicSleep);
