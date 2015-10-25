@@ -66,10 +66,3 @@ void graphic::Graphic::start() {
     processCommands ( );
   }
 }
-
-void graphic::Graphic::_sendKill() {
-  command_manager::Command cmd = command_manager::Command(
-    id(), command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::KILL);
-  commandManager_->push(cmd);
-}

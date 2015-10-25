@@ -18,7 +18,7 @@
 
 namespace graphic {
 
-  class Graphic : public thread_manager::ThreadSubject, private GraphicSupport, 
+  class Graphic : public thread_manager::ThreadSubjectWithKill, private GraphicSupport, 
 #if defined(__DX_GRAPHIC)
     public DirectXFacade
 #elif defined(__GL_GRAPHIC)
@@ -30,10 +30,10 @@ namespace graphic {
     command_manager::ID id();
     void stop();
     void start();
+    void pause();
+    void resume();
 
     Graphic ( );
-  private:
-    void _sendKill();
   };
 
 }
