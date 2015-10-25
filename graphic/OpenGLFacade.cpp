@@ -1,6 +1,7 @@
 #include "OpenGLFacade.h"
 
 static const float sceneColor[4]{ 0.95f, 0.55f, 0.65f, 1.0f };
+static const int bitDepth = 16;
 
 graphic::OpenGLFacade::OpenGLFacade() {
   _hDC = 0;
@@ -11,8 +12,6 @@ graphic::OpenGLFacade::OpenGLFacade() {
 bool graphic::OpenGLFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
   int PixelFormat;
   _hWnd = reinterpret_cast<HWND> (hwnd);
-  // TODO: to config?? i think it must always be 32. or 16. ??
-  int bits = 16;
 
   PIXELFORMATDESCRIPTOR pfd = {
     sizeof(PIXELFORMATDESCRIPTOR),
@@ -21,7 +20,7 @@ bool graphic::OpenGLFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
     PFD_SUPPORT_OPENGL |  // Format Must Support OpenGL
     PFD_DOUBLEBUFFER,     // Must Support Double Buffering
     PFD_TYPE_RGBA,        // Request An RGBA Format
-    bits,                 // Select Our Color Depth
+    bitDepth,             // Select Our Color Depth
     0, 0, 0, 0, 0, 0,     // Color Bits Ignored
     0,                    // No Alpha Buffer
     0,                    // Shift Bit Ignored
