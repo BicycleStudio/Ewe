@@ -11,7 +11,7 @@ namespace graphic {
     OpenGLFacade();
 
   protected:
-    bool _initializeGraphic(int hwnd, int, int);
+    bool _initializeGraphic(int hdc, int, int);
     bool _resizeBuffers(int, int);
     void _beginScene();
     void _endScene();

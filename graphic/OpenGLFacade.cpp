@@ -5,11 +5,10 @@ static const int bitDepth = 16;
 
 graphic::OpenGLFacade::OpenGLFacade() {
   _hDC = 0;
-  _hRC = 0;
-  _hWnd = 0;
 }
 
-bool graphic::OpenGLFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
+bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
+  _hDC = reinterpret_cast<HDC>(hdc);
 
   glShadeModel(GL_SMOOTH);
   glClearColor(sceneColor[0], sceneColor[1], sceneColor[2], sceneColor[3]);
