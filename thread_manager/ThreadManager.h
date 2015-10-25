@@ -28,9 +28,9 @@ public:
   virtual void start ( ) = 0;
   
   void bind(command_manager::CommandManager*);
-  // TODO:
-  //virtual void pause ( ) = 0;
-  //virtual void unpause ( ) = 0;
+
+  virtual void pause ( ) = 0;
+  virtual void resume ( ) = 0;
 };
 
 class ThreadManager {
@@ -46,6 +46,8 @@ public:
   void add(ThreadSubject *);
   void start();
   void stop();
+  void pause();
+  void resume();
 
   void listen ( );
 };

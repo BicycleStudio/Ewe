@@ -14,6 +14,7 @@ void thread_manager::ThreadSubject::processCommands ( ) {
     this->commands_->pop();
   }
 }
+
 void thread_manager::ThreadSubject::bind(command_manager::CommandManager* commandManager) {
   commandManager_ = commandManager;
 }
@@ -50,6 +51,14 @@ void thread_manager::ThreadManager::stop() {
   threads_.clear();
 }
 
+void thread_manager::ThreadManager::pause() {
+  for (auto& c : subjects_) c->pause();
+}
+
+void thread_manager::ThreadManager::resume() {
+  for (auto& c : subjects_) c->resume();
+}
+
 void thread_manager::ThreadManager::listen ( ) {
   while (true) {
     auto a = std::chrono::milliseconds(threadManagerSleep);
@@ -60,17 +69,22 @@ void thread_manager::ThreadManager::listen ( ) {
     while (this->commands_->size () > 0) {
       auto& c = this->commands_->front();
       switch (c.commandType) {
-        case command_manager::CommandType::KILL: {
+
+        case command_manager::CommandType::KILL: 
           this->stop ( );
           return;
-        }
+        
+        case command_manager::CommandType::PAUSE:
+          this->pause();
+          break;
+
+        case command_manager::CommandType::RESUME:
+          this->resume();
+          break;
+
         default: break;
       }
       this->commands_->pop();
     }
-
-    // TODO: commands from OS
-    // all -> pause();
-    // all -> unpause();
   }
 }
