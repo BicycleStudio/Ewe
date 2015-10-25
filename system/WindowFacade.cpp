@@ -213,10 +213,78 @@ bool window_facade::WindowFacade::_initialize() {
 
   return true;
 }
+bool window_facade::WindowFacade::_additionalInitialize() {
+  int PixelFormat;
+  
+  PIXELFORMATDESCRIPTOR pfd = {
+    sizeof(PIXELFORMATDESCRIPTOR),
+    1,                    // Version Number
+    PFD_DRAW_TO_WINDOW |  // Format Must Support Window
+    PFD_SUPPORT_OPENGL |  // Format Must Support OpenGL
+    PFD_DOUBLEBUFFER,     // Must Support Double Buffering
+    PFD_TYPE_RGBA,        // Request An RGBA Format
+    BITZ,                 // Select Our Color Depth
+    0, 0, 0, 0, 0, 0,     // Color Bits Ignored
+    0,                    // No Alpha Buffer
+    0,                    // Shift Bit Ignored
+    0,                    // No Accumulation Buffer
+    0, 0, 0, 0,           // Accumulation Bits Ignored
+    16,                   // 16Bit Z-Buffer (Depth Buffer)  
+    0,                    // No Stencil Buffer
+    0,                    // No Auxiliary Buffer
+    PFD_MAIN_PLANE,       // Main Drawing Layer
+    0,                    // Reserved
+    0, 0, 0               // Layer Masks Ignored
+  };
+
+  if (!(_hDC = GetDC(_hwnd))) {
+    _shutdown();
+    // TODO: Log "Graphic: Can't Create A GL Device Context."
+    return false;
+  }
+
+  if (!(PixelFormat = ChoosePixelFormat(_hDC, &pfd))) {
+    _shutdown();
+    // TODO: Log "Graphic: Can't Find A Suitable PixelFormat."
+    return false;
+  }
+
+  if (!SetPixelFormat(_hDC, PixelFormat, &pfd)) {
+    _shutdown();
+    // TODO: Log "Graphic: Can't Set The PixelFormat."
+    return false;
+  }
+
+  if (!(_hRC = wglCreateContext(_hDC))) {
+    _shutdown();
+    // TODO: Log "Graphic: Can't Create A GL Rendering Context."
+    return false;
+  }
+
+  if (!wglMakeCurrent(_hDC, _hRC)) {
+    _shutdown();
+    // TODO: Log "Graphic: Can't Activate The GL Rendering Context."
+    return false;
+  }
+}
 void window_facade::WindowFacade::_shutdown() {
   if (_fullscreen) {
     ChangeDisplaySettings(NULL, 0);
     ShowCursor(false);
+  }
+  if (_hRC) {
+    if (!wglMakeCurrent(NULL, NULL))
+      ;
+    // TODO: Log "Graphic: Release Of DC And RC Failed."
+    if (!wglDeleteContext(_hRC))
+      ;
+    // TODO: Log "Graphic: Release Rendering Context Failed."
+    _hRC = NULL;
+  }
+  if (_hDC && !ReleaseDC(_hwnd, _hDC)) {
+    // TODO: Log "Graphic: Release Device Context Failed."
+    ;
+    _hDC = NULL;
   }
   if (_hwnd && !DestroyWindow(_hwnd)) {
     // TODO: Log error

@@ -19,8 +19,6 @@ namespace graphic {
 
   private:
     HDC     _hDC;
-    HGLRC   _hRC;
-    HWND    _hWnd;
   };
 
 }
