@@ -34,8 +34,10 @@ void io::IO::start() {
 
     _update();
 
-    if (_pressed(IO_KEY_W)) cout << "W pressed!\n";
-    if (_pressed(IO_KEY_A)) cout << "A pressed!\n";
+    if (_pressed(IO_KEY_W)) 
+      cout << "W pressed!\n";
+    if (_pressed(IO_KEY_A)) 
+      cout << "A pressed!\n";
   }
 }
 

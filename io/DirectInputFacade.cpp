@@ -49,20 +49,20 @@ void io::DirectInputFacade::_shutdown() {
 
 void io::DirectInputFacade::_update() {
   HRESULT hres = _mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&_mouseState);
-  if (FAILED(hres))
+  if (FAILED(hres)) {
     log->warn("update mouse fails.");
     return;
-
+  }
   hres = _keyboard->GetDeviceState(sizeof(_keyState), (LPVOID)&_keyState);
-  if (FAILED(hres))
+  if (FAILED(hres)) {
     log->warn("update keyboard fails.");
     return;
+  }
 }
 
 bool io::DirectInputFacade::_acquire() {
   CHECK_HRESULT(_mouse->Acquire(), "mouse acquire fails.");
   CHECK_HRESULT(_keyboard->Acquire(), "keys acquire fails.");
-
   return true;
 }
 
