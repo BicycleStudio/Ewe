@@ -296,7 +296,7 @@ bool window_facade::WindowFacade::pp_getMinimized() {
 }
 void window_facade::WindowFacade::_sendHwnd() {
   command_manager::Command hwndToGraphic = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE, command_manager::ID::GRAPHIC,
+    this->id(), command_manager::ID::GRAPHIC,
     command_manager::CommandType::INITIALIZE);
 #if defined(__DX_GRAPHIC)
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hwnd);
@@ -308,10 +308,16 @@ void window_facade::WindowFacade::_sendHwnd() {
   _send(hwndToGraphic);
 
   command_manager::Command hwndToIO = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE, command_manager::ID::IO,
+    this->id(), command_manager::ID::IO,
     command_manager::CommandType::INITIALIZE);
   hwndToIO.args[0] = reinterpret_cast<int>(_hwnd);
   _send(hwndToIO);
+
+  command_manager::Command hwndToSound = command_manager::Command(
+    this->id(), command_manager::ID::SOUND,
+    command_manager::CommandType::INITIALIZE);
+  hwndToSound.args[0] = reinterpret_cast<int>(_hwnd);
+  _send(hwndToSound);
 }
 void window_facade::WindowFacade::pp_sendPause() {
   command_manager::Command commandPause = command_manager::Command(
