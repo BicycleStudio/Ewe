@@ -13,7 +13,7 @@
 
 namespace sound {
 
-  class Sound : public thread_manager::ThreadSubject,
+  class Sound : public thread_manager::ThreadSubjectWithKill,
   #ifdef __DX_SOUND
     public DirectSoundFacade
   #endif

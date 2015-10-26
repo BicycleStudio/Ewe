@@ -3,16 +3,24 @@
 
 #include "DependenciesDSound.h"
 #include "SoundFacade.h"
+#include "Logger.h"
 
 namespace sound {
 
   class DirectSoundFacade : public SoundFacade {
+    utils::Logger* log;
+
   public:
     DirectSoundFacade();
+    ~DirectSoundFacade();
 
   protected:
     bool _initialize(int hwnd);
     void _shutdown();
+
+  private:
+    IDirectSound8*      _dSound;
+    IDirectSoundBuffer* _primaryBuffer;
   };
 
 }

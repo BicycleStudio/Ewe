@@ -19,12 +19,15 @@ sound::Sound::~Sound() {
 
 void sound::Sound::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
-  // TODO: process coommand
-  /*
   switch (c.commandType) {
+  case CommandType::INITIALIZE:
+    if (!_initialize(c.args[0]))
+      _sendKill();
+    _initialized = true;
+    log->info("Sound init [OK]");
+    break;
   default: break;
   }
-  */
   return;
 }
 
