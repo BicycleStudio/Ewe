@@ -61,8 +61,11 @@ namespace thread_manager {
   }
 
   void ThreadManager::start() {
-    for (auto c : subjects_)
-      threads_.push_back(thread([&c]() { c->start(); }));
+    // don't replace to for(auto c : subjects_)
+    for (auto c = subjects_.begin(); c != subjects_.end(); c++){
+      auto value = *c;
+      threads_.push_back(thread([&value]() { value->start(); }));
+    }
   }
 
   void ThreadManager::stop() {
