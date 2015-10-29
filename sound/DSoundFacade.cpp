@@ -5,6 +5,7 @@
 static const int samplePerSecond = 22050;
 static const int bitzPerSample = 16;
 static const int channels = 1;
+static const std::string testFile = "c:/test/sound01.wav";
 
 using sound::direct_sound::Facade;
 
@@ -50,7 +51,7 @@ bool Facade::_initialize(int hwnd) {
 
 #pragma region TemporaryForTest
   Audio audio;
-  if (!audio.initialize("", reinterpret_cast<int> (_dSound))) {
+  if (!audio.initialize(testFile, reinterpret_cast<int> (_dSound))) {
     log->warn("Can't initialize audio!");
     log->info("Can't initialize audio!");
     return false;

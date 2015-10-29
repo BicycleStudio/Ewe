@@ -36,21 +36,34 @@ bool Audio::stop() {
 }
 
 bool Audio::initialize(std::string fileName, int forDSound) {
+  WaveHeader* waveHdr = new WaveHeader();
+
+  FILE* fp;
+  fopen_s(&fp, fileName.c_str(), "rb");
+
+  fread(waveHdr, 1, sizeof(WaveHeader), fp);
+
+  if (memcmp(waveHdr->riffSig, "RIFF", 4) || memcmp(waveHdr->waveSig, "WAVE", 4) ||
+    memcmp(waveHdr->formatSig, "fmt ", 4) || memcmp(waveHdr->dataSig, "data", 4))
+    return false;
+
   WAVEFORMATEX waveFormat;
   waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-  waveFormat.nSamplesPerSec = samplePerSecond;
-  waveFormat.wBitsPerSample = bitzPerSample;
-  waveFormat.nChannels = channels;
+  waveFormat.nSamplesPerSec = waveHdr->sampleRate;
+  waveFormat.wBitsPerSample = waveHdr->bitsPerSample;
+  waveFormat.nChannels = waveHdr->channels;
   waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
   waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
   waveFormat.cbSize = 0;
 
   int seconds = 10;
 
-  if (!_create(reinterpret_cast<IDirectSound8*>(forDSound), seconds, waveFormat))
+  if (!_create(reinterpret_cast<IDirectSound8*>(forDSound), waveHdr->dataSize, waveFormat))
     return false;
 
-  if (!_updateRandom())
+  fclose(fp);
+
+  if (!_update(fileName,0,waveHdr->dataSize))
     return false;
 
   return true;
@@ -98,6 +111,30 @@ bool Audio::_create(IDirectSound8* dSound, int seconds, WAVEFORMATEX& wfex, DWOR
   return _create(dSound, bdesc);
 }
 
+bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex) {
+  DSBUFFERDESC bdesc;
+  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
+
+  bdesc.dwSize = sizeof(DSBUFFERDESC);
+  bdesc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN;
+  bdesc.dwBufferBytes = dataSize;
+  bdesc.lpwfxFormat = &wfex;
+
+  return _create(dSound, bdesc);
+}
+
+bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex, DWORD flags) {
+  DSBUFFERDESC bdesc;
+  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
+
+  bdesc.dwSize = sizeof(DSBUFFERDESC);
+  bdesc.dwFlags = flags;
+  bdesc.dwBufferBytes = dataSize;
+  bdesc.lpwfxFormat = &wfex;
+
+  return _create(dSound, bdesc);
+}
+
 bool Audio::_updateRandom() {
   char* data; DWORD size;
   if (FAILED(_buffer->Lock(0, 0, (void**)&data, (DWORD*)&size, NULL, 0, DSBLOCK_ENTIREBUFFER))) 
@@ -108,5 +145,31 @@ bool Audio::_updateRandom() {
   if (FAILED(_buffer->Unlock((void*)data, size, NULL, 0))) 
     return false;
 
+  return true;
+}
+
+bool Audio::_update(std::string fileName, long LockPos, long Size) {
+  FILE* fp;
+  fopen_s(&fp, fileName.c_str(), "rb");
+  fseek(fp, sizeof(WaveHeader), SEEK_SET);
+
+  BYTE  *ptr1, *ptr2;
+  DWORD size1, size2;
+
+  if (FAILED(_buffer->Lock(LockPos, Size,(void**)&ptr1, &size1,(void**)&ptr2, &size2, 0))) {
+    fclose(fp);
+    return false;
+  }
+
+  fread(ptr1, 1, size1, fp);
+  if (ptr2 != NULL)
+    fread(ptr2, 1, size2, fp);
+
+  if (FAILED(_buffer->Unlock(ptr1, size1, ptr2, size2))) {
+    fclose(fp);
+    return false;
+  }
+
+  fclose(fp);
   return true;
 }
