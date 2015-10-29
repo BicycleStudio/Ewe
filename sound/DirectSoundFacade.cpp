@@ -1,5 +1,6 @@
 #include "DirectSoundFacade.h"
-#define CHECK_HRESULT(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
+#define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
+#define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 static const int samplePerSecond = 22050;
 static const int bitzPerSample = 16;
@@ -17,10 +18,10 @@ sound::DirectSoundFacade::~DirectSoundFacade() {
 bool sound::DirectSoundFacade::_initialize(int hwnd) {
   HWND hwnd_ = reinterpret_cast <HWND> (hwnd);
 
-  CHECK_HRESULT(DirectSoundCreate8(NULL, &_dSound, NULL), 
+  CHECK_HRESULT_FATAL(DirectSoundCreate8(NULL, &_dSound, NULL),
     "Can't create DirectSound Interface.");
   
-  CHECK_HRESULT(_dSound->SetCooperativeLevel(hwnd_, DSSCL_PRIORITY),
+  CHECK_HRESULT_FATAL(_dSound->SetCooperativeLevel(hwnd_, DSSCL_PRIORITY),
     "Can't set cooperative level.");
   
   DSBUFFERDESC bufferDesc;
@@ -29,7 +30,7 @@ bool sound::DirectSoundFacade::_initialize(int hwnd) {
   bufferDesc.dwSize = sizeof(DSBUFFERDESC);
   bufferDesc.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRLVOLUME;
 
-  CHECK_HRESULT(_dSound->CreateSoundBuffer(&bufferDesc, &_primaryBuffer, NULL),
+  CHECK_HRESULT_FATAL(_dSound->CreateSoundBuffer(&bufferDesc, &_primaryBuffer, NULL),
     "Can't create primaryBuffer");
 
   WAVEFORMATEX waveFormat;
@@ -41,24 +42,51 @@ bool sound::DirectSoundFacade::_initialize(int hwnd) {
   waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
   waveFormat.cbSize = 0;
 
-  if (!setPrimaryBufferFormat(waveFormat)) return false;
-  
+  if (!_setPrimaryBufferFormat(waveFormat)) return false;
+  _primaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
+
 #pragma region TemporaryForTest
-  IDirectSoundBuffer8* secondaryBuffer = _createSecondaryBuffer(2, waveFormat);
+  IDirectSoundBuffer8* secondaryBuffer = _createSecondaryBuffer(10, waveFormat);
   if (secondaryBuffer == 0) return false;
+  if (!_updateBuffer(secondaryBuffer)) return false;
+  secondaryBuffer->Play(0, 0, 0);
+
+  _secondaryBuffers.push_back(secondaryBuffer);
 #pragma endregion
 
   return true;
 }
 
 void sound::DirectSoundFacade::_shutdown() {
+  for (auto b : _secondaryBuffers) {
+    CHECK_HRESULT_WARN(b->Stop(),"Can't Stop secondaryBuffer.");
+    SAFE_RELEASE(b);
+  }
+  CHECK_HRESULT_WARN(_primaryBuffer->Stop(), "Can't Stop primaryBuffer.");
   SAFE_RELEASE(_primaryBuffer);
   SAFE_RELEASE(_dSound);
   log->info("shutdown...");
 }
 
-bool sound::DirectSoundFacade::setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
-  CHECK_HRESULT(_primaryBuffer->SetFormat(&waveFormat), "Can't setFormat for primaryBuffer.");
+bool sound::DirectSoundFacade::_updateBuffer(IDirectSoundBuffer8* buf) {
+  char* data; DWORD size;
+  if (FAILED(buf->Lock(0, 0, (void**)&data, (DWORD*)&size, NULL, 0, DSBLOCK_ENTIREBUFFER))) {
+    log->fatal("can't lock buffer for update.");
+    return false;
+  }
+
+  for (DWORD i = 0; i < size; i++) data[i] = rand() % 65536;
+
+  if (FAILED(buf->Unlock((void*)data, size, NULL, 0))) {
+    log->fatal("can't unlock buffer for update.");
+    return false;
+  }
+
+  return true;
+}
+
+bool sound::DirectSoundFacade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
+  CHECK_HRESULT_FATAL(_primaryBuffer->SetFormat(&waveFormat), "Can't setFormat for primaryBuffer.");
   
   return true;
 }

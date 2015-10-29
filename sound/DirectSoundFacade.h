@@ -19,7 +19,8 @@ namespace sound {
     void _shutdown();
 
   private:
-    bool setPrimaryBufferFormat(WAVEFORMATEX&);
+    bool _setPrimaryBufferFormat(WAVEFORMATEX&);
+    bool _updateBuffer(IDirectSoundBuffer8*);
 
     IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&);
     IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&, DWORD flags);
@@ -27,6 +28,7 @@ namespace sound {
 
     IDirectSound8*      _dSound;
     IDirectSoundBuffer* _primaryBuffer;
+    std::vector<IDirectSoundBuffer8*> _secondaryBuffers;
   };
 
 }
