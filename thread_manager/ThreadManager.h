@@ -11,11 +11,11 @@ namespace thread_manager {
 
 class ThreadSubject {
 protected:
-  command_manager::CommandManager* commandManager_;
+  command_manager::CommandManager* _commandManager;
 
-  std::shared_ptr<std::queue<command_manager::Command>> commands_;
-  void processCommands ( );
-  virtual void processCommand (command_manager::Command& c) = 0;
+  std::shared_ptr<std::queue<command_manager::Command>> _commands;
+  void _processCommands ( );
+  virtual void _processCommand (command_manager::Command& c) = 0;
 
   bool _willStop;
   bool _paused;
@@ -40,11 +40,11 @@ protected:
 };
 class ThreadManager {
 private:
-  std::vector<ThreadSubject*> subjects_;
-  std::vector<std::thread> threads_;
+  std::vector<ThreadSubject*> _subjects;
+  std::vector<std::thread> _threads;
 
-  command_manager::CommandManager commandManager_;
-  std::shared_ptr<std::queue<command_manager::Command>> commands_;
+  command_manager::CommandManager _commandManager;
+  std::shared_ptr<std::queue<command_manager::Command>> _commands;
 public:
   ThreadManager ( );
 

@@ -11,7 +11,7 @@ namespace window_facade {
   class WindowFacade : public thread_manager::ThreadSubjectWithKill {
     utils::Logger* log;
 
-    void processCommand(command_manager::Command& c);
+    void _processCommand(command_manager::Command& c);
   public:
     static WindowFacade* getInstance();
     ~WindowFacade();

@@ -17,71 +17,71 @@ using command_manager::ID;
 namespace thread_manager {
 
   ThreadSubject::ThreadSubject() {
-    this->commands_ = make_shared<queue<Command>>();
+    this->_commands = make_shared<queue<Command>>();
     this->_willStop = false;
     this->_paused = false;
   }
 
-  void ThreadSubject::processCommands() {
-    while (this->commands_->size() > 0) {
-      auto& c = this->commands_->front();
-      processCommand(c);
-      this->commands_->pop();
+  void ThreadSubject::_processCommands() {
+    while (this->_commands->size() > 0) {
+      auto& c = this->_commands->front();
+      _processCommand(c);
+      this->_commands->pop();
     }
   }
 
   void ThreadSubject::bind(CommandManager* commandManager) {
-    commandManager_ = commandManager;
+    _commandManager = commandManager;
   }
 
   shared_ptr<queue<Command>> ThreadSubject::getQueueLink() {
-    return this->commands_;
+    return this->_commands;
   }
 
   void ThreadSubjectWithKill::_sendKill() {
     Command commandKill = Command(
       this->id(), ID::THREAD_MANAGER,
       CommandType::KILL);
-    commandManager_->push(commandKill);
+    _commandManager->push(commandKill);
   }
 
   ThreadManager::ThreadManager() {
-    this->commands_ = make_shared<queue<Command>>();
-    this->commandManager_.addQueue(
+    this->_commands = make_shared<queue<Command>>();
+    this->_commandManager.addQueue(
       ID::THREAD_MANAGER,
-      this->commands_
+      this->_commands
       );
   }
 
   void ThreadManager::add(ThreadSubject * tc) {
-    tc->bind(&commandManager_);
+    tc->bind(&_commandManager);
 
-    this->subjects_.push_back(tc);
-    this->commandManager_.addQueue(tc->id(), tc->getQueueLink());
+    this->_subjects.push_back(tc);
+    this->_commandManager.addQueue(tc->id(), tc->getQueueLink());
   }
 
   void ThreadManager::start() {
-    // don't replace to for(auto c : subjects_)
-    for (auto c = subjects_.begin(); c != subjects_.end(); c++){
+    // don't replace to for(auto c : _subjects)
+    for (auto c = _subjects.begin(); c != _subjects.end(); c++){
       auto value = *c;
-      threads_.push_back(thread([&value]() { value->start(); }));
+      _threads.push_back(thread([&value]() { value->start(); }));
     }
   }
 
   void ThreadManager::stop() {
-    for (auto& c : subjects_) c->stop();
-    for (auto& t : threads_) t.join();
+    for (auto& c : _subjects) c->stop();
+    for (auto& t : _threads) t.join();
 
-    subjects_.clear();
-    threads_.clear();
+    _subjects.clear();
+    _threads.clear();
   }
 
   void ThreadManager::pause() {
-    for (auto& c : subjects_) c->pause();
+    for (auto& c : _subjects) c->pause();
   }
 
   void ThreadManager::resume() {
-    for (auto& c : subjects_) c->resume();
+    for (auto& c : _subjects) c->resume();
   }
 
   void ThreadManager::listen() {
@@ -89,10 +89,10 @@ namespace thread_manager {
       auto a = milliseconds(threadManagerSleep);
       sleep_for(a);
 
-      commandManager_.process();
+      _commandManager.process();
 
-      while (this->commands_->size() > 0) {
-        auto& c = this->commands_->front();
+      while (this->_commands->size() > 0) {
+        auto& c = this->_commands->front();
         switch (c.commandType) {
 
         case CommandType::KILL:
@@ -109,7 +109,7 @@ namespace thread_manager {
 
         default: break;
         }
-        this->commands_->pop();
+        this->_commands->pop();
       }
     }
   }
