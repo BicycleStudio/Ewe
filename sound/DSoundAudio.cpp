@@ -40,8 +40,8 @@ bool Audio::initialize(std::string fileName, int forDSound) {
 
   FILE* fp;
   fopen_s(&fp, fileName.c_str(), "rb");
-
   fread(waveHdr, 1, sizeof(WaveHeader), fp);
+  fclose(fp);
 
   if (memcmp(waveHdr->riffSig, "RIFF", 4) || memcmp(waveHdr->waveSig, "WAVE", 4) ||
     memcmp(waveHdr->formatSig, "fmt ", 4) || memcmp(waveHdr->dataSig, "data", 4))
@@ -56,12 +56,8 @@ bool Audio::initialize(std::string fileName, int forDSound) {
   waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
   waveFormat.cbSize = 0;
 
-  int seconds = 10;
-
   if (!_create(reinterpret_cast<IDirectSound8*>(forDSound), waveHdr->dataSize, waveFormat))
     return false;
-
-  fclose(fp);
 
   if (!_update(fileName,0,waveHdr->dataSize))
     return false;
@@ -148,7 +144,7 @@ bool Audio::_updateRandom() {
   return true;
 }
 
-bool Audio::_update(std::string fileName, long LockPos, long Size) {
+bool Audio::_update(std::string fileName, long lockPos, long size) {
   FILE* fp;
   fopen_s(&fp, fileName.c_str(), "rb");
   fseek(fp, sizeof(WaveHeader), SEEK_SET);
@@ -156,7 +152,7 @@ bool Audio::_update(std::string fileName, long LockPos, long Size) {
   BYTE  *ptr1, *ptr2;
   DWORD size1, size2;
 
-  if (FAILED(_buffer->Lock(LockPos, Size,(void**)&ptr1, &size1,(void**)&ptr2, &size2, 0))) {
+  if (FAILED(_buffer->Lock(lockPos, size, (void**)&ptr1, &size1, (void**)&ptr2, &size2, 0))) {
     fclose(fp);
     return false;
   }
