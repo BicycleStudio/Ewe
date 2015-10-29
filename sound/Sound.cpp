@@ -21,8 +21,10 @@ void sound::Sound::processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   case CommandType::INITIALIZE:
-    if (!_initialize(c.args[0]))
+    if (!_initialize(c.args[0])) {
       _sendKill();
+      return;
+    }
     _initialized = true;
     log->info("Sound init [OK]");
     break;
@@ -32,6 +34,7 @@ void sound::Sound::processCommand (command_manager::Command& c) {
 }
 
 void sound::Sound::stop() {
+  _shutdown();
   log->info("Sound thread was stopped");
 
   this->_willStop = true;

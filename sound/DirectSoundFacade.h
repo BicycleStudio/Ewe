@@ -19,6 +19,12 @@ namespace sound {
     void _shutdown();
 
   private:
+    bool setPrimaryBufferFormat(WAVEFORMATEX&);
+
+    IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&);
+    IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&, DWORD flags);
+    IDirectSoundBuffer8* _createSecondaryBuffer(DSBUFFERDESC&);
+
     IDirectSound8*      _dSound;
     IDirectSoundBuffer* _primaryBuffer;
   };
