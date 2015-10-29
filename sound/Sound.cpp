@@ -17,7 +17,7 @@ sound::Sound::~Sound() {
   delete log;
 }
 
-void sound::Sound::processCommand (command_manager::Command& c) {
+void sound::Sound::_processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   case CommandType::INITIALIZE:
@@ -47,7 +47,7 @@ void sound::Sound::start() {
     auto a = std::chrono::milliseconds(soundSleep);
     std::this_thread::sleep_for (a);
 
-    processCommands ();
+    _processCommands ();
   }
 }
 

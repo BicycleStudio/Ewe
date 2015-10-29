@@ -42,7 +42,7 @@ window_facade::WindowFacade::~WindowFacade() {
 }
 
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
-  commandManager_->push(c);
+  _commandManager->push(c);
 }
 void window_facade::WindowFacade::pause() {
   this->_paused = true;
@@ -56,7 +56,7 @@ void window_facade::WindowFacade::stop() {
   _shutdown();
   this->_willStop = true;
 }
-void window_facade::WindowFacade::processCommand(command_manager::Command& c) {
+void window_facade::WindowFacade::_processCommand(command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   case CommandType::PAUSE: log->info("WindowFacade pause"); break;
@@ -84,7 +84,7 @@ void window_facade::WindowFacade::start() {
       TranslateMessage(&msg_);
       DispatchMessage(&msg_);
     }
-    processCommands();
+    _processCommands();
   }
 }
 void window_facade::WindowFacade::_generateCommandProcessors() {

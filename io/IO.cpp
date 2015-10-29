@@ -27,7 +27,7 @@ void io::IO::start() {
     auto a = std::chrono::milliseconds(ioSleep);
     std::this_thread::sleep_for(a);
 
-    processCommands();
+    _processCommands();
     
     if (_paused || !_initialized) 
       continue;
@@ -62,7 +62,7 @@ void io::IO::resume() {
   log->info("IO thread was resumed");
 }
 
-void io::IO::processCommand(command_manager::Command& c) {
+void io::IO::_processCommand(command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   case CommandType::INITIALIZE: 
