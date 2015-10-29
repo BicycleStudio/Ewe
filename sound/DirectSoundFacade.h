@@ -18,6 +18,8 @@ namespace sound {
     bool _initialize(int hwnd);
     void _shutdown();
 
+    void _pause();
+    void _resume();
   private:
     bool _setPrimaryBufferFormat(WAVEFORMATEX&);
     bool _updateBuffer(IDirectSoundBuffer8*);

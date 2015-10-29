@@ -11,6 +11,7 @@ sound::DirectSoundFacade::DirectSoundFacade() {
   _dSound = 0;
   _primaryBuffer = 0;
 }
+
 sound::DirectSoundFacade::~DirectSoundFacade() {
   delete log;
 }
@@ -66,6 +67,16 @@ void sound::DirectSoundFacade::_shutdown() {
   SAFE_RELEASE(_primaryBuffer);
   SAFE_RELEASE(_dSound);
   log->info("shutdown...");
+}
+
+void sound::DirectSoundFacade::_pause() {
+  for (auto b : _secondaryBuffers) 
+    CHECK_HRESULT_WARN(b->Stop(), "Can't Stop secondaryBuffer for pause.");
+}
+
+void sound::DirectSoundFacade::_resume() {
+  for (auto b : _secondaryBuffers)
+    CHECK_HRESULT_WARN(b->Play(0,0,0), "Can't Play secondaryBuffer for resume.");
 }
 
 bool sound::DirectSoundFacade::_updateBuffer(IDirectSoundBuffer8* buf) {

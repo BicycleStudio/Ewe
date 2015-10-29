@@ -10,6 +10,8 @@ namespace sound {
     virtual bool _initialize(int hwnd) = 0;
     virtual void _shutdown() = 0;
 
+    virtual void _pause() = 0;
+    virtual void _resume() = 0;
     bool _initialized;
   };
 
