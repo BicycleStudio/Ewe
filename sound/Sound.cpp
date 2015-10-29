@@ -54,9 +54,11 @@ void sound::Sound::start() {
 void sound::Sound::pause() {
   log->info("Sound pause");
   this->_paused = true;
+  _pause();
 }
 
 void sound::Sound::resume() {
   log->info("Sound resume");
   this->_paused = false;
+  _resume();
 }

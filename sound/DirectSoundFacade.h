@@ -7,31 +7,35 @@
 
 namespace sound {
 
-  class DirectSoundFacade : public SoundFacade {
-    utils::Logger* log;
+  namespace direct_sound {
 
-  public:
-    DirectSoundFacade();
-    ~DirectSoundFacade();
+    class Facade : public SoundFacade {
+      utils::Logger* log;
 
-  protected:
-    bool _initialize(int hwnd);
-    void _shutdown();
+    public:
+      Facade();
+      ~Facade();
 
-    void _pause();
-    void _resume();
-  private:
-    bool _setPrimaryBufferFormat(WAVEFORMATEX&);
-    bool _updateBuffer(IDirectSoundBuffer8*);
+    protected:
+      bool _initialize(int hwnd);
+      void _shutdown();
 
-    IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&);
-    IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&, DWORD flags);
-    IDirectSoundBuffer8* _createSecondaryBuffer(DSBUFFERDESC&);
+      void _pause();
+      void _resume();
+    private:
+      bool _setPrimaryBufferFormat(WAVEFORMATEX&);
+      bool _updateBuffer(IDirectSoundBuffer8*);
 
-    IDirectSound8*      _dSound;
-    IDirectSoundBuffer* _primaryBuffer;
-    std::vector<IDirectSoundBuffer8*> _secondaryBuffers;
-  };
+      IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&);
+      IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&, DWORD flags);
+      IDirectSoundBuffer8* _createSecondaryBuffer(DSBUFFERDESC&);
+
+      IDirectSound8*      _dSound;
+      IDirectSoundBuffer* _primaryBuffer;
+      std::vector<IDirectSoundBuffer8*> _secondaryBuffers;
+    };
+  
+  }
 
 }
 

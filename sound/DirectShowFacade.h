@@ -7,20 +7,33 @@
 
 namespace sound {
 
-  class DirectShowFacade : public SoundFacade {
-    utils::Logger* log;
+  namespace direct_show {
 
-  public:
-    DirectShowFacade();
-    ~DirectShowFacade();
+    class Facade : public SoundFacade {
+      utils::Logger* log;
 
-  protected:
-    bool _initialize(int hwnd);
-    void _shutdown();
+    public:
+      Facade();
+      ~Facade();
 
-    void _pause();
-    void _resume();
-  };
+    protected:
+      bool _initialize(int hwnd);
+      void _shutdown();
+
+      void _pause();
+      void _resume();
+
+    private:
+      IGraphBuilder* _graphBuilder;
+      IMediaControl* _mediaControl;
+      IMediaEvent*   _mediaEvent;
+
+      IGraphBuilder* _graphBuilder2;
+      IMediaControl* _mediaControl2;
+      IMediaEvent*   _mediaEvent2;
+    };
+    
+  }
 
 }
 

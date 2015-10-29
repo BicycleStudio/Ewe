@@ -1,11 +1,14 @@
 #ifndef SOUND_H_
 #define SOUND_H_
-#define __DX_SOUND
+//#define __DX_SOUND
+#define __DX_SHOW
 
 #include "Dependencies.h"
 
-#ifdef __DX_SOUND
+#if defined(__DX_SOUND)
 #include "DirectSoundFacade.h"
+#elif defined(__DX_SHOW)
+#include "DirectShowFacade.h"
 #endif
 
 #include <ThreadManager.h>
@@ -15,7 +18,9 @@ namespace sound {
 
   class Sound : public thread_manager::ThreadSubjectWithKill,
   #ifdef __DX_SOUND
-    public DirectSoundFacade
+    public direct_sound::Facade
+  #elif defined(__DX_SHOW)
+    public direct_show::Facade
   #endif
   {
     utils::Logger* log;

@@ -6,17 +6,19 @@ static const int samplePerSecond = 22050;
 static const int bitzPerSample = 16;
 static const int channels = 1;
 
-sound::DirectSoundFacade::DirectSoundFacade() {
+using sound::direct_sound::Facade;
+
+Facade::Facade() {
   log = new utils::Logger(typeid(*this).name());
   _dSound = 0;
   _primaryBuffer = 0;
 }
 
-sound::DirectSoundFacade::~DirectSoundFacade() {
+Facade::~Facade() {
   delete log;
 }
 
-bool sound::DirectSoundFacade::_initialize(int hwnd) {
+bool Facade::_initialize(int hwnd) {
   HWND hwnd_ = reinterpret_cast <HWND> (hwnd);
 
   CHECK_HRESULT_FATAL(DirectSoundCreate8(NULL, &_dSound, NULL),
@@ -58,7 +60,7 @@ bool sound::DirectSoundFacade::_initialize(int hwnd) {
   return true;
 }
 
-void sound::DirectSoundFacade::_shutdown() {
+void Facade::_shutdown() {
   for (auto b : _secondaryBuffers) {
     CHECK_HRESULT_WARN(b->Stop(),"Can't Stop secondaryBuffer.");
     SAFE_RELEASE(b);
@@ -69,17 +71,17 @@ void sound::DirectSoundFacade::_shutdown() {
   log->info("shutdown...");
 }
 
-void sound::DirectSoundFacade::_pause() {
+void Facade::_pause() {
   for (auto b : _secondaryBuffers) 
     CHECK_HRESULT_WARN(b->Stop(), "Can't Stop secondaryBuffer for pause.");
 }
 
-void sound::DirectSoundFacade::_resume() {
+void Facade::_resume() {
   for (auto b : _secondaryBuffers)
     CHECK_HRESULT_WARN(b->Play(0,0,0), "Can't Play secondaryBuffer for resume.");
 }
 
-bool sound::DirectSoundFacade::_updateBuffer(IDirectSoundBuffer8* buf) {
+bool Facade::_updateBuffer(IDirectSoundBuffer8* buf) {
   char* data; DWORD size;
   if (FAILED(buf->Lock(0, 0, (void**)&data, (DWORD*)&size, NULL, 0, DSBLOCK_ENTIREBUFFER))) {
     log->fatal("can't lock buffer for update.");
@@ -96,13 +98,13 @@ bool sound::DirectSoundFacade::_updateBuffer(IDirectSoundBuffer8* buf) {
   return true;
 }
 
-bool sound::DirectSoundFacade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
+bool Facade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
   CHECK_HRESULT_FATAL(_primaryBuffer->SetFormat(&waveFormat), "Can't setFormat for primaryBuffer.");
   
   return true;
 }
 
-IDirectSoundBuffer8* sound::DirectSoundFacade::_createSecondaryBuffer(DSBUFFERDESC& bdesc) {
+IDirectSoundBuffer8* Facade::_createSecondaryBuffer(DSBUFFERDESC& bdesc) {
   IDirectSoundBuffer8* secondaryBuffer;
   IDirectSoundBuffer* tempBuffer;
 
@@ -123,7 +125,7 @@ IDirectSoundBuffer8* sound::DirectSoundFacade::_createSecondaryBuffer(DSBUFFERDE
   }
 }
 
-IDirectSoundBuffer8* sound::DirectSoundFacade::_createSecondaryBuffer(int seconds, WAVEFORMATEX& wfex) {
+IDirectSoundBuffer8* Facade::_createSecondaryBuffer(int seconds, WAVEFORMATEX& wfex) {
   DSBUFFERDESC bdesc;
   ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
 
@@ -135,7 +137,7 @@ IDirectSoundBuffer8* sound::DirectSoundFacade::_createSecondaryBuffer(int second
   return _createSecondaryBuffer(bdesc);
 }
 
-IDirectSoundBuffer8* sound::DirectSoundFacade::_createSecondaryBuffer(int seconds, WAVEFORMATEX& wfex, DWORD flags) {
+IDirectSoundBuffer8* Facade::_createSecondaryBuffer(int seconds, WAVEFORMATEX& wfex, DWORD flags) {
   DSBUFFERDESC bdesc;
   ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
 
