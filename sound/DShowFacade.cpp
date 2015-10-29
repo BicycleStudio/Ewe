@@ -1,4 +1,4 @@
-#include "DirectShowFacade.h"
+#include "DShowFacade.h"
 
 #define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 #define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }

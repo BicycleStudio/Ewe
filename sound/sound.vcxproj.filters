@@ -30,25 +30,31 @@
     <ClInclude Include="DependenciesDSound.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DirectSoundFacade.h">
-      <Filter>src\soundFacade\directSoundFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectShowFacade.h">
-      <Filter>src\soundFacade\directShowFacade</Filter>
-    </ClInclude>
     <ClInclude Include="DependenciesDShow.h">
       <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DShowAudio.h">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DShowFacade.h">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DSoundFacade.h">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sound.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="DirectSoundFacade.cpp">
-      <Filter>src\soundFacade\directSoundFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectShowFacade.cpp">
+    <ClCompile Include="DShowAudio.cpp">
       <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DShowFacade.cpp">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DSoundFacade.cpp">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

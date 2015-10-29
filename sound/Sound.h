@@ -6,9 +6,9 @@
 #include "Dependencies.h"
 
 #if defined(__DX_SOUND)
-#include "DirectSoundFacade.h"
+#include "DSoundFacade.h"
 #elif defined(__DX_SHOW)
-#include "DirectShowFacade.h"
+#include "DShowFacade.h"
 #endif
 
 #include <ThreadManager.h>

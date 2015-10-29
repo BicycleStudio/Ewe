@@ -1,4 +1,4 @@
-#include "DirectSoundFacade.h"
+#include "DSoundFacade.h"
 #define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 #define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
