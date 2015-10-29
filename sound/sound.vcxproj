@@ -85,6 +85,7 @@
     <ClInclude Include="DependenciesDShow.h" />
     <ClInclude Include="DependenciesDSound.h" />
     <ClInclude Include="DShowFacade.h" />
+    <ClInclude Include="DSoundAudio.h" />
     <ClInclude Include="DSoundFacade.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundFacade.h" />
@@ -92,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="DShowAudio.cpp" />
     <ClCompile Include="DShowFacade.cpp" />
+    <ClCompile Include="DSoundAudio.cpp" />
     <ClCompile Include="DSoundFacade.cpp" />
     <ClCompile Include="Sound.cpp" />
   </ItemGroup>

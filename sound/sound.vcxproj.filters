@@ -42,6 +42,9 @@
     <ClInclude Include="DSoundFacade.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
+    <ClInclude Include="DSoundAudio.h">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sound.cpp">
@@ -54,6 +57,9 @@
       <Filter>src\soundFacade\directShowFacade</Filter>
     </ClCompile>
     <ClCompile Include="DSoundFacade.cpp">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DSoundAudio.cpp">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClCompile>
   </ItemGroup>

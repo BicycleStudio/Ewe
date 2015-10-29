@@ -47,6 +47,7 @@ void sound::Sound::start() {
     auto a = std::chrono::milliseconds(soundSleep);
     std::this_thread::sleep_for (a);
 
+    // TODO: check all audios for end & remove if;
     _processCommands ();
   }
 }
