@@ -45,6 +45,9 @@
     <ClInclude Include="DSoundAudio.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
+    <ClInclude Include="AudioFacade.h">
+      <Filter>src\soundFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sound.cpp">

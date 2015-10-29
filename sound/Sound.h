@@ -1,7 +1,7 @@
 #ifndef SOUND_H_
 #define SOUND_H_
-//#define __DX_SOUND
-#define __DX_SHOW
+#define __DX_SOUND
+//#define __DX_SHOW
 
 #include "Dependencies.h"
 

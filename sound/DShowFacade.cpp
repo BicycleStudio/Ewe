@@ -1,7 +1,7 @@
 #include "DShowFacade.h"
 
 #define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
-#define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }
+#define CHECK_RESULT_WARN(res,msg) { if(!res) log->warn(msg); }
 #define SAFE_RELEASE(pointer) { if(pointer) { pointer->Release(); pointer = 0; } }
 
 // use your favourite file )
@@ -27,14 +27,14 @@ void Facade::_shutdown() {
 void Facade::_pause() {
   if (_initialized) {
     for (auto& a : _audios)
-      CHECK_HRESULT_WARN(a.pause(), "mediaControl of audio  pause.");
+      CHECK_RESULT_WARN(a.pause(), "mediaControl of audio  pause.");
   }
 }
 
 void Facade::_resume() {
   if (_initialized) {
     for (auto& a : _audios)
-      CHECK_HRESULT_WARN(a.run(), "mediaControl of audio run.");
+      CHECK_RESULT_WARN(a.run(), "mediaControl of audio run.");
   }
 }
 
@@ -42,7 +42,7 @@ bool Facade::_initialize(int hwnd) {
   CHECK_HRESULT_FATAL(CoInitializeEx(NULL, COINIT_MULTITHREADED), "Can't CoInitializeEx with multithread!");
 
 #pragma region test functionality
-  { Audio audio; CHECK_HRESULT_WARN(audio.initialize(testFile1), "Can't initialize audio."); _audios.push_back(audio); }
+  { Audio audio; CHECK_RESULT_WARN(audio.initialize(testFile1, 0), "Can't initialize audio."); _audios.push_back(audio); }
 #pragma endregion
 
   return true;

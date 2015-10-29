@@ -49,21 +49,21 @@ bool Facade::_initialize(int hwnd) {
   _primaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
 
 #pragma region TemporaryForTest
-  IDirectSoundBuffer8* secondaryBuffer = _createSecondaryBuffer(10, waveFormat);
-  if (secondaryBuffer == 0) return false;
-  if (!_updateBuffer(secondaryBuffer)) return false;
-  secondaryBuffer->Play(0, 0, 0);
-
-  _secondaryBuffers.push_back(secondaryBuffer);
+  Audio audio;
+  if (!audio.initialize("", reinterpret_cast<int> (_dSound))) {
+    log->warn("Can't initialize audio!");
+    log->info("Can't initialize audio!");
+    return false;
+  }
+  _audios.push_back(audio);
 #pragma endregion
 
   return true;
 }
 
 void Facade::_shutdown() {
-  for (auto b : _secondaryBuffers) {
-    CHECK_HRESULT_WARN(b->Stop(),"Can't Stop secondaryBuffer.");
-    SAFE_RELEASE(b);
+  for (auto& b : _audios) {
+    b.shutdown();
   }
   CHECK_HRESULT_WARN(_primaryBuffer->Stop(), "Can't Stop primaryBuffer.");
   SAFE_RELEASE(_primaryBuffer);
@@ -72,30 +72,13 @@ void Facade::_shutdown() {
 }
 
 void Facade::_pause() {
-  for (auto b : _secondaryBuffers) 
-    CHECK_HRESULT_WARN(b->Stop(), "Can't Stop secondaryBuffer for pause.");
+  for (auto& a : _audios) 
+    CHECK_HRESULT_WARN(a.pause(), "Can't pause audio for pause.");
 }
 
 void Facade::_resume() {
-  for (auto b : _secondaryBuffers)
-    CHECK_HRESULT_WARN(b->Play(0,0,0), "Can't Play secondaryBuffer for resume.");
-}
-
-bool Facade::_updateBuffer(IDirectSoundBuffer8* buf) {
-  char* data; DWORD size;
-  if (FAILED(buf->Lock(0, 0, (void**)&data, (DWORD*)&size, NULL, 0, DSBLOCK_ENTIREBUFFER))) {
-    log->fatal("can't lock buffer for update.");
-    return false;
-  }
-
-  for (DWORD i = 0; i < size; i++) data[i] = rand() % 65536;
-
-  if (FAILED(buf->Unlock((void*)data, size, NULL, 0))) {
-    log->fatal("can't unlock buffer for update.");
-    return false;
-  }
-
-  return true;
+  for (auto& a : _audios)
+    CHECK_HRESULT_WARN(a.run(), "Can't run audio for resume.");
 }
 
 bool Facade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
@@ -104,47 +87,3 @@ bool Facade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
   return true;
 }
 
-IDirectSoundBuffer8* Facade::_createSecondaryBuffer(DSBUFFERDESC& bdesc) {
-  IDirectSoundBuffer8* secondaryBuffer;
-  IDirectSoundBuffer* tempBuffer;
-
-  if (FAILED(_dSound->CreateSoundBuffer(&bdesc, &tempBuffer, NULL))) {
-    log->warn("Can't create temp SoundBuffer.");
-    return 0;
-  }
-  else {
-    if (FAILED(tempBuffer->QueryInterface(IID_IDirectSoundBuffer8, (void**)&secondaryBuffer))) {
-      log->warn("Can't create SecondaryBuffer.");
-      tempBuffer->Release();
-      return 0;
-    }
-    else {
-      tempBuffer->Release();
-      return secondaryBuffer;
-    }
-  }
-}
-
-IDirectSoundBuffer8* Facade::_createSecondaryBuffer(int seconds, WAVEFORMATEX& wfex) {
-  DSBUFFERDESC bdesc;
-  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
-
-  bdesc.dwSize = sizeof(DSBUFFERDESC);
-  bdesc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN;
-  bdesc.dwBufferBytes = wfex.nAvgBytesPerSec * seconds;
-  bdesc.lpwfxFormat = &wfex;
-
-  return _createSecondaryBuffer(bdesc);
-}
-
-IDirectSoundBuffer8* Facade::_createSecondaryBuffer(int seconds, WAVEFORMATEX& wfex, DWORD flags) {
-  DSBUFFERDESC bdesc;
-  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
-
-  bdesc.dwSize = sizeof(DSBUFFERDESC);
-  bdesc.dwFlags = flags;
-  bdesc.dwBufferBytes = wfex.nAvgBytesPerSec * seconds;
-  bdesc.lpwfxFormat = &wfex;
-
-  return _createSecondaryBuffer(bdesc);
-}

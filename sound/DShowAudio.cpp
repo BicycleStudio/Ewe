@@ -9,9 +9,6 @@ Audio::Audio() {
   _mediaEvent = 0;
 }
 
-Audio::~Audio() {
-}
-
 void Audio::shutdown() {
   stop();
   SAFE_RELEASE(_mediaEvent);
@@ -19,16 +16,16 @@ void Audio::shutdown() {
   SAFE_RELEASE(_graphBuilder);
 }
 
-HRESULT Audio::initialize(std::string fileName) {
+bool Audio::initialize(std::string fileName, int forDsound) {
 
   HRESULT hres = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&_graphBuilder);
-  if (FAILED(hres)) return hres;
+  if (FAILED(hres)) return false;
 
   hres = _graphBuilder->QueryInterface(IID_IMediaControl, (void**)&_mediaControl);
-  if (FAILED(hres)) return hres;
+  if (FAILED(hres)) return false;
 
   hres = _graphBuilder->QueryInterface(IID_IMediaEvent, (void**)&_mediaEvent);
-  if (FAILED(hres)) return hres;
+  if (FAILED(hres)) return false;
 
   size_t size = strlen(fileName.c_str()) + 1;
   WCHAR* wFilename = new WCHAR[size];
@@ -36,17 +33,28 @@ HRESULT Audio::initialize(std::string fileName) {
   mbstowcs_s(&outSize, wFilename, size, fileName.c_str(), size - 1);
 
   hres = _graphBuilder->RenderFile(wFilename, 0);
-  return hres;
+  if (FAILED(hres)) return false;
+  
+  return true;
 }
 
-HRESULT Audio::pause() {
-  return _mediaControl->Pause();
+bool Audio::pause() {
+  HRESULT hres = _mediaControl->Pause();
+  if (FAILED(hres)) return false;
+
+  return true;
 }
 
-HRESULT Audio::run() {
-  return _mediaControl->Run();
+bool Audio::run() {
+  HRESULT hres = _mediaControl->Run();
+  if (FAILED(hres)) return false;
+
+  return true;
 }
 
-HRESULT Audio::stop() {
-  return _mediaControl->Stop();
+bool Audio::stop() {
+  HRESULT hres = _mediaControl->Stop();
+  if (FAILED(hres)) return false;
+
+  return true;
 }

@@ -3,6 +3,7 @@
 
 #include "DependenciesDSound.h"
 #include "SoundFacade.h"
+#include "DSoundAudio.h"
 #include "Logger.h"
 
 namespace sound {
@@ -24,15 +25,11 @@ namespace sound {
       void _resume();
     private:
       bool _setPrimaryBufferFormat(WAVEFORMATEX&);
-      bool _updateBuffer(IDirectSoundBuffer8*);
 
-      IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&);
-      IDirectSoundBuffer8* _createSecondaryBuffer(int seconds, WAVEFORMATEX&, DWORD flags);
-      IDirectSoundBuffer8* _createSecondaryBuffer(DSBUFFERDESC&);
 
       IDirectSound8*      _dSound;
       IDirectSoundBuffer* _primaryBuffer;
-      std::vector<IDirectSoundBuffer8*> _secondaryBuffers;
+      std::vector<Audio>  _audios;
     };
   
   }

@@ -2,22 +2,21 @@
 #define DSHOW_AUDIO_H_
 
 #include "DependenciesDShow.h"
-#include <string>
+#include "AudioFacade.h"
 
 namespace sound {
 
   namespace direct_show {
 
-    class Audio {
+    class Audio : public AudioFacade {
     public:
       Audio();
-      ~Audio();
 
-      HRESULT initialize(std::string fileName);
+      bool initialize(std::string fileName, int forDsound);
       void shutdown();
-      HRESULT pause();
-      HRESULT run();
-      HRESULT stop();
+      bool pause();
+      bool run();
+      bool stop();
 
     private:
       IGraphBuilder* _graphBuilder;
