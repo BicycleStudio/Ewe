@@ -10,6 +10,9 @@
     <Filter Include="src\soundFacade\directSoundFacade">
       <UniqueIdentifier>{0154b20b-7e98-4bf2-b0e9-0a27a5c12eb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\soundFacade\directShowFacade">
+      <UniqueIdentifier>{e1592d5f-4f61-48c4-af29-89d1ef02d7b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,6 +33,12 @@
     <ClInclude Include="DirectSoundFacade.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
+    <ClInclude Include="DirectShowFacade.h">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DependenciesDShow.h">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sound.cpp">
@@ -37,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="DirectSoundFacade.cpp">
       <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShowFacade.cpp">
+      <Filter>src\soundFacade\directShowFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
