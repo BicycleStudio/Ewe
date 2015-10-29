@@ -17,7 +17,7 @@ logic::Logic::~Logic() {
   delete log;
 }
 
-void logic::Logic::processCommand (command_manager::Command& c) {
+void logic::Logic::_processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   default: break;
@@ -38,7 +38,7 @@ void logic::Logic::start() {
     auto a = std::chrono::milliseconds(logicSleep);
     std::this_thread::sleep_for (a);
 
-    processCommands ();
+    _processCommands ();
   }
 }
 

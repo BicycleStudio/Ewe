@@ -25,7 +25,7 @@ namespace graphic {
     public OpenGLFacade
 #endif
   {
-    void processCommand (command_manager::Command& c);
+    void _processCommand (command_manager::Command& c);
   public:
     command_manager::ID id();
     void stop();

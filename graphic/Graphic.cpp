@@ -27,7 +27,7 @@ void graphic::Graphic::pause() {
 void graphic::Graphic::resume() {
   this->_paused = false;
 }
-void graphic::Graphic::processCommand (command_manager::Command& c) {
+void graphic::Graphic::_processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) { 
   case CommandType::INITIALIZE: 
@@ -61,6 +61,6 @@ void graphic::Graphic::start() {
       _endScene();
     }
 
-    processCommands ( );
+    _processCommands ( );
   }
 }
