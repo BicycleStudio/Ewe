@@ -1,7 +1,7 @@
 #ifndef DIRECT_SHOW_FACADE_H_
 #define DIRECT_SHOW_FACADE_H_
 
-#include "SoundFacade.h"
+#include "ISoundFacade.h"
 #include "Logger.h"
 #include "DShowAudio.h"
 
@@ -9,12 +9,12 @@ namespace sound {
 
   namespace direct_show {
 
-    class Facade : public SoundFacade {
+    class SoundFacade : public ISoundFacade {
       utils::Logger* log;
 
     public:
-      Facade();
-      ~Facade();
+      SoundFacade();
+      ~SoundFacade();
 
     protected:
       bool _initialize(int hwnd);

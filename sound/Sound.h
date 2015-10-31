@@ -6,7 +6,8 @@
 #include "Dependencies.h"
 
 #if defined(__DX_SOUND)
-#include "DSoundFacade.h"
+ #include "DSoundFacade.h"
+ using namespace sound::direct_sound;
 #elif defined(__DX_SHOW)
 #include "DShowFacade.h"
 #endif
@@ -16,12 +17,7 @@
 
 namespace sound {
 
-  class Sound : public thread_manager::ThreadSubjectWithKill,
-  #ifdef __DX_SOUND
-    public direct_sound::Facade
-  #elif defined(__DX_SHOW)
-    public direct_show::Facade
-  #endif
+  class Sound : public thread_manager::ThreadSubjectWithKill, public SoundFacade
   {
     utils::Logger* log;
 

@@ -7,19 +7,19 @@ static const int bitzPerSample = 16;
 static const int channels = 1;
 static const std::string testFile = "c:/test/sound01.wav";
 
-using sound::direct_sound::Facade;
+using sound::direct_sound::SoundFacade;
 
-Facade::Facade() {
+SoundFacade::SoundFacade() {
   log = new utils::Logger(typeid(*this).name());
   _dSound = 0;
   _primaryBuffer = 0;
 }
 
-Facade::~Facade() {
+SoundFacade::~SoundFacade() {
   delete log;
 }
 
-bool Facade::_initialize(int hwnd) {
+bool SoundFacade::_initialize(int hwnd) {
   HWND hwnd_ = reinterpret_cast <HWND> (hwnd);
 
   CHECK_HRESULT_FATAL(DirectSoundCreate8(NULL, &_dSound, NULL),
@@ -62,7 +62,7 @@ bool Facade::_initialize(int hwnd) {
   return true;
 }
 
-void Facade::_shutdown() {
+void SoundFacade::_shutdown() {
   for (auto& b : _audios) {
     b.shutdown();
   }
@@ -72,17 +72,17 @@ void Facade::_shutdown() {
   log->info("shutdown...");
 }
 
-void Facade::_pause() {
+void SoundFacade::_pause() {
   for (auto& a : _audios) 
     CHECK_HRESULT_WARN(a.pause(), "Can't pause audio for pause.");
 }
 
-void Facade::_resume() {
+void SoundFacade::_resume() {
   for (auto& a : _audios)
     CHECK_HRESULT_WARN(a.run(), "Can't run audio for resume.");
 }
 
-bool Facade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
+bool SoundFacade::_setPrimaryBufferFormat(WAVEFORMATEX& waveFormat) {
   CHECK_HRESULT_FATAL(_primaryBuffer->SetFormat(&waveFormat), "Can't setFormat for primaryBuffer.");
   
   return true;

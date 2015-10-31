@@ -24,9 +24,6 @@
     <ClInclude Include="Dependencies.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="SoundFacade.h">
-      <Filter>src\soundFacade</Filter>
-    </ClInclude>
     <ClInclude Include="DependenciesDSound.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
@@ -44,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="DSoundAudio.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="ISoundFacade.h">
+      <Filter>src\soundFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

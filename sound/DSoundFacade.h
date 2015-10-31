@@ -2,7 +2,7 @@
 #define DIRECT_SOUND_FACADE_H_
 
 #include "DependenciesDSound.h"
-#include "SoundFacade.h"
+#include "ISoundFacade.h"
 #include "DSoundAudio.h"
 #include "Logger.h"
 
@@ -10,12 +10,12 @@ namespace sound {
 
   namespace direct_sound {
 
-    class Facade : public SoundFacade {
+    class SoundFacade : public ISoundFacade {
       utils::Logger* log;
 
     public:
-      Facade();
-      ~Facade();
+      SoundFacade();
+      ~SoundFacade();
 
     protected:
       bool _initialize(int hwnd);
