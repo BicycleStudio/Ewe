@@ -3,7 +3,7 @@
 #include "DSoundAudio.h"
 #include "WavFormat.h"
 
-#define CHECK_HRESULT_ERROR(hres,msg) { if(FAILED(hres)) { log->error(msg); return false; } }
+#define CHECK_HRESULT_ERROR(hres,msg) { if(FAILED(hres)) { log->error(msg); shutdown(); return false; } }
 #define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 
@@ -23,7 +23,8 @@ Audio::~Audio() {
 }
 
 void Audio::shutdown() {
-  CHECK_HRESULT_WARN(_buffer->Stop(),"Stop in shutdown function failed.");
+  if (_buffer)
+    CHECK_HRESULT_WARN(_buffer->Stop(),"Stop in shutdown function failed.");
   SAFE_RELEASE(_buffer);
 }
 

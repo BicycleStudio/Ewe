@@ -3,14 +3,18 @@
 
 #include "DependenciesDShow.h"
 #include <string>
+#include "Logger.h"
 
 namespace sound {
 
   namespace direct_show {
 
     class Audio  {
+      utils::Logger* log;
+
     public:
       Audio();
+      ~Audio();
 
       bool initialize(std::string fileName);
       void shutdown();
