@@ -68,7 +68,7 @@ void WindowFacade::stop() {
 
 void WindowFacade::_processCommand(command_manager::Command& c) {
   switch (c.commandType) {
-  case KILL_WINDOW: 
+  case KILL: 
     _shutdown();
     _sendDestroyAll();
     break;
@@ -319,7 +319,6 @@ void WindowFacade::pp_setMinimized(bool minimized) {
 bool WindowFacade::pp_getMinimized() {
   return _minimized;
 }
-
 
 void WindowFacade::_sendHwnd() {
   Command hwndToGraphic = Command( this->id(), ID::GRAPHIC, INITIALIZE);
