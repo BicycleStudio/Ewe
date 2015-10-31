@@ -89,6 +89,7 @@
     <ClInclude Include="DSoundFacade.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="ISoundFacade.h" />
+    <ClInclude Include="WavFormat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DShowAudio.cpp" />

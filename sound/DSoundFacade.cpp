@@ -1,4 +1,5 @@
 #include "DSoundFacade.h"
+#include "WavFormat.h"
 
 #define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 #define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }
