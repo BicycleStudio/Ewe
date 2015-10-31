@@ -3,12 +3,15 @@
 
 #include "DependenciesGL.h"
 #include "IGraphicFacade.h"
+#include <Logger.h>
 
 namespace graphic {
 
   namespace open_gl {
 
     class GraphicFacade : public IGraphicFacade {
+      utils::Logger* log;
+
     public:
       GraphicFacade();
       ~GraphicFacade();

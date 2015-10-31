@@ -6,25 +6,27 @@ static const int bitDepth = 16;
 using graphic::open_gl::GraphicFacade;
 
 GraphicFacade::GraphicFacade() {
+  log = new utils::Logger(typeid(*this).name());
   _hDC = 0;
   _hRC = 0;
 }
 
 GraphicFacade::~GraphicFacade() {
+  delete log;
 }
 
 bool GraphicFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
   _hDC = reinterpret_cast<HDC>(hdc);
 
   if (!(_hRC = wglCreateContext(_hDC))) {
+    log->fatal("Can't Create A GL Rendering Context.");
     _shutdown();
-    // TODO: Log "Graphic: Can't Create A GL Rendering Context."
     return false;
   }
 
   if (!wglMakeCurrent(_hDC, _hRC)) {
+    log->fatal("Can't Activate The GL Rendering Context.");
     _shutdown();
-    // TODO: Log "Graphic: Can't Activate The GL Rendering Context."
     return false;
   }
 
@@ -40,10 +42,10 @@ bool GraphicFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
 
 void GraphicFacade::_shutdown() {
   if (_hRC) {
-    if (!wglMakeCurrent(NULL, NULL)) { }
-    // TODO: Log "Graphic: Release Of DC And RC Failed."
-    if (!wglDeleteContext(_hRC)) { }
-    // TODO: Log "Graphic: Release Rendering Context Failed."
+    if (!wglMakeCurrent(NULL, NULL)) 
+      log->fatal("Release Of DC And RC Failed.");
+    if (!wglDeleteContext(_hRC))
+      log->fatal("Release Rendering Context Failed.");
     _hRC = NULL;
   }
 }

@@ -1,5 +1,6 @@
 #include "DirectXFacade.h"
 
+#define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 
 static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
@@ -7,6 +8,7 @@ static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
 using graphic::direct_x::GraphicFacade;
 
 GraphicFacade::GraphicFacade() {
+  log = new utils::Logger(typeid(*this).name());
   _device = 0;
   _immediateContext = 0;
   _swapChain = 0;
@@ -18,6 +20,7 @@ GraphicFacade::GraphicFacade() {
 }
 
 GraphicFacade::~GraphicFacade() {
+  delete log;
 }
 
 bool GraphicFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
@@ -39,7 +42,6 @@ bool GraphicFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
 }
 
 bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
-  HRESULT hr;
   UINT createDeviceFlags = 0;
 
   D3D_FEATURE_LEVEL       featureLevel_;
@@ -66,7 +68,6 @@ bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
   DXGI_SWAP_CHAIN_DESC sd;
   ZeroMemory(&sd, sizeof(sd));
   sd.BufferCount = 2;
-  // First init with bigSize, after call resize with correct size
   sd.BufferDesc.Width = _sizeX;
   sd.BufferDesc.Height = _sizeY;
   sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -78,16 +79,15 @@ bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
   sd.SampleDesc.Quality = 0;
   sd.Windowed = TRUE;
 
+  HRESULT hres;
   for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++) {
     driverType_ = driverTypes[driverTypeIndex];
-    hr = D3D11CreateDeviceAndSwapChain(NULL, driverType_, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+    hres = D3D11CreateDeviceAndSwapChain(NULL, driverType_, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
       D3D11_SDK_VERSION, &sd, &_swapChain, &_device, &featureLevel_, &_immediateContext);
-    if (SUCCEEDED(hr))			break;
+    if (SUCCEEDED(hres))			break;
   }
-  if (FAILED(hr)) {
-    // TODO: Log "Graphic: DX 11 can't initialize on this machine"
-    return false;
-  }
+  CHECK_HRESULT_FATAL(hres, "DX 11 can't initialize on this machine");
+
   return true;
 }
 
@@ -122,16 +122,11 @@ void GraphicFacade::_setRenderTargets() {
 }
 
 bool GraphicFacade::_createRTV() {
-  HRESULT hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer);
-  if (FAILED(hr)) {
-    // TODO: Log "Graphic: can't get buffer from swapChain!"
-    return false;
-  }
-  hr = _device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView);
-  if (FAILED(hr)) {
-    // TODO: Log "Graphic: can't create renderTargetView from backBuffer!"
-    return false;
-  }
+  CHECK_HRESULT_FATAL(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer),
+    "Can't get buffer from swapChain.");
+  CHECK_HRESULT_FATAL(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView),
+    "Can't create renderTargetView from backBuffer.");
+
   return true;
 }
 
@@ -144,20 +139,17 @@ bool GraphicFacade::_createDSV() {
   descDepth.SampleDesc.Count = 1;	descDepth.SampleDesc.Quality = 0;
   descDepth.Usage = D3D11_USAGE_DEFAULT;	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
   descDepth.CPUAccessFlags = 0;	descDepth.MiscFlags = 0;
-  HRESULT hr = _device->CreateTexture2D(&descDepth, NULL, &_depthStencil);
-  if (FAILED(hr)) {
-    // TODO: Log "Graphic: can't create depthStencil!"
-    return false;
-  }
+  
+  CHECK_HRESULT_FATAL(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil),
+    "Can't create depthStencil.");
 
   D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
   ZeroMemory(&descDSV, sizeof(descDSV));	descDSV.Format = descDepth.Format;
   descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;	descDSV.Texture2D.MipSlice = 0;
-  hr = _device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView);
-  if (FAILED(hr)) {
-    // TODO: Log "Graphic: can't create depthStencilView from depthStencil!"
-    return false;
-  }
+  
+  CHECK_HRESULT_FATAL(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView),
+    "Can't create depthStencilView from depthStencil.");
+
   return true;
 }
 
@@ -176,11 +168,8 @@ bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   if (_sizeY == 0) _sizeY = 1;
   _clearContext();
 
-  HRESULT hr = _swapChain->ResizeBuffers(1, _sizeX, _sizeY, DXGI_FORMAT_UNKNOWN, 0);
-  if (FAILED(hr)) {
-    // TODO: Log "Graphic: can't resize buffers!"
-    return false;
-  }
+  CHECK_HRESULT_FATAL(_swapChain->ResizeBuffers(1, _sizeX, _sizeY, DXGI_FORMAT_UNKNOWN, 0),
+    "Can't resize buffers.");
 
   if (!_createRTV()) return false;
   if (!_createDSV()) return false;

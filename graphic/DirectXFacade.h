@@ -3,12 +3,15 @@
 
 #include "DependenciesDX.h"
 #include "IGraphicFacade.h"
+#include <Logger.h>
 
 namespace graphic {
 
   namespace direct_x {
 
     class GraphicFacade : public IGraphicFacade {
+      utils::Logger* log;
+
     public:
       GraphicFacade();
       ~GraphicFacade();
