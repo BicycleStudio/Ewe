@@ -1,17 +1,7 @@
 #ifndef SOUND_H_
 #define SOUND_H_
-#define __DX_SOUND
-//#define __DX_SHOW
 
 #include "Dependencies.h"
-
-#if defined(__DX_SOUND)
- #include "DSoundFacade.h"
- using namespace sound::direct_sound;
-#elif defined(__DX_SHOW)
-#include "DShowFacade.h"
-#endif
-
 #include <ThreadManager.h>
 #include <Logger.h>
 
