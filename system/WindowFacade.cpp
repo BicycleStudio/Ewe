@@ -1,9 +1,11 @@
 #include "WindowFacade.h"
-
 #include <CommandManager.h>
 #include <iostream>
-using std::cout;
+
 #define __DX_GRAPHIC
+
+using window_facade::WindowFacade;
+using namespace command_manager;
 
 static const int windowFacadeSleep = 100;
 static const std::string fullScreenString = "Start fullscreen?";
@@ -15,13 +17,15 @@ static const int windowHeight = 600;
 static const bool windowed = true;
 #define BITZ 32
 
-command_manager::ID window_facade::WindowFacade::id() {
-  return command_manager::ID::WINDOW_FACADE;
+ID WindowFacade::id() {
+  return ID::WINDOW_FACADE;
 }
-window_facade::WindowFacade* window_facade::WindowFacade::getInstance() {
+
+WindowFacade* window_facade::WindowFacade::getInstance() {
   static WindowFacade* facade = new WindowFacade();
   return facade;
 }
+
 window_facade::WindowFacade::WindowFacade() {
   log = new utils::Logger(typeid(*this).name());
 
@@ -44,34 +48,43 @@ window_facade::WindowFacade::~WindowFacade() {
 void window_facade::WindowFacade::_send(command_manager::Command& c) {
   _commandManager->push(c);
 }
-void window_facade::WindowFacade::pause() {
+
+void WindowFacade::pause() {
+  log->info("thread was paused\n");
   this->_paused = true;
 }
-void window_facade::WindowFacade::resume() {
+
+void WindowFacade::resume() {
+  log->info("thread was resumed\n");
   this->_paused = false;
 }
-void window_facade::WindowFacade::stop() {
-  log->info("WindowFacade thread was stopped\n");
+
+void WindowFacade::stop() {
+  log->info("thread was stopped\n");
 
   _shutdown();
   this->_willStop = true;
 }
-void window_facade::WindowFacade::_processCommand(command_manager::Command& c) {
-  using command_manager::CommandType;
+
+void WindowFacade::_processCommand(command_manager::Command& c) {
   switch (c.commandType) {
-  case CommandType::PAUSE: log->info("WindowFacade pause"); break;
-  case CommandType::RESUME: log->info("WindowFacade resume"); break;
+  case KILL_WINDOW: 
+    _shutdown();
+    _sendDestroyAll();
+    break;
   default: break;
   }
   return;
 }
-void window_facade::WindowFacade::start() {
+
+void WindowFacade::start() {
   log->info("WindowFacade thread was started");
 
   if (!_initialize()) {
     pp_sendKill();
     return;
   }
+  _initialized = true;
   _sendHwnd();
 
   MSG msg_;
@@ -87,7 +100,8 @@ void window_facade::WindowFacade::start() {
     _processCommands();
   }
 }
-void window_facade::WindowFacade::_generateCommandProcessors() {
+
+void WindowFacade::_generateCommandProcessors() {
   _commandProcessors[WM_CLOSE] = [](WPARAM wParam, LPARAM lParam) {
     WindowFacade::getInstance()->pp_sendKill();
     return true;
@@ -120,7 +134,8 @@ void window_facade::WindowFacade::_generateCommandProcessors() {
     return false;
   };
 }
-bool window_facade::WindowFacade::_initialize() {
+
+bool WindowFacade::_initialize() {
   getInstance()->_generateCommandProcessors();
 
   HINSTANCE hInstance_ = GetModuleHandle(NULL);
@@ -227,7 +242,8 @@ bool window_facade::WindowFacade::_initialize() {
 
   return true;
 }
-bool window_facade::WindowFacade::_additionalInitialize() {
+
+bool WindowFacade::_additionalInitialize() {
   int PixelFormat;
 
   PIXELFORMATDESCRIPTOR pfd = {
@@ -270,34 +286,43 @@ bool window_facade::WindowFacade::_additionalInitialize() {
   }
   return true;
 }
-void window_facade::WindowFacade::_shutdown() {
-  if (_fullscreen) {
-    ChangeDisplaySettings(NULL, 0);
-    ShowCursor(false);
-  }
-  if (_hDC && !ReleaseDC(_hwnd, _hDC)) {
-    // TODO: Log "WindowFacade: Release Device Context Failed."
-    ;
-    _hDC = NULL;
-  }
-  if (_hwnd && !DestroyWindow(_hwnd)) {
-    log->fatal("DestroyWindow was failed");
-    _hwnd = NULL;
+
+void WindowFacade::_shutdown() {
+  if (!_initialized) return;
+  _initialized = false;
+
+  if (_hwnd) {
+    if (_hDC && !ReleaseDC(_hwnd, _hDC)) {
+      log->fatal("Release Device Context Failed.");
+      _hDC = NULL;
+    }
+   if(!DestroyWindow(_hwnd)) {
+     DWORD problem = GetLastError();
+      log->fatal("DestroyWindow was failed");
+    }
+   _hwnd = NULL;
   }
   if (!UnregisterClass(_wndClassName.c_str(), GetModuleHandle(NULL))) {
     log->fatal("UnregisterClass was failed");
   }
+
+  if (_fullscreen) {
+    ChangeDisplaySettings(NULL, 0);
+    ShowCursor(true);
+  }
 }
-void window_facade::WindowFacade::pp_setMinimized(bool minimized) {
+
+void WindowFacade::pp_setMinimized(bool minimized) {
   _minimized = minimized;
 }
-bool window_facade::WindowFacade::pp_getMinimized() {
+
+bool WindowFacade::pp_getMinimized() {
   return _minimized;
 }
-void window_facade::WindowFacade::_sendHwnd() {
-  command_manager::Command hwndToGraphic = command_manager::Command(
-    this->id(), command_manager::ID::GRAPHIC,
-    command_manager::CommandType::INITIALIZE);
+
+
+void WindowFacade::_sendHwnd() {
+  Command hwndToGraphic = Command( this->id(), ID::GRAPHIC, INITIALIZE);
 #if defined(__DX_GRAPHIC)
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hwnd);
 #elif defined(__GL_GRAPHIC)
@@ -307,43 +332,39 @@ void window_facade::WindowFacade::_sendHwnd() {
   hwndToGraphic.args[2] = _height;
   _send(hwndToGraphic);
 
-  command_manager::Command hwndToIO = command_manager::Command(
-    this->id(), command_manager::ID::IO,
-    command_manager::CommandType::INITIALIZE);
+  Command hwndToIO = Command( this->id(), ID::IO, INITIALIZE);
   hwndToIO.args[0] = reinterpret_cast<int>(_hwnd);
   _send(hwndToIO);
 
-  command_manager::Command hwndToSound = command_manager::Command(
-    this->id(), command_manager::ID::SOUND,
-    command_manager::CommandType::INITIALIZE);
+  Command hwndToSound = Command(this->id(), ID::SOUND, INITIALIZE);
   hwndToSound.args[0] = reinterpret_cast<int>(_hwnd);
   _send(hwndToSound);
 }
-void window_facade::WindowFacade::pp_sendPause() {
-  command_manager::Command commandPause = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE,
-    command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::PAUSE);
+
+void WindowFacade::pp_sendPause() {
+  Command commandPause = Command(id(), ID::THREAD_MANAGER, PAUSE);
   _send(commandPause);
 }
-void window_facade::WindowFacade::pp_sendResume() {
-  command_manager::Command commandResume = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE,
-    command_manager::ID::THREAD_MANAGER,
-    command_manager::CommandType::RESUME);
+
+void WindowFacade::pp_sendResume() {
+  Command commandResume = Command(id(), ID::THREAD_MANAGER, RESUME);
   _send(commandResume);
 }
+
 void window_facade::WindowFacade::pp_sendKill() {
   _sendKill();
 }
+
 void window_facade::WindowFacade::pp_sendResize(int width, int height) {
   _width = width;
   _height = height;
-  command_manager::Command commandResize = command_manager::Command(
-    command_manager::ID::WINDOW_FACADE,
-    command_manager::ID::GRAPHIC,
-    command_manager::CommandType::RESIZE);
+  Command commandResize = Command(id(), ID::GRAPHIC, RESIZE);
   commandResize.args[0] = width;
   commandResize.args[1] = height;
   _send(commandResize);
+}
+
+void WindowFacade::_sendDestroyAll() {
+  Command cmndRealKill = Command(id(), ID::THREAD_MANAGER, DESTROY_ALL);
+  _commandManager->push(cmndRealKill);
 }

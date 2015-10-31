@@ -16,7 +16,10 @@ namespace command_manager {
   };
 
   enum CommandType {
-    KILL,
+    // ONLY FOR WINDOW_FACADE!! if you wan't to shutdown system use KILL_WINDOW.
+    DESTROY_ALL,
+    // Any thread send KILL_WINDOW, ThreadManager send it to WindowFacade, WindowFacade after shutdown send DESTROY_ALL
+    KILL_WINDOW,
     PAUSE,
     RESUME,
     INITIALIZE,

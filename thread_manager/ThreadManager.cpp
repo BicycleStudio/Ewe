@@ -41,7 +41,7 @@ namespace thread_manager {
   void ThreadSubjectWithKill::_sendKill() {
     Command commandKill = Command(
       this->id(), ID::THREAD_MANAGER,
-      CommandType::KILL);
+      CommandType::KILL_WINDOW);
     _commandManager->push(commandKill);
   }
 
@@ -62,7 +62,7 @@ namespace thread_manager {
 
   void ThreadManager::start() {
     // don't replace to for(auto c : _subjects)
-    for (auto c = _subjects.begin(); c != _subjects.end(); c++){
+    for (auto c = _subjects.begin(); c != _subjects.end(); c++) {
       auto value = *c;
       _threads.push_back(thread([&value]() { value->start(); }));
 
@@ -97,10 +97,12 @@ namespace thread_manager {
       while (this->_commands->size() > 0) {
         auto& c = this->_commands->front();
         switch (c.commandType) {
-
-        case CommandType::KILL:
+        case CommandType::DESTROY_ALL:
           this->stop();
           return;
+        case CommandType::KILL_WINDOW:
+          _sendKillWindow();
+          break;
 
         case CommandType::PAUSE:
           this->pause();
@@ -115,6 +117,11 @@ namespace thread_manager {
         this->_commands->pop();
       }
     }
+  }
+
+  void ThreadManager::_sendKillWindow() {
+    Command cmndKill = Command(ID::THREAD_MANAGER, ID::WINDOW_FACADE, CommandType::KILL_WINDOW);
+    _commandManager.push(cmndKill);
   }
 
 }
