@@ -36,14 +36,14 @@
     <ClInclude Include="DirectXFacade.h">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicFacade.h">
-      <Filter>src\graphicFacade</Filter>
-    </ClInclude>
     <ClInclude Include="OpenGLFacade.h">
       <Filter>src\graphicFacade\openGLFacade</Filter>
     </ClInclude>
     <ClInclude Include="DependenciesGL.h">
       <Filter>src\graphicFacade\openGLFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="IGraphicFacade.h">
+      <Filter>src\graphicFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

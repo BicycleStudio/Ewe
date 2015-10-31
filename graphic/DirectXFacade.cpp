@@ -1,9 +1,12 @@
 #include "DirectXFacade.h"
 
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
+
 static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
 
-graphic::DirectXFacade::DirectXFacade() { 
+using graphic::direct_x::GraphicFacade;
+
+GraphicFacade::GraphicFacade() {
   _device = 0;
   _immediateContext = 0;
   _swapChain = 0;
@@ -14,7 +17,10 @@ graphic::DirectXFacade::DirectXFacade() {
   _depthStencil = 0;
 }
 
-bool graphic::DirectXFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
+GraphicFacade::~GraphicFacade() {
+}
+
+bool GraphicFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
   _sizeX = sizeX;
   _sizeY = sizeY;
 
@@ -32,7 +38,7 @@ bool graphic::DirectXFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) 
   return true;
 }
 
-bool graphic::DirectXFacade::_createDeviceSwapChain(HWND renderHwnd) {
+bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
   HRESULT hr;
   UINT createDeviceFlags = 0;
 
@@ -85,7 +91,7 @@ bool graphic::DirectXFacade::_createDeviceSwapChain(HWND renderHwnd) {
   return true;
 }
 
-void graphic::DirectXFacade::_shutdown() {
+void GraphicFacade::_shutdown() {
   if (_initialized)
     _clearContext();
   _initialized = false;
@@ -94,7 +100,7 @@ void graphic::DirectXFacade::_shutdown() {
   SAFE_RELEASE(_device);
 }
 
-void graphic::DirectXFacade::_clearContext() {
+void GraphicFacade::_clearContext() {
   _immediateContext->ClearState();
   _immediateContext->OMSetRenderTargets(0, NULL, NULL);
   SAFE_RELEASE(_renderTargetView);
@@ -103,7 +109,7 @@ void graphic::DirectXFacade::_clearContext() {
   SAFE_RELEASE(_depthStencil);
 }
 
-void graphic::DirectXFacade::_setRenderTargets() {
+void GraphicFacade::_setRenderTargets() {
   D3D11_VIEWPORT vp;
   vp.Width = (FLOAT)_sizeX;
   vp.Height = (FLOAT)_sizeY;
@@ -115,7 +121,7 @@ void graphic::DirectXFacade::_setRenderTargets() {
   _immediateContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 }
 
-bool graphic::DirectXFacade::_createRTV() {
+bool GraphicFacade::_createRTV() {
   HRESULT hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer);
   if (FAILED(hr)) {
     // TODO: Log "Graphic: can't get buffer from swapChain!"
@@ -129,7 +135,7 @@ bool graphic::DirectXFacade::_createRTV() {
   return true;
 }
 
-bool graphic::DirectXFacade::_createDSV() {
+bool GraphicFacade::_createDSV() {
   D3D11_TEXTURE2D_DESC descDepth;
   ZeroMemory(&descDepth, sizeof(descDepth));
   descDepth.Width = _sizeX;	descDepth.Height = _sizeY;
@@ -155,16 +161,16 @@ bool graphic::DirectXFacade::_createDSV() {
   return true;
 }
 
-void graphic::DirectXFacade::_beginScene() {
+void GraphicFacade::_beginScene() {
   _immediateContext->ClearRenderTargetView(_renderTargetView, sceneColor);
   _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void graphic::DirectXFacade::_endScene() {
+void GraphicFacade::_endScene() {
   _swapChain->Present(0, 0);
 }
 
-bool graphic::DirectXFacade::_resizeBuffers(int sizeX, int sizeY) {
+bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   _sizeX = sizeX; _sizeY = sizeY;
   if (_sizeX == 0) _sizeX = 1;
   if (_sizeY == 0) _sizeY = 1;
