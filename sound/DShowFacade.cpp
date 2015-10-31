@@ -42,7 +42,7 @@ bool Facade::_initialize(int hwnd) {
   CHECK_HRESULT_FATAL(CoInitializeEx(NULL, COINIT_MULTITHREADED), "Can't CoInitializeEx with multithread!");
 
 #pragma region test functionality
-  { Audio audio; CHECK_RESULT_WARN(audio.initialize(testFile1, 0), "Can't initialize audio."); _audios.push_back(audio); }
+  { Audio audio; CHECK_RESULT_WARN(audio.initialize(testFile1), "Can't initialize audio."); _audios.push_back(audio); }
 #pragma endregion
 
   return true;

@@ -51,7 +51,7 @@ bool Facade::_initialize(int hwnd) {
 
 #pragma region TemporaryForTest
   Audio audio;
-  if (!audio.initialize(testFile, reinterpret_cast<int> (_dSound))) {
+  if (!audio.initialize(testFile,_dSound)) {
     log->warn("Can't initialize audio!");
     log->info("Can't initialize audio!");
     return false;

@@ -2,17 +2,17 @@
 #define DSOUND_AUDIO_H_
 
 #include "DependenciesDSound.h"
-#include "AudioFacade.h"
+#include <string>
 
 namespace sound {
 
   namespace direct_sound {
 
-    class Audio : public AudioFacade {
+    class Audio  {
     public:
       Audio();
 
-      bool initialize(std::string fileName, int forDSound);
+      bool initialize(std::string fileName, IDirectSound8* dsound);
       void shutdown();
       bool pause();
       bool run();

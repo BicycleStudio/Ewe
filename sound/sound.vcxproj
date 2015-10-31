@@ -80,7 +80,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioFacade.h" />
     <ClInclude Include="DShowAudio.h" />
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="DependenciesDShow.h" />

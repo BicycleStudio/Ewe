@@ -35,7 +35,7 @@ bool Audio::stop() {
   return true;
 }
 
-bool Audio::initialize(std::string fileName, int forDSound) {
+bool Audio::initialize(std::string fileName, IDirectSound8* dsound) {
   WaveHeader* waveHdr = new WaveHeader();
 
   FILE* fp;
@@ -56,7 +56,7 @@ bool Audio::initialize(std::string fileName, int forDSound) {
   waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
   waveFormat.cbSize = 0;
 
-  if (!_create(reinterpret_cast<IDirectSound8*>(forDSound), waveHdr->dataSize, waveFormat))
+  if (!_create(dsound, waveHdr->dataSize, waveFormat))
     return false;
 
   if (!_update(fileName,0,waveHdr->dataSize))

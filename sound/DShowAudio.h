@@ -2,17 +2,17 @@
 #define DSHOW_AUDIO_H_
 
 #include "DependenciesDShow.h"
-#include "AudioFacade.h"
+#include <string>
 
 namespace sound {
 
   namespace direct_show {
 
-    class Audio : public AudioFacade {
+    class Audio  {
     public:
       Audio();
 
-      bool initialize(std::string fileName, int forDsound);
+      bool initialize(std::string fileName);
       void shutdown();
       bool pause();
       bool run();

@@ -16,7 +16,7 @@ void Audio::shutdown() {
   SAFE_RELEASE(_graphBuilder);
 }
 
-bool Audio::initialize(std::string fileName, int forDsound) {
+bool Audio::initialize(std::string fileName) {
 
   HRESULT hres = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&_graphBuilder);
   if (FAILED(hres)) return false;
