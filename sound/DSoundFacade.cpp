@@ -1,11 +1,12 @@
 #include "DSoundFacade.h"
+
 #define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 #define CHECK_HRESULT_WARN(hres,msg) { if(FAILED(hres)) log->warn(msg); }
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
-static const int samplePerSecond = 22050;
-static const int bitzPerSample = 16;
-static const int channels = 1;
-static const std::string testFile = "c:/test/sound01.wav";
+
+static const int samplePerSecondPrimary = 22050;
+static const int bitzPerSamplePrimary = 16;
+static const int channelsPrimary = 1;
 
 using sound::direct_sound::SoundFacade;
 
@@ -37,27 +38,10 @@ bool SoundFacade::_initialize(int hwnd) {
   CHECK_HRESULT_FATAL(_dSound->CreateSoundBuffer(&bufferDesc, &_primaryBuffer, NULL),
     "Can't create primaryBuffer");
 
-  WAVEFORMATEX waveFormat;
-  waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-  waveFormat.nSamplesPerSec = samplePerSecond;
-  waveFormat.wBitsPerSample = bitzPerSample;
-  waveFormat.nChannels = channels;
-  waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
-  waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
-  waveFormat.cbSize = 0;
+  WavFormat primary = WavFormat(samplePerSecondPrimary, bitzPerSamplePrimary, channelsPrimary);
 
-  if (!_setPrimaryBufferFormat(waveFormat)) return false;
+  if (!_setPrimaryBufferFormat(primary.format)) return false;
   _primaryBuffer->Play(0, 0, DSBPLAY_LOOPING);
-
-#pragma region TemporaryForTest
-  Audio audio;
-  if (!audio.initialize(testFile,_dSound)) {
-    log->warn("Can't initialize audio!");
-    log->info("Can't initialize audio!");
-    return false;
-  }
-  _audios.push_back(audio);
-#pragma endregion
 
   return true;
 }

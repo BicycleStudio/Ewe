@@ -36,10 +36,7 @@ namespace sound {
       } WaveHeader;
 
       bool _update(std::string fileName, long LockPos, long Size);
-      bool _updateRandom();
 
-      bool _create(IDirectSound8* dSound, int seconds, WAVEFORMATEX&);
-      bool _create(IDirectSound8* dSound, int seconds, WAVEFORMATEX&, DWORD flags);
       bool _create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX&);
       bool _create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX&, DWORD flags);
       bool _create(IDirectSound8* dSound, DSBUFFERDESC&);

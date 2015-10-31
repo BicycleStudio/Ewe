@@ -4,9 +4,6 @@
 #define CHECK_RESULT_WARN(res,msg) { if(!res) log->warn(msg); }
 #define SAFE_RELEASE(pointer) { if(pointer) { pointer->Release(); pointer = 0; } }
 
-// use your favourite file )
-static const char* testFile1 = "c:/test/Rob zombie - Dracula.mp3";
-
 using sound::direct_show::SoundFacade;
 
 SoundFacade::SoundFacade() {
@@ -40,10 +37,6 @@ void SoundFacade::_resume() {
 
 bool SoundFacade::_initialize(int hwnd) {
   CHECK_HRESULT_FATAL(CoInitializeEx(NULL, COINIT_MULTITHREADED), "Can't CoInitializeEx with multithread!");
-
-#pragma region test functionality
-  { Audio audio; CHECK_RESULT_WARN(audio.initialize(testFile1), "Can't initialize audio."); _audios.push_back(audio); }
-#pragma endregion
 
   return true;
 }

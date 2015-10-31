@@ -68,43 +68,16 @@ bool Audio::initialize(std::string fileName, IDirectSound8* dsound) {
 bool Audio::_create(IDirectSound8* dSound, DSBUFFERDESC& bdesc) {
   IDirectSoundBuffer* tempBuffer;
 
-  if (FAILED(dSound->CreateSoundBuffer(&bdesc, &tempBuffer, NULL))) {
+  if (FAILED(dSound->CreateSoundBuffer(&bdesc, &tempBuffer, NULL))) 
+    return false;
+  
+  if (FAILED(tempBuffer->QueryInterface(IID_IDirectSoundBuffer8, (void**)&_buffer))) {
+    tempBuffer->Release();
     return false;
   }
-  else {
-    if (FAILED(tempBuffer->QueryInterface(IID_IDirectSoundBuffer8, (void**)&_buffer))) {
-      tempBuffer->Release();
-      return false;
-    }
-    else {
-      tempBuffer->Release();
-      return true;
-    }
-  }
-}
 
-bool Audio::_create(IDirectSound8* dSound, int seconds, WAVEFORMATEX& wfex) {
-  DSBUFFERDESC bdesc;
-  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
-
-  bdesc.dwSize = sizeof(DSBUFFERDESC);
-  bdesc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN;
-  bdesc.dwBufferBytes = wfex.nAvgBytesPerSec * seconds;
-  bdesc.lpwfxFormat = &wfex;
-
-  return _create(dSound, bdesc);
-}
-
-bool Audio::_create(IDirectSound8* dSound, int seconds, WAVEFORMATEX& wfex, DWORD flags) {
-  DSBUFFERDESC bdesc;
-  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
-
-  bdesc.dwSize = sizeof(DSBUFFERDESC);
-  bdesc.dwFlags = flags;
-  bdesc.dwBufferBytes = wfex.nAvgBytesPerSec * seconds;
-  bdesc.lpwfxFormat = &wfex;
-
-  return _create(dSound, bdesc);
+  tempBuffer->Release();
+  return true;
 }
 
 bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex) {
@@ -129,19 +102,6 @@ bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex, DW
   bdesc.lpwfxFormat = &wfex;
 
   return _create(dSound, bdesc);
-}
-
-bool Audio::_updateRandom() {
-  char* data; DWORD size;
-  if (FAILED(_buffer->Lock(0, 0, (void**)&data, (DWORD*)&size, NULL, 0, DSBLOCK_ENTIREBUFFER))) 
-    return false;
-
-  for (DWORD i = 0; i < size; i++) data[i] = rand() % 65536;
-
-  if (FAILED(_buffer->Unlock((void*)data, size, NULL, 0))) 
-    return false;
-
-  return true;
 }
 
 bool Audio::_update(std::string fileName, long lockPos, long size) {
