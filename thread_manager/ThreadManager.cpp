@@ -65,6 +65,9 @@ namespace thread_manager {
     for (auto c = _subjects.begin(); c != _subjects.end(); c++){
       auto value = *c;
       _threads.push_back(thread([&value]() { value->start(); }));
+
+      auto a = milliseconds(threadManagerSleep);
+      sleep_for(a);
     }
   }
 

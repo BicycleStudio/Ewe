@@ -88,10 +88,10 @@ bool graphic::DirectXFacade::_createDeviceSwapChain(HWND renderHwnd) {
 void graphic::DirectXFacade::_shutdown() {
   if (_initialized)
     _clearContext();
+  _initialized = false;
   SAFE_RELEASE(_swapChain);
   SAFE_RELEASE(_immediateContext);
   SAFE_RELEASE(_device);
-  _initialized = false;
 }
 
 void graphic::DirectXFacade::_clearContext() {

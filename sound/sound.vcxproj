@@ -80,10 +80,22 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DShowAudio.h" />
     <ClInclude Include="Dependencies.h" />
+    <ClInclude Include="DependenciesDShow.h" />
+    <ClInclude Include="DependenciesDSound.h" />
+    <ClInclude Include="DShowFacade.h" />
+    <ClInclude Include="DSoundAudio.h" />
+    <ClInclude Include="DSoundFacade.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="ISoundFacade.h" />
+    <ClInclude Include="WavFormat.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DShowAudio.cpp" />
+    <ClCompile Include="DShowFacade.cpp" />
+    <ClCompile Include="DSoundAudio.cpp" />
+    <ClCompile Include="DSoundFacade.cpp" />
     <ClCompile Include="Sound.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

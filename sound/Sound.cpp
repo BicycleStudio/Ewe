@@ -20,12 +20,21 @@ sound::Sound::~Sound() {
 void sound::Sound::_processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
+  case CommandType::INITIALIZE:
+    if (!_initialize(c.args[0])) {
+      _sendKill();
+      return;
+    }
+    _initialized = true;
+    log->info("Sound init [OK]");
+    break;
   default: break;
   }
   return;
 }
 
 void sound::Sound::stop() {
+  _shutdown();
   log->info("Sound thread was stopped");
 
   this->_willStop = true;
@@ -38,6 +47,7 @@ void sound::Sound::start() {
     auto a = std::chrono::milliseconds(soundSleep);
     std::this_thread::sleep_for (a);
 
+    // TODO: check all audios for end & remove if;
     _processCommands ();
   }
 }
@@ -45,9 +55,11 @@ void sound::Sound::start() {
 void sound::Sound::pause() {
   log->info("Sound pause");
   this->_paused = true;
+  _pause();
 }
 
 void sound::Sound::resume() {
   log->info("Sound resume");
   this->_paused = false;
+  _resume();
 }
