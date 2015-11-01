@@ -50,13 +50,13 @@ bool Audio::initialize(std::string fileName, IDirectSound8* dsound) {
   }
 
   FILE* fp;
-  WaveHeader* waveHdr = new WaveHeader();
+  WavHeader* waveHdr = new WavHeader();
   fopen_s(&fp, fileName.c_str(), "rb");
   if (fp == NULL) {
     log->error("Can't open file " + fileName + " for reading.");
     return false;
   }
-  fread(waveHdr, 1, sizeof(WaveHeader), fp);
+  fread(waveHdr, 1, sizeof(WavHeader), fp);
   fclose(fp);
 
   if (memcmp(waveHdr->riffSig, "RIFF", 4) || memcmp(waveHdr->waveSig, "WAVE", 4) ||
@@ -67,7 +67,7 @@ bool Audio::initialize(std::string fileName, IDirectSound8* dsound) {
 
   WavFormat wave = WavFormat(waveHdr->sampleRate, waveHdr->bitsPerSample, waveHdr->channels);
 
-  if (!_create(dsound, waveHdr->dataSize, wave.format))
+  if (!_create(dsound, waveHdr->dataSize, wave.format, DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN))
     return false;
 
   if (!_update(fileName,0,waveHdr->dataSize))
@@ -92,18 +92,6 @@ bool Audio::_create(IDirectSound8* dSound, DSBUFFERDESC& bdesc) {
   return true;
 }
 
-bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex) {
-  DSBUFFERDESC bdesc;
-  ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
-
-  bdesc.dwSize = sizeof(DSBUFFERDESC);
-  bdesc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN;
-  bdesc.dwBufferBytes = dataSize;
-  bdesc.lpwfxFormat = &wfex;
-
-  return _create(dSound, bdesc);
-}
-
 bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex, DWORD flags) {
   DSBUFFERDESC bdesc;
   ZeroMemory(&bdesc, sizeof(DSBUFFERDESC));
@@ -119,7 +107,7 @@ bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex, DW
 bool Audio::_update(std::string fileName, long lockPos, long size) {
   FILE* fp;
   fopen_s(&fp, fileName.c_str(), "rb");
-  fseek(fp, sizeof(WaveHeader), SEEK_SET);
+  fseek(fp, sizeof(WavHeader), SEEK_SET);
 
   BYTE  *ptr1, *ptr2;
   DWORD size1, size2;

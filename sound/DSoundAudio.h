@@ -25,7 +25,6 @@ namespace sound {
     private:
       bool _update(std::string fileName, long LockPos, long Size);
 
-      bool _create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX&);
       bool _create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX&, DWORD flags);
       bool _create(IDirectSound8* dSound, DSBUFFERDESC&);
 

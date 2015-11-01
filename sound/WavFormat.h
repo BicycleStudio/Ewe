@@ -6,7 +6,7 @@
 namespace sound {
   namespace direct_sound {
 
-    struct WavFormat {
+    class WavFormat {
     private:
       WavFormat() {}
     public:
@@ -22,7 +22,7 @@ namespace sound {
       WAVEFORMATEX format;
     };
 
-    struct WaveHeader {
+    struct WavHeader {
       char  riffSig[4];        // 'RIFF'
       long  waveformChunkSize;
       char  waveSig[4];        // 'WAVE'
