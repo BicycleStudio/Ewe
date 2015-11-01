@@ -68,7 +68,7 @@ bool Audio::initialize(std::string fileName, IDirectSound8* dsound) {
 
   WavFormat wave = WavFormat(waveHdr->sampleRate, waveHdr->bitsPerSample, waveHdr->channels);
 
-  if (!_create(dsound, waveHdr->dataSize, wave.format, defaultWavFlags))
+  if (!_create(dsound, waveHdr->dataSize, wave.format))
     return false;
 
   if (!_update(fileName,0,waveHdr->dataSize))
@@ -91,6 +91,10 @@ bool Audio::_create(IDirectSound8* dSound, DSBUFFERDESC& bdesc) {
 
   tempBuffer->Release();
   return true;
+}
+
+bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex) {
+  return _create(dSound, dataSize, wfex, defaultWavFlags);
 }
 
 bool Audio::_create(IDirectSound8* dSound, long dataSize, WAVEFORMATEX& wfex, DWORD flags) {
