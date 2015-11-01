@@ -10,6 +10,7 @@
 static const int samplePerSecond = 22050;
 static const int bitzPerSample = 16;
 static const int channels = 1;
+static const DWORD defaultWavFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN;
 
 using sound::direct_sound::Audio;
 
@@ -67,7 +68,7 @@ bool Audio::initialize(std::string fileName, IDirectSound8* dsound) {
 
   WavFormat wave = WavFormat(waveHdr->sampleRate, waveHdr->bitsPerSample, waveHdr->channels);
 
-  if (!_create(dsound, waveHdr->dataSize, wave.format, DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPAN))
+  if (!_create(dsound, waveHdr->dataSize, wave.format, defaultWavFlags))
     return false;
 
   if (!_update(fileName,0,waveHdr->dataSize))
