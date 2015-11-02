@@ -1,11 +1,9 @@
-#ifndef IOFACADE_H_
-#define IOFACADE_H_
-
-#include <Facade.h>
+#ifndef IINPUT_FACADE_H
+#define IINPUT_FACADE_H
 
 namespace io  {
 
-  class IOFacade : public patterns::Facade {
+  class IInputFacade  {
   protected:
     virtual bool _initialize(int hwnd) = 0;
     virtual void _shutdown() = 0;
@@ -19,4 +17,4 @@ namespace io  {
 
 }
 
-#endif // IOFACADE_H_
+#endif // IINPUT_FACADE_H

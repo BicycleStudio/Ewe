@@ -1,22 +1,14 @@
 #ifndef IO_H_
 #define IO_H_
-#define __DIRECT_INPUT
-
-#if defined(__DIRECT_INPUT)
-#include "DirectInputFacade.h"
-#endif
 
 #include <ThreadManager.h>
 #include <GraphicInformer.h>
 #include <Logger.h>
+#include "Dependencies.h"
 
 namespace io {
 
-  class IO : public thread_manager::ThreadSubjectWithKill,
-  #if defined(__DIRECT_INPUT)
-    public DirectInputFacade
-  #endif
-  {
+  class IO : public thread_manager::ThreadSubjectWithKill, public direct_input::InputFacade {
     utils::Logger* log;
 
     graphic::GraphicInformer graphicInformer;

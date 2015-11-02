@@ -1,20 +1,22 @@
-#include "DirectInputFacade.h"
+#include "DInputFacade.h"
 
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
 #define CHECK_HRESULT(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 
-io::DirectInputFacade::DirectInputFacade() {
+using io::direct_input::InputFacade;
+
+InputFacade::InputFacade() {
   log = new utils::Logger(typeid(*this).name());
   _device = 0;
   _keyboard = 0;
   _mouse = 0;
 }
 
-io::DirectInputFacade::~DirectInputFacade() {
+InputFacade::~InputFacade() {
   delete log;
 }
 
-bool io::DirectInputFacade::_initialize(int hwnd) {
+bool InputFacade::_initialize(int hwnd) {
   HWND hwnd_ = reinterpret_cast<HWND> (hwnd);
   
   CHECK_HRESULT(DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&_device, NULL), 
@@ -39,15 +41,15 @@ bool io::DirectInputFacade::_initialize(int hwnd) {
   return true;
 }
 
-void io::DirectInputFacade::_shutdown() {
+void InputFacade::_shutdown() {
+  _initialized = false;
+
   SAFE_RELEASE(_mouse);
   SAFE_RELEASE(_keyboard);
   SAFE_RELEASE(_device);
-
-  _initialized = false;
 }
 
-void io::DirectInputFacade::_update() {
+void InputFacade::_update() {
   HRESULT hres = _mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&_mouseState);
   if (FAILED(hres)) {
     log->warn("update mouse fails.");
@@ -60,12 +62,12 @@ void io::DirectInputFacade::_update() {
   }
 }
 
-bool io::DirectInputFacade::_acquire() {
+bool InputFacade::_acquire() {
   CHECK_HRESULT(_mouse->Acquire(), "mouse acquire fails.");
   CHECK_HRESULT(_keyboard->Acquire(), "keys acquire fails.");
   return true;
 }
 
-bool io::DirectInputFacade::_pressed(int key) {
+bool InputFacade::_pressed(int key) {
   return _keyState[key];
 }
