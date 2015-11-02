@@ -45,6 +45,8 @@ private:
 
   command_manager::CommandManager _commandManager;
   std::shared_ptr<std::queue<command_manager::Command>> _commands;
+
+  void _sendKillWindow();
 public:
   ThreadManager ( );
 

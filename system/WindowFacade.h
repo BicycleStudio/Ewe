@@ -3,6 +3,7 @@
 
 #include <ThreadManager.h>
 #include <Windows.h>
+#include <Logger.h>
 
 #include <Logger.h>
 
@@ -34,6 +35,7 @@ namespace window_facade {
     WindowFacade();
     WindowFacade(WindowFacade&);
     void _generateCommandProcessors();
+    void _sendDestroyAll();
 
   private:
     void _sendHwnd();
@@ -52,6 +54,7 @@ namespace window_facade {
     std::string _wndClassName;
     bool _fullscreen;
     bool _minimized;
+    bool _initialized;
   };
 
 }
