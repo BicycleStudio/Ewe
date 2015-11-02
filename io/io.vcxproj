@@ -82,13 +82,13 @@
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="DependenciesDInput.h" />
-    <ClInclude Include="DirectInputFacade.h" />
+    <ClInclude Include="DInputFacade.h" />
     <ClInclude Include="IO.h" />
-    <ClInclude Include="IOFacade.h" />
+    <ClInclude Include="IInputFacade.h" />
     <ClInclude Include="IOKeys.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DirectInputFacade.cpp" />
+    <ClCompile Include="DInputFacade.cpp" />
     <ClCompile Include="IO.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

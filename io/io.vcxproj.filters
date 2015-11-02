@@ -21,24 +21,24 @@
     <ClInclude Include="Dependencies.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="IOFacade.h">
-      <Filter>src\ioFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectInputFacade.h">
-      <Filter>src\ioFacade\directInputFacade</Filter>
-    </ClInclude>
     <ClInclude Include="DependenciesDInput.h">
       <Filter>src\ioFacade\directInputFacade</Filter>
     </ClInclude>
     <ClInclude Include="IOKeys.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="IInputFacade.h">
+      <Filter>src\ioFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DInputFacade.h">
+      <Filter>src\ioFacade\directInputFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IO.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="DirectInputFacade.cpp">
+    <ClCompile Include="DInputFacade.cpp">
       <Filter>src\ioFacade\directInputFacade</Filter>
     </ClCompile>
   </ItemGroup>
