@@ -3,23 +3,30 @@
 static const float sceneColor[4]{ 0.95f, 0.55f, 0.65f, 1.0f };
 static const int bitDepth = 16;
 
-graphic::OpenGLFacade::OpenGLFacade() {
+using graphic::open_gl::GraphicFacade;
+
+GraphicFacade::GraphicFacade() {
+  log = new utils::Logger(typeid(*this).name());
   _hDC = 0;
   _hRC = 0;
 }
 
-bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
+GraphicFacade::~GraphicFacade() {
+  delete log;
+}
+
+bool GraphicFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
   _hDC = reinterpret_cast<HDC>(hdc);
 
   if (!(_hRC = wglCreateContext(_hDC))) {
+    log->fatal("Can't Create A GL Rendering Context.");
     _shutdown();
-    // TODO: Log "Graphic: Can't Create A GL Rendering Context."
     return false;
   }
 
   if (!wglMakeCurrent(_hDC, _hRC)) {
+    log->fatal("Can't Activate The GL Rendering Context.");
     _shutdown();
-    // TODO: Log "Graphic: Can't Activate The GL Rendering Context."
     return false;
   }
 
@@ -33,17 +40,17 @@ bool graphic::OpenGLFacade::_initializeGraphic(int hdc, int sizeX, int sizeY) {
   return true;
 }
 
-void graphic::OpenGLFacade::_shutdown() {
+void GraphicFacade::_shutdown() {
   if (_hRC) {
-    if (!wglMakeCurrent(NULL, NULL)) { }
-    // TODO: Log "Graphic: Release Of DC And RC Failed."
-    if (!wglDeleteContext(_hRC)) { }
-    // TODO: Log "Graphic: Release Rendering Context Failed."
+    if (!wglMakeCurrent(NULL, NULL)) 
+      log->fatal("Release Of DC And RC Failed.");
+    if (!wglDeleteContext(_hRC))
+      log->fatal("Release Rendering Context Failed.");
     _hRC = NULL;
   }
 }
 
-bool graphic::OpenGLFacade::_resizeBuffers(int width, int height) {
+bool GraphicFacade::_resizeBuffers(int width, int height) {
   if (width == 0) width = 1;
   if (height == 0) height = 1;
 
@@ -59,10 +66,12 @@ bool graphic::OpenGLFacade::_resizeBuffers(int width, int height) {
 
   return true;
 }
-void graphic::OpenGLFacade::_beginScene() {
+
+void GraphicFacade::_beginScene() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 }
-void graphic::OpenGLFacade::_endScene() {
+
+void GraphicFacade::_endScene() {
   SwapBuffers(_hDC);
 }

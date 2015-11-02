@@ -1,39 +1,25 @@
 #ifndef GRAPHIC_H_
 #define GRAPHIC_H_
 
-#define __DX_GRAPHIC
-
-#if defined(__DX_GRAPHIC)
-#include "DirectXFacade.h"
-#elif defined(__GL_GRAPHIC)
-#include "OpenGLFacade.h"
-#endif
-
-#include <memory>
-#include <queue>
-
 #include <ThreadManager.h>
-
 #include "GraphicSupport.h"
+#include <Logger.h>
 
 namespace graphic {
 
-  class Graphic : public thread_manager::ThreadSubjectWithKill, private GraphicSupport, 
-#if defined(__DX_GRAPHIC)
-    public DirectXFacade
-#elif defined(__GL_GRAPHIC)
-    public OpenGLFacade
-#endif
-  {
-    void _processCommand (command_manager::Command& c);
+  class Graphic : public thread_manager::ThreadSubjectWithKill, public GraphicFacade, private GraphicSupport {
+    utils::Logger* log;
+
+    void _processCommand(command_manager::Command& c);
   public:
     command_manager::ID id();
+    Graphic();
+    ~Graphic();
+
     void stop();
     void start();
     void pause();
     void resume();
-
-    Graphic ( );
   };
 
 }

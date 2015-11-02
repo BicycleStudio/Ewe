@@ -2,26 +2,33 @@
 #define OPENGL_FACADE_H_
 
 #include "DependenciesGL.h"
-#include "GraphicFacade.h"
+#include "IGraphicFacade.h"
+#include <Logger.h>
 
 namespace graphic {
 
-  class OpenGLFacade : public GraphicFacade {
-  public:
-    OpenGLFacade();
+  namespace open_gl {
 
-  protected:
-    bool _initializeGraphic(int hdc, int, int);
-    bool _resizeBuffers(int, int);
-    void _beginScene();
-    void _endScene();
-    void _shutdown();
+    class GraphicFacade : public IGraphicFacade {
+      utils::Logger* log;
 
-  private:
-    HDC     _hDC;
-    HGLRC   _hRC;
-  };
+    public:
+      GraphicFacade();
+      ~GraphicFacade();
 
+    protected:
+      bool _initializeGraphic(int hdc, int, int);
+      bool _resizeBuffers(int, int);
+      void _beginScene();
+      void _endScene();
+      void _shutdown();
+
+    private:
+      HDC     _hDC;
+      HGLRC   _hRC;
+    };
+
+  }
 }
 
 #endif // OPENGL_FACADE_H_
