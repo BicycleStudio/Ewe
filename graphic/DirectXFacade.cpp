@@ -171,8 +171,8 @@ bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   CHECK_HRESULT_FATAL(_swapChain->ResizeBuffers(1, _sizeX, _sizeY, DXGI_FORMAT_UNKNOWN, 0),
     "Can't resize buffers.");
 
-  if (!_createRTV()) return false;
-  if (!_createDSV()) return false;
+  if (!_createRenderTargetView()) return false;
+  if (!_createDepthStencilView()) return false;
 
   _setRenderTargets();
 
