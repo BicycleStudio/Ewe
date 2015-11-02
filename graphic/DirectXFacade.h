@@ -25,8 +25,8 @@ namespace graphic {
 
     private:
       bool _createDeviceSwapChain(HWND renderHwnd);
-      bool _createRTV();
-      bool _createDSV();
+      bool _createRenderTargetView();
+      bool _createDepthStencilView();
       void _clearContext();
       void _setRenderTargets();
 

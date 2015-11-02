@@ -121,7 +121,7 @@ void GraphicFacade::_setRenderTargets() {
   _immediateContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 }
 
-bool GraphicFacade::_createRTV() {
+bool GraphicFacade::_createRenderTargetView() {
   CHECK_HRESULT_FATAL(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer),
     "Can't get buffer from swapChain.");
   CHECK_HRESULT_FATAL(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView),
@@ -130,7 +130,7 @@ bool GraphicFacade::_createRTV() {
   return true;
 }
 
-bool GraphicFacade::_createDSV() {
+bool GraphicFacade::_createDepthStencilView() {
   D3D11_TEXTURE2D_DESC descDepth;
   ZeroMemory(&descDepth, sizeof(descDepth));
   descDepth.Width = _sizeX;	descDepth.Height = _sizeY;
