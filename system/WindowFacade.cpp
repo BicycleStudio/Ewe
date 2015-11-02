@@ -21,12 +21,12 @@ ID WindowFacade::id() {
   return ID::WINDOW_FACADE;
 }
 
-WindowFacade* window_facade::WindowFacade::getInstance() {
+WindowFacade* WindowFacade::getInstance() {
   static WindowFacade* facade = new WindowFacade();
   return facade;
 }
 
-window_facade::WindowFacade::WindowFacade() {
+WindowFacade::WindowFacade() {
   log = new utils::Logger(typeid(*this).name());
 
   _name = appName;
@@ -41,11 +41,11 @@ window_facade::WindowFacade::WindowFacade() {
   _hwnd = 0;
 }
 
-window_facade::WindowFacade::~WindowFacade() {
+WindowFacade::~WindowFacade() {
   delete log;
 }
 
-void window_facade::WindowFacade::_send(command_manager::Command& c) {
+void WindowFacade::_send(command_manager::Command& c) {
   _commandManager->push(c);
 }
 
@@ -268,20 +268,20 @@ bool WindowFacade::_additionalInitialize() {
   };
 
   if (!(_hDC = GetDC(_hwnd))) {
+    log->fatal("Can't Create A GL Device Context.");
     _shutdown();
-    // TODO: Log "WindowFacade: Can't Create A GL Device Context."
     return false;
   }
 
   if (!(PixelFormat = ChoosePixelFormat(_hDC, &pfd))) {
+    log->fatal("Can't Find A Suitable PixelFormat.");
     _shutdown();
-    // TODO: Log "WindowFacade: Can't Find A Suitable PixelFormat."
     return false;
   }
 
   if (!SetPixelFormat(_hDC, PixelFormat, &pfd)) {
+    log->fatal("Can't Set The PixelFormat.");
     _shutdown();
-    // TODO: Log "WindowFacade: Can't Set The PixelFormat."
     return false;
   }
   return true;
@@ -296,10 +296,8 @@ void WindowFacade::_shutdown() {
       log->fatal("Release Device Context Failed.");
       _hDC = NULL;
     }
-   if(!DestroyWindow(_hwnd)) {
-     DWORD problem = GetLastError();
+   if(!DestroyWindow(_hwnd)) 
       log->fatal("DestroyWindow was failed");
-    }
    _hwnd = NULL;
   }
   if (!UnregisterClass(_wndClassName.c_str(), GetModuleHandle(NULL))) {
@@ -313,25 +311,25 @@ void WindowFacade::_shutdown() {
 }
 
 void WindowFacade::pp_setMinimized(bool minimized) {
-  _minimized = minimized;
+  this->_minimized = minimized;
 }
 
 bool WindowFacade::pp_getMinimized() {
-  return _minimized;
+  return this->_minimized;
 }
 
 void WindowFacade::_sendHwnd() {
-  Command hwndToGraphic = Command( this->id(), ID::GRAPHIC, INITIALIZE);
+  Command hwndToGraphic = Command(this->id(), ID::GRAPHIC, INITIALIZE);
 #if defined(__DX_GRAPHIC)
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hwnd);
 #elif defined(__GL_GRAPHIC)
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hDC);
 #endif
-  hwndToGraphic.args[1] = _width;
-  hwndToGraphic.args[2] = _height;
+  hwndToGraphic.args[1] = this->_width;
+  hwndToGraphic.args[2] = this->_height;
   _send(hwndToGraphic);
 
-  Command hwndToIO = Command( this->id(), ID::IO, INITIALIZE);
+  Command hwndToIO = Command(this->id(), ID::IO, INITIALIZE);
   hwndToIO.args[0] = reinterpret_cast<int>(_hwnd);
   _send(hwndToIO);
 
@@ -341,29 +339,29 @@ void WindowFacade::_sendHwnd() {
 }
 
 void WindowFacade::pp_sendPause() {
-  Command commandPause = Command(id(), ID::THREAD_MANAGER, PAUSE);
+  Command commandPause = Command(this->id(), ID::THREAD_MANAGER, PAUSE);
   _send(commandPause);
 }
 
 void WindowFacade::pp_sendResume() {
-  Command commandResume = Command(id(), ID::THREAD_MANAGER, RESUME);
+  Command commandResume = Command(this->id(), ID::THREAD_MANAGER, RESUME);
   _send(commandResume);
 }
 
-void window_facade::WindowFacade::pp_sendKill() {
+void WindowFacade::pp_sendKill() {
   _sendKill();
 }
 
-void window_facade::WindowFacade::pp_sendResize(int width, int height) {
-  _width = width;
-  _height = height;
-  Command commandResize = Command(id(), ID::GRAPHIC, RESIZE);
-  commandResize.args[0] = width;
-  commandResize.args[1] = height;
+void WindowFacade::pp_sendResize(int width, int height) {
+  this->_width = width;
+  this->_height = height;
+  Command commandResize = Command(this->id(), ID::GRAPHIC, RESIZE);
+  commandResize.args[0] = this->_width;
+  commandResize.args[1] = this->_height;
   _send(commandResize);
 }
 
 void WindowFacade::_sendDestroyAll() {
-  Command cmndRealKill = Command(id(), ID::THREAD_MANAGER, DESTROY_ALL);
+  Command cmndRealKill = Command(this->id(), ID::THREAD_MANAGER, DESTROY_ALL);
   _commandManager->push(cmndRealKill);
 }
