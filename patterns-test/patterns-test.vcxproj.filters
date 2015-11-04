@@ -23,7 +23,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="Dependencies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -64,9 +64,4 @@
       <Filter>behavioral</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Singleton.cpp">
-      <Filter>creational</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>
