@@ -27,6 +27,23 @@ public:
   }
 };
 
+class SingletonImpl2 : public patterns::Singleton<SingletonImpl2>{
+private:
+  SingletonImpl2() {}
+  SingletonImpl2(const SingletonImpl2&) {}
+  friend class patterns::Singleton<SingletonImpl2>;
+
+private:
+  int value;
+public:
+  void setValue(int v) {
+    value = v;
+  }
+  int getValue() {
+    return value;
+  }
+};
+
 namespace patternstest
 {
   [TestClass]
@@ -90,6 +107,17 @@ namespace patternstest
 
       SingletonImpl* s1 = SingletonImpl::getInstance();
       Assert::AreEqual(s1->getValue(), intTestValue);
+    }
+
+    [TestMethod]
+    void TwoSingletonImplementationTest() {
+      SingletonImpl* s1 = SingletonImpl::getInstance();
+      SingletonImpl2* s2 = SingletonImpl2::getInstance();
+
+      int val1 = reinterpret_cast<int>(s1);
+      int val2 = reinterpret_cast<int>(s2);
+
+      Assert::AreNotEqual(val1, val2);
     }
   };
 }
