@@ -64,4 +64,7 @@
       <Filter>behavioral</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="patterns.cpp" />
+  </ItemGroup>
 </Project>
