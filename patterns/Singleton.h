@@ -3,29 +3,23 @@
 
 namespace patterns {
 
-  class Singleton;
-
-  class SingletonDestroyer {
-  private:
-    Singleton* p_instance;
-  public:
-    ~SingletonDestroyer ();
-    void initialize (Singleton* p);
-  };
-
+  template <class T>
   class Singleton {
   private:
-    static Singleton* p_instance;
-    static SingletonDestroyer destroyer;
+    static T* p_instance;
   protected:
-    Singleton () { }
-    Singleton (const Singleton&);
-    Singleton& operator=(Singleton&);
-    ~Singleton () { }
-    friend class SingletonDestroyer;
+    T& operator=(T&);
   public:
-    static Singleton& getInstance ();
+    static T* getInstance() {
+      if (!p_instance) {
+        p_instance = new T();
+      }
+      return p_instance;
+    }
   };
+
+  template <class T>
+  T* Singleton<T>::p_instance = 0;
 
 }
 

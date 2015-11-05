@@ -65,8 +65,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Singleton.cpp">
-      <Filter>creational</Filter>
-    </ClCompile>
+    <ClCompile Include="patterns.cpp" />
   </ItemGroup>
 </Project>
