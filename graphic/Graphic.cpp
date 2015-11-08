@@ -72,7 +72,7 @@ void Graphic::start() {
 
     if (_initialized && !_paused) {
       _beginScene();
-      // TODO: Render objects
+      _drawContent();
       _endScene();
     }
 

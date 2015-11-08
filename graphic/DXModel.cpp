@@ -2,7 +2,7 @@
 
 #include "DXModel.h"
 
-using graphic::direct_x::Model;
+using namespace graphic::direct_x;
 
 Model::Model() {
   log = new utils::Logger(typeid(*this).name());
@@ -31,8 +31,8 @@ bool Model::initialize(ID3D11Device* device, string fileName) {
   for(int i = 0; i < mdlHeader.countVerts; i++)
     fscanf_s(fp, "%f %f %f", &vertexs[i].position.x, &vertexs[i].position.y, &vertexs[i].position.z);
 
-  int countInds = mdlHeader.countFaces * 3;
-  UINT* indexes = new UINT[countInds];
+  _countIndex = mdlHeader.countFaces * 3;
+  UINT* indexes = new UINT[_countIndex];
   for(int i = 0; i < mdlHeader.countFaces; i++)
     fscanf_s(fp, "%d %d %d", &indexes[i * 3], &indexes[i * 3 + 1], &indexes[i * 3 + 2]);
   
@@ -43,7 +43,7 @@ bool Model::initialize(ID3D11Device* device, string fileName) {
     delete indexes;
     return false;
   }
-  if(!_indexs.initialize(device, indexes, countInds)) {
+  if(!_indexs.initialize(device, indexes, _countIndex)) {
     delete vertexs;
     delete indexes;
     return false;
@@ -56,4 +56,15 @@ bool Model::initialize(ID3D11Device* device, string fileName) {
 void Model::shutdown() {
   _vertexs.shutdown();
   _indexs.shutdown();
+}
+
+void Model::draw(ID3D11DeviceContext* context, Material* material) {
+  UINT offset_ = 0;
+  UINT stride_ = material->getStride();
+
+  ID3D11Buffer* vbuf = _vertexs.get();
+  context->IASetVertexBuffers(0, 1, &vbuf, &stride_, &offset_);
+  context->IASetIndexBuffer(_indexs.get(), DXGI_FORMAT_R32_UINT, 0);
+
+  context->DrawIndexed(_countIndex, 0, 0);
 }

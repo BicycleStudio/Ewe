@@ -17,6 +17,8 @@ GraphicFacade::GraphicFacade() {
   _backBuffer = 0;
   _depthStencilView = 0;
   _depthStencil = 0;
+
+  _materialDefault = 0; 
 }
 
 GraphicFacade::~GraphicFacade() {
@@ -34,6 +36,10 @@ bool GraphicFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
   // 3. create rasterizer states { Solid, SolidNonCull( transparent objects ), Wireframe }
   // 4. create sampler states { Linear, ForDeffered }
   // 5. init all shaders
+
+  _materialDefault = new Material();
+  if(!_materialDefault->initialize(_device)) 
+    return false;
 
   _setRenderTargets();
   // 6. set projection matrix
@@ -92,14 +98,20 @@ bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
 }
 
 void GraphicFacade::_shutdown() {
+  if(_initialized)
+    _clearContext();
+  _initialized = false;
+
   for(auto mdl : _models) {
     mdl->shutdown();
     delete mdl;
+  } _models.clear();
+  if(_materialDefault) {
+    _materialDefault->shutdown();
+    delete _materialDefault;
+    _materialDefault = 0;
   }
-  _models.clear();
-  if (_initialized)
-    _clearContext();
-  _initialized = false;
+
   SAFE_RELEASE(_swapChain);
   SAFE_RELEASE(_immediateContext);
   SAFE_RELEASE(_device);
@@ -161,6 +173,16 @@ bool GraphicFacade::_createDepthStencilView() {
 void GraphicFacade::_beginScene() {
   _immediateContext->ClearRenderTargetView(_renderTargetView, sceneColor);
   _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+  _immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void GraphicFacade::_drawContent() {
+  // TODO: set materials from list & draw attached models
+
+  _materialDefault->set(_immediateContext);
+
+  for(auto mdl : _models) 
+    mdl->draw(_immediateContext, _materialDefault);
 }
 
 void GraphicFacade::_endScene() {

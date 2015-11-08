@@ -3,6 +3,7 @@
 
 #include "DependenciesDX.h"
 #include "DXBuffer.h"
+#include "DXMaterial.h"
 #include <Logger.h>
 
 using std::string;
@@ -25,10 +26,12 @@ namespace graphic {
 
       bool initialize(ID3D11Device*, string fileName);
       void shutdown();
+      void draw(ID3D11DeviceContext*, Material*);
 
     private:
       Buffer    _vertexs;
       Buffer    _indexs;
+      UINT      _countIndex;
     };
 
   }

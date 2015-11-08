@@ -55,3 +55,7 @@ bool Buffer::initialize(ID3D11Device* device, Vertex* verts, int vertSize, int c
 void Buffer::shutdown() {
   SAFE_RELEASE(_buffer)
 }
+
+ID3D11Buffer* Buffer::get() {
+  return _buffer;
+}

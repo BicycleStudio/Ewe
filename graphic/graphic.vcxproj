@@ -20,7 +20,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -85,6 +85,7 @@
     <ClInclude Include="DependenciesDX.h" />
     <ClInclude Include="DependenciesGL.h" />
     <ClInclude Include="DXFacade.h" />
+    <ClInclude Include="DXMaterial.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="IGraphicFacade.h" />
     <ClInclude Include="GraphicInformer.h" />
@@ -96,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="DXBuffer.cpp" />
     <ClCompile Include="DXFacade.cpp" />
+    <ClCompile Include="DXMaterial.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="DXModel.cpp" />
     <ClCompile Include="OpenGLFacade.cpp" />

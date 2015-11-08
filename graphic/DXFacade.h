@@ -5,6 +5,7 @@
 #include "IGraphicFacade.h"
 #include <Logger.h>
 #include "DXModel.h"
+#include "DXMaterial.h"
 
 using std::vector;
 
@@ -23,6 +24,7 @@ namespace graphic {
       bool _initializeGraphic(int hwnd, int, int);
       bool _resizeBuffers(int, int);
       void _beginScene();
+      void _drawContent();
       void _endScene();
       void _shutdown();
       bool _addModel(const char*);
@@ -42,6 +44,8 @@ namespace graphic {
       ID3D11DepthStencilView* _depthStencilView;
       ID3D11Texture2D*        _depthStencil;
 
+      // TODO: List of materails & on each material list of models 
+      Material*               _materialDefault;
       vector<Model*>          _models;
     };
 

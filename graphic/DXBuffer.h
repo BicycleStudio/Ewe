@@ -20,6 +20,7 @@ namespace graphic {
       bool initialize(ID3D11Device*, D3D11_BUFFER_DESC&, D3D11_SUBRESOURCE_DATA&);
       bool initialize(ID3D11Device*, UINT* indexes, int countInds);
       bool initialize(ID3D11Device*, Vertex* verts, int vertSize, int countVerts);
+      ID3D11Buffer* get();
 
     private:
       ID3D11Buffer*   _buffer;
