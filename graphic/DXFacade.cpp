@@ -1,4 +1,4 @@
-#include "DirectXFacade.h"
+#include "DXFacade.h"
 
 #define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
 #define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }

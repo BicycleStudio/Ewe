@@ -33,9 +33,6 @@
     <ClInclude Include="GraphicSupport.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXFacade.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
     <ClInclude Include="OpenGLFacade.h">
       <Filter>src\graphicFacade\openGLFacade</Filter>
     </ClInclude>
@@ -54,13 +51,13 @@
     <ClInclude Include="DXVertex.h">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
+    <ClInclude Include="DXFacade.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXFacade.cpp">
-      <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
     <ClCompile Include="OpenGLFacade.cpp">
       <Filter>src\graphicFacade\openGLFacade</Filter>
@@ -69,6 +66,9 @@
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
     <ClCompile Include="DXModel.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFacade.cpp">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
   </ItemGroup>

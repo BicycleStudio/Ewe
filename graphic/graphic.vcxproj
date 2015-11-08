@@ -84,7 +84,7 @@
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="DependenciesDX.h" />
     <ClInclude Include="DependenciesGL.h" />
-    <ClInclude Include="DirectXFacade.h" />
+    <ClInclude Include="DXFacade.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="IGraphicFacade.h" />
     <ClInclude Include="GraphicInformer.h" />
@@ -95,7 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXBuffer.cpp" />
-    <ClCompile Include="DirectXFacade.cpp" />
+    <ClCompile Include="DXFacade.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="DXModel.cpp" />
     <ClCompile Include="OpenGLFacade.cpp" />
