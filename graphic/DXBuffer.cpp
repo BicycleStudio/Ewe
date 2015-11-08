@@ -24,6 +24,7 @@ bool Buffer::initialize(ID3D11Device* device, D3D11_BUFFER_DESC& bd, D3D11_SUBRE
 
 bool Buffer::initialize(ID3D11Device* device, UINT* indexes, int countInds) {
   D3D11_BUFFER_DESC bd;
+  ZeroMemory(&bd, sizeof(bd));
   bd.Usage = D3D11_USAGE_DEFAULT;
   bd.ByteWidth = sizeof(UINT) * countInds;
   bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -38,6 +39,7 @@ bool Buffer::initialize(ID3D11Device* device, UINT* indexes, int countInds) {
 
 bool Buffer::initialize(ID3D11Device* device, Vertex* verts, int vertSize, int countVerts) {
   D3D11_BUFFER_DESC bd;
+  ZeroMemory(&bd, sizeof(bd));
   bd.Usage = D3D11_USAGE_DEFAULT;
   bd.ByteWidth = vertSize * countVerts;
   bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;

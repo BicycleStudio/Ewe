@@ -12,8 +12,8 @@ namespace graphic {
   namespace direct_x {
 
     struct MdlHeader {
-      long  countVerts;
-      long  countFaces;
+      int  countVerts;
+      int  countFaces;
     };
 
     class Model {

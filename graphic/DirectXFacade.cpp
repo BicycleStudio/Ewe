@@ -92,6 +92,11 @@ bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
 }
 
 void GraphicFacade::_shutdown() {
+  for(auto mdl : _models) {
+    mdl->shutdown();
+    delete mdl;
+  }
+  _models.clear();
   if (_initialized)
     _clearContext();
   _initialized = false;
@@ -177,5 +182,16 @@ bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   _setRenderTargets();
 
   // TODO: set projection matrix
+  return true;
+}
+
+bool GraphicFacade::_addModel(const char* fileName) {
+  Model* model = new Model();
+  if(!model->initialize(_device, fileName)) {
+    delete model;
+    return false;
+  }
+
+  _models.push_back(model);
   return true;
 }

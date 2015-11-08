@@ -4,6 +4,9 @@
 #include "DependenciesDX.h"
 #include "IGraphicFacade.h"
 #include <Logger.h>
+#include "DXModel.h"
+
+using std::vector;
 
 namespace graphic {
 
@@ -22,6 +25,7 @@ namespace graphic {
       void _beginScene();
       void _endScene();
       void _shutdown();
+      bool _addModel(const char*);
 
     private:
       bool _createDeviceSwapChain(HWND renderHwnd);
@@ -37,6 +41,8 @@ namespace graphic {
       ID3D11Texture2D*        _backBuffer;
       ID3D11DepthStencilView* _depthStencilView;
       ID3D11Texture2D*        _depthStencil;
+
+      vector<Model*>          _models;
     };
 
   }

@@ -19,19 +19,37 @@ bool Model::initialize(ID3D11Device* device, string fileName) {
   }
   FILE* fp;
   fopen_s(&fp, fileName.c_str(), "r");
-  MdlHeader* mdlHeader = new MdlHeader();
-  fread(mdlHeader, 1, sizeof(MdlHeader), fp);
-  
-  Vertex* vertexs = new Vertex[mdlHeader->countVerts];
-
-  for(int i = 0; i < mdlHeader->countVerts; i++) {
-    fread(&vertexs[i].position.x, 1, sizeof(float), fp);
-    fread(&vertexs[i].position.y, 1, sizeof(float), fp);
-    fread(&vertexs[i].position.z, 1, sizeof(float), fp);
+  if(fp == NULL) {
+    log->error("Can't open file " + fileName + " for reading.");
+    return false;
   }
-  _vertexs.initialize(device, vertexs, sizeof(Vertex), mdlHeader->countVerts);
+  MdlHeader mdlHeader;
+  fscanf_s(fp, "%d %d", &mdlHeader.countVerts, &mdlHeader.countFaces);
+  
+  Vertex* vertexs = new Vertex[mdlHeader.countVerts];
 
+  for(int i = 0; i < mdlHeader.countVerts; i++)
+    fscanf_s(fp, "%f %f %f", &vertexs[i].position.x, &vertexs[i].position.y, &vertexs[i].position.z);
+
+  int countInds = mdlHeader.countFaces * 3;
+  UINT* indexes = new UINT[countInds];
+  for(int i = 0; i < mdlHeader.countFaces; i++)
+    fscanf_s(fp, "%d %d %d", &indexes[i * 3], &indexes[i * 3 + 1], &indexes[i * 3 + 2]);
+  
   fclose(fp);
+
+  if(!_vertexs.initialize(device, vertexs, sizeof(Vertex), mdlHeader.countVerts)) {
+    delete vertexs;
+    delete indexes;
+    return false;
+  }
+  if(!_indexs.initialize(device, indexes, countInds)) {
+    delete vertexs;
+    delete indexes;
+    return false;
+  }
+  delete vertexs;
+  delete indexes;
   return true;
 }
 
