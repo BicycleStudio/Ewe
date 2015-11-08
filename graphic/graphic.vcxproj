@@ -80,6 +80,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DXBuffer.h" />
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="DependenciesDX.h" />
     <ClInclude Include="DependenciesGL.h" />
@@ -88,11 +89,15 @@
     <ClInclude Include="IGraphicFacade.h" />
     <ClInclude Include="GraphicInformer.h" />
     <ClInclude Include="GraphicSupport.h" />
+    <ClInclude Include="DXModel.h" />
     <ClInclude Include="OpenGLFacade.h" />
+    <ClInclude Include="DXVertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DXBuffer.cpp" />
     <ClCompile Include="DirectXFacade.cpp" />
     <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="DXModel.cpp" />
     <ClCompile Include="OpenGLFacade.cpp" />
   </ItemGroup>
   <ItemGroup>

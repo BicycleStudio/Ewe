@@ -5,6 +5,7 @@
 #pragma warning(push)
 #pragma warning(disable:4005)
 #include <D3D11.h>
+#include <xnamath.h>
 #pragma warning(pop)
 
 #pragma comment (lib, "D3D11.lib")

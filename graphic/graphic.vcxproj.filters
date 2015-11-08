@@ -45,6 +45,15 @@
     <ClInclude Include="IGraphicFacade.h">
       <Filter>src\graphicFacade</Filter>
     </ClInclude>
+    <ClInclude Include="DXBuffer.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DXModel.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="DXVertex.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic.cpp">
@@ -55,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="OpenGLFacade.cpp">
       <Filter>src\graphicFacade\openGLFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DXBuffer.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DXModel.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
