@@ -57,6 +57,9 @@
     <ClInclude Include="DXMaterial.h">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
+    <ClInclude Include="DXShader.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic.cpp">
@@ -75,6 +78,9 @@
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
     <ClCompile Include="DXMaterial.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShader.cpp">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
   </ItemGroup>
