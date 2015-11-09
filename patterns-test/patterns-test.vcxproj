@@ -87,9 +87,12 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="SingletonTest.cpp" />
+    <ClCompile Include="SingletonTestData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
+    <ClInclude Include="TestMacros.h" />
+    <ClInclude Include="ThreadWorker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

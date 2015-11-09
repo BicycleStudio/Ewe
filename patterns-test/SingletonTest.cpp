@@ -1,123 +1,64 @@
 #include "Dependencies.h"
 
+#include "TestMacros.h"
+#include "ThreadWorker.h"
+
+#include "SingletonTestData.h"
+
 using namespace System;
 using namespace System::Text;
-using namespace System::Threading;
 using namespace System::Collections::Generic;
 using namespace Microsoft::VisualStudio::TestTools::UnitTesting;
 
-#include <Singleton.h>
-
-const int intTestValue = 42;
-
-class SingletonImpl : public patterns::Singleton<SingletonImpl>{
-private:
-  SingletonImpl() {}
-  SingletonImpl(const SingletonImpl&) {}
-  friend class patterns::Singleton<SingletonImpl>;
-
-private:
-  int value;
-public:
-  void setValue(int v) {
-    value = v;
-  }
-  int getValue() {
-    return value;
-  }
-};
-
-class SingletonImpl2 : public patterns::Singleton<SingletonImpl2>{
-private:
-  SingletonImpl2() {}
-  SingletonImpl2(const SingletonImpl2&) {}
-  friend class patterns::Singleton<SingletonImpl2>;
-
-private:
-  int value;
-public:
-  void setValue(int v) {
-    value = v;
-  }
-  int getValue() {
-    return value;
-  }
-};
-
-namespace patternstest
+namespace patterns_test
 {
+  void setTestValueToSingleton() {
+    SingletonImpl::getInstance()->set(intTestValue);
+  }
+
   [TestClass]
   public ref class SingletonTest
   {
-  private:
-    TestContext^ testContextInstance;
-  public:
-    property Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ TestContext
-    {
-      Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ get()
-      {
-        return testContextInstance;
-      }
-      System::Void set(Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ value)
-      {
-        testContextInstance = value;
-      }
+    INIT_TEST_CONTEXT
+
+    [TestCleanup()]
+    void AfterEach() {
+      SingletonImpl::getInstance()->set(intTestClearValue);
+      SingletonImpl2::getInstance()->set(intTestClearValue);
     };
 
     [TestMethod]
     void GetInstanceWasCorrect()
     {
-      SingletonImpl* s1 = SingletonImpl::getInstance();
-      SingletonImpl* s2 = SingletonImpl::getInstance();
-
-      int val1 = reinterpret_cast<int>(s1);
-      int val2 = reinterpret_cast<int>(s2);
+      int val1 = reinterpret_cast<int>(SingletonImpl::getInstance());
+      int val2 = reinterpret_cast<int>(SingletonImpl::getInstance());
       
       Assert::AreEqual(val1, val2);
     };
 
     [TestMethod]
+    void TwoSingletonImplementationTest() {
+      int val1 = reinterpret_cast<int>(SingletonImpl::getInstance());
+      int val2 = reinterpret_cast<int>(SingletonImpl2::getInstance());
+
+      Assert::AreNotEqual(val1, val2);
+    }
+
+    [TestMethod]
     void CorrectWorkWithSingletonObjectFunctionality()
     {
-      SingletonImpl* s1 = SingletonImpl::getInstance();
-      s1->setValue(intTestValue);
-
-      SingletonImpl* s2 = SingletonImpl::getInstance();
-      int value = s2->getValue();
+      SingletonImpl::getInstance()->set(intTestValue);
+      int value = SingletonImpl::getInstance()->get();
 
       Assert::AreEqual(intTestValue, value);
     };
 
-    // method for test 'ThreadSynchronizeSingletonTest'
-    void ForThreadTestMethod() {
-      SingletonImpl* s1 = SingletonImpl::getInstance();
-      s1->setValue(intTestValue);
-    }
-
     [TestMethod]
     void ThreadSynchronizeSingletonTest() {
-      SingletonTest^ some = gcnew SingletonTest();
+      ThreadWorker::run(gcnew TestDelegate(setTestValueToSingleton));
+      int value = SingletonImpl::getInstance()->get();
 
-      Thread^ t1 = gcnew Thread(gcnew ThreadStart(some, &SingletonTest::ForThreadTestMethod));
-      t1->Start();
-
-      Thread::Sleep(500);
-
-      Assert::AreEqual(t1->ThreadState, ThreadState::Stopped);
-
-      SingletonImpl* s1 = SingletonImpl::getInstance();
-      Assert::AreEqual(s1->getValue(), intTestValue);
-    }
-
-    [TestMethod]
-    void TwoSingletonImplementationTest() {
-      SingletonImpl* s1 = SingletonImpl::getInstance();
-      SingletonImpl2* s2 = SingletonImpl2::getInstance();
-
-      int val1 = reinterpret_cast<int>(s1);
-      int val2 = reinterpret_cast<int>(s2);
-
-      Assert::AreNotEqual(val1, val2);
+      Assert::AreEqual(value, intTestValue);
     }
   };
 }
