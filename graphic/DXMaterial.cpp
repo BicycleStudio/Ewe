@@ -1,9 +1,8 @@
 #include "DXMaterial.h"
-
-#define CHECK_HRESULT_ERROR(hres,msg) { if(FAILED(hres)) { log->error(msg); return false; } }
-#define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
+#include "DXSupport.h"
 
 using namespace graphic::direct_x;
+using namespace direct_x;
 
 Material::Material() {
   log = new utils::Logger(typeid(*this).name());

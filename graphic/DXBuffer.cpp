@@ -1,8 +1,7 @@
 #include "DXBuffer.h"
+#include "DXSupport.h"
 
-#define CHECK_HRESULT_ERROR(hres,msg) { if(FAILED(hres)) { log->error(msg); return false; } }
-#define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
-
+using namespace direct_x;
 using namespace graphic::direct_x;
 
 Buffer::Buffer() {
@@ -16,8 +15,8 @@ Buffer::~Buffer() {
 
 bool Buffer::initialize(ID3D11Device* device, D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& data) {
   shutdown();
-  CHECK_HRESULT_ERROR(device->CreateBuffer(&bd, &data, &_buffer),
-    "CreateBuffer for indexes failed.");
+  CHECK_HRESULT(device->CreateBuffer(&bd, &data, &_buffer),
+    log->error("CreateBuffer for indexes failed."));
 
   return true;
 }

@@ -1,12 +1,11 @@
 #include "DXShader.h"
+#include "DXSupport.h"
 
 #include <d3dcompiler.h>
 #pragma comment (lib, "d3dcompiler.lib")
 
-#define CHECK_HRESULT_ERROR(hres,msg) { if(FAILED(hres)) { log->error(msg); return false; } }
-#define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
-
 using namespace graphic::direct_x;
+using namespace direct_x;
 
 Shader::Shader(){
 }
@@ -61,15 +60,15 @@ bool VShader::compileFromFile(ID3D11Device* device, string fileName, string func
   if (!_compileFromFile(device, fileName, funcName, &_shaderBlob))
     return false;
 
-  CHECK_HRESULT_ERROR(device->CreateVertexShader(_shaderBlob->GetBufferPointer(), _shaderBlob->GetBufferSize(), NULL, &_shader),
-    "Create VShader for " + fileName + " failed.");
+  CHECK_HRESULT(device->CreateVertexShader(_shaderBlob->GetBufferPointer(), _shaderBlob->GetBufferSize(), NULL, &_shader),
+    log->error("Create VShader for " + fileName + " failed."));
 
   return true;
 }
 
 bool VShader::createInputLayout(ID3D11Device* device, const D3D11_INPUT_ELEMENT_DESC* layout, UINT arraySize, ID3D11InputLayout** inputLayout) {
-  CHECK_HRESULT_ERROR(device->CreateInputLayout(layout, arraySize, _shaderBlob->GetBufferPointer(), _shaderBlob->GetBufferSize(), inputLayout),
-    "Create InputLayout for material failed.");
+  CHECK_HRESULT(device->CreateInputLayout(layout, arraySize, _shaderBlob->GetBufferPointer(), _shaderBlob->GetBufferSize(), inputLayout),
+    log->error("Create InputLayout for material failed."));
 
   return true;
 }
@@ -100,7 +99,7 @@ bool PShader::compileFromFile(ID3D11Device* device, string fileName, string func
   HRESULT hres = device->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), NULL, &_shader);
   SAFE_RELEASE(shaderBlob);
 
-  CHECK_HRESULT_ERROR(hres, "Create PShader for " + fileName + " failed.");
+  CHECK_HRESULT(hres, log->error("Create PShader for " + fileName + " failed."));
 
   return true;
 }
