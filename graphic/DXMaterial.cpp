@@ -1,5 +1,7 @@
 #include "DXMaterial.h"
 #include "DXSupport.h"
+#include "DXVShader.h"
+#include "DXPShader.h"
 
 using namespace graphic::direct_x;
 using namespace direct_x;

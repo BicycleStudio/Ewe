@@ -14,9 +14,9 @@ Buffer::~Buffer() {
 }
 
 bool Buffer::initialize(ID3D11Device* device, D3D11_BUFFER_DESC& bd, D3D11_SUBRESOURCE_DATA& data) {
-  shutdown();
+  SAFE_RELEASE(_buffer)
   CHECK_HRESULT(device->CreateBuffer(&bd, &data, &_buffer),
-    log->error("CreateBuffer for indexes failed."));
+    log->error("CreateBuffer failed."));
 
   return true;
 }

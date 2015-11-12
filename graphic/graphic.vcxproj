@@ -86,7 +86,9 @@
     <ClInclude Include="DependenciesGL.h" />
     <ClInclude Include="DXFacade.h" />
     <ClInclude Include="DXMaterial.h" />
+    <ClInclude Include="DXPShader.h" />
     <ClInclude Include="DXShader.h" />
+    <ClInclude Include="DXVShader.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="IGraphicFacade.h" />
     <ClInclude Include="GraphicInformer.h" />
@@ -99,7 +101,9 @@
     <ClCompile Include="DXBuffer.cpp" />
     <ClCompile Include="DXFacade.cpp" />
     <ClCompile Include="DXMaterial.cpp" />
+    <ClCompile Include="DXPShader.cpp" />
     <ClCompile Include="DXShader.cpp" />
+    <ClCompile Include="DXVShader.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="DXModel.cpp" />
     <ClCompile Include="OpenGLFacade.cpp" />
