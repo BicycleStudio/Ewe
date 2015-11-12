@@ -67,7 +67,7 @@ void io::IO::_processCommand(command_manager::Command& c) {
   switch (c.commandType) {
   case CommandType::INITIALIZE: 
     log->info("IO initialize start...");
-    if (!_initialize(c.args[0])) {
+    if (!_initialize(c.argInt[0])) {
       log->fatal("_initialize error");
       _sendKill();
     }

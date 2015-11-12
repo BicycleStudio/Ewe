@@ -21,7 +21,7 @@ void sound::Sound::_processCommand (command_manager::Command& c) {
   using command_manager::CommandType;
   switch (c.commandType) {
   case CommandType::INITIALIZE:
-    if (!_initialize(c.args[0])) {
+    if(!_initialize(c.argInt[0])) {
       _sendKill();
       return;
     }
