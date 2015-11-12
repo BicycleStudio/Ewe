@@ -1,6 +1,7 @@
 #include <io.h>
 
 #include "DXModel.h"
+#include "DXMaterial.h"
 
 using namespace graphic::direct_x;
 

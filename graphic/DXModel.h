@@ -3,7 +3,6 @@
 
 #include "DependenciesDX.h"
 #include "DXBuffer.h"
-#include "DXMaterial.h"
 #include <Logger.h>
 
 using std::string;
@@ -16,7 +15,7 @@ namespace graphic {
       int  countVerts;
       int  countFaces;
     };
-
+    class Material;
     class Model {
       utils::Logger* log;
 

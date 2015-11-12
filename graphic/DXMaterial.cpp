@@ -1,3 +1,4 @@
+#include <io.h>
 #include "DXMaterial.h"
 #include "DXSupport.h"
 #include "DXVShader.h"
@@ -17,15 +18,33 @@ Material::~Material() {
 }
 
 bool Material::initialize(ID3D11Device* device, string fileName) {
-  std::string defaultPath = "c:/Prog/default.hlsl";
+  if(_access(fileName.c_str(), 0) == -1) {
+    log->error("File " + fileName + " does not exist.");
+    return false;
+  }
+  FILE* fp;
+  fopen_s(&fp, fileName.c_str(), "r");
+  if(fp == NULL) {
+    log->error("Can't open file " + fileName + " for reading.");
+    return false;
+  }
+  char hlslFile[MAX_PATH];
+  char vsFunc[MAX_PATH];
+  char psFunc[MAX_PATH];
+
+  fscanf_s(fp, "%s ", hlslFile, _countof(hlslFile));
+  fscanf_s(fp, "%s", vsFunc, _countof(vsFunc));
+  fscanf_s(fp, "%s", psFunc, _countof(psFunc));
+
+  fclose(fp);
 
   VShader* vShader = new VShader();
-  if (!vShader->compileFromFile(device, defaultPath, "vsDefault")) {
+  if(!vShader->compileFromFile(device, hlslFile, vsFunc)) {
     delete vShader;
     return false;
   }
   PShader* pShader = new PShader();
-  if (!pShader->compileFromFile(device, defaultPath, "psDefault")) {
+  if(!pShader->compileFromFile(device, hlslFile, psFunc)) {
     delete vShader;
     delete pShader;
     return false;
