@@ -321,20 +321,20 @@ bool WindowFacade::pp_getMinimized() {
 void WindowFacade::_sendHwnd() {
   Command hwndToGraphic = Command(this->id(), ID::GRAPHIC, INITIALIZE);
 #if defined(__DX_GRAPHIC)
-  hwndToGraphic.args[0] = reinterpret_cast<int>(_hwnd);
+  hwndToGraphic.argInt.push_back(reinterpret_cast<int>(_hwnd));
 #elif defined(__GL_GRAPHIC)
   hwndToGraphic.args[0] = reinterpret_cast<int>(_hDC);
 #endif
-  hwndToGraphic.args[1] = this->_width;
-  hwndToGraphic.args[2] = this->_height;
+  hwndToGraphic.argInt.push_back(this->_width);
+  hwndToGraphic.argInt.push_back(this->_height);
   _send(hwndToGraphic);
 
   Command hwndToIO = Command(this->id(), ID::IO, INITIALIZE);
-  hwndToIO.args[0] = reinterpret_cast<int>(_hwnd);
+  hwndToIO.argInt.push_back(reinterpret_cast<int>(_hwnd));
   _send(hwndToIO);
 
   Command hwndToSound = Command(this->id(), ID::SOUND, INITIALIZE);
-  hwndToSound.args[0] = reinterpret_cast<int>(_hwnd);
+  hwndToSound.argInt.push_back(reinterpret_cast<int>(_hwnd));
   _send(hwndToSound);
 }
 
@@ -356,8 +356,8 @@ void WindowFacade::pp_sendResize(int width, int height) {
   this->_width = width;
   this->_height = height;
   Command commandResize = Command(this->id(), ID::GRAPHIC, RESIZE);
-  commandResize.args[0] = this->_width;
-  commandResize.args[1] = this->_height;
+  commandResize.argInt.push_back(this->_width);
+  commandResize.argInt.push_back(this->_height);
   _send(commandResize);
 }
 

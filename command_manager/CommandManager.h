@@ -28,10 +28,12 @@ namespace command_manager {
 
   class Command {
   public:
-    Command(ID from_, ID to_, CommandType commandType_) :from(from_), to(to_), commandType(commandType_) { args[0] = args[1] = args[2] = 0; };
+    Command(ID from_, ID to_, CommandType commandType_) :from(from_), to(to_), commandType(commandType_) { };
     ID from, to;
     CommandType commandType;
-    int args [3];
+    std::vector<int> argInt;
+    std::vector<std::string> argStr;
+    std::vector<float> argFlt;
   };
 
   class CommandManager {
