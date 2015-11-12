@@ -47,7 +47,6 @@ void Graphic::_processCommand (command_manager::Command& c) {
       _sendKill();
     }
     _initialized = true;
-    _addModel("c:/Prog/tri.mdl");
     log->info("Initialize [OK]");
     break;
   case CommandType::RESIZE: 

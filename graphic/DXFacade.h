@@ -44,8 +44,7 @@ namespace graphic {
       ID3D11DepthStencilView* _depthStencilView;
       ID3D11Texture2D*        _depthStencil;
 
-      // TODO: List of materails & on each material list of models 
-      Material*               _materialDefault;
+      vector<Material*>       _materials;
       vector<Model*>          _models;
     };
 

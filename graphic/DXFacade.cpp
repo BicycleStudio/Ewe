@@ -16,8 +16,6 @@ GraphicFacade::GraphicFacade() {
   _backBuffer = 0;
   _depthStencilView = 0;
   _depthStencil = 0;
-
-  _materialDefault = 0; 
 }
 
 GraphicFacade::~GraphicFacade() {
@@ -35,10 +33,6 @@ bool GraphicFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
   // 3. create rasterizer states { Solid, SolidNonCull( transparent objects ), Wireframe }
   // 4. create sampler states { Linear, ForDeffered }
   // 5. init all shaders
-
-  _materialDefault = new Material();
-  if(!_materialDefault->initialize(_device)) 
-    return false;
 
   _setRenderTargets();
   // 6. set projection matrix
@@ -105,11 +99,10 @@ void GraphicFacade::_shutdown() {
     mdl->shutdown();
     delete mdl;
   } _models.clear();
-  if(_materialDefault) {
-    _materialDefault->shutdown();
-    delete _materialDefault;
-    _materialDefault = 0;
-  }
+  for(auto mtl : _materials) {
+    mtl->shutdown();
+    delete mtl;
+  } _materials.clear();
 
   SAFE_RELEASE(_swapChain);
   SAFE_RELEASE(_immediateContext);
@@ -176,12 +169,11 @@ void GraphicFacade::_beginScene() {
 }
 
 void GraphicFacade::_drawContent() {
-  // TODO: set materials from list & draw attached models
-
-  _materialDefault->set(_immediateContext);
-
-  for(auto mdl : _models) 
-    mdl->draw(_immediateContext, _materialDefault);
+  for(auto material : _materials) {
+    material->set(_immediateContext);
+    for(auto model : material->models)
+      model->draw(_immediateContext, material);
+  }
 }
 
 void GraphicFacade::_endScene() {

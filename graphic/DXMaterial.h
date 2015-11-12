@@ -3,6 +3,7 @@
 
 #include "DependenciesDX.h"
 #include "DXShader.h"
+#include "DXModel.h"
 #include <Logger.h>
 
 using std::vector;
@@ -17,14 +18,14 @@ namespace graphic {
       Material();
       ~Material();
 
-      bool initialize(ID3D11Device* device);
+      bool initialize(ID3D11Device*, string fileName);
       void shutdown();
       void set(ID3D11DeviceContext*);
 
       UINT getStride();
 
+      vector<Model*>      models;
     private:
-
       vector<Shader*>     _shaders;
       ID3D11InputLayout*  _inputayout;
       UINT                _vertexStride;

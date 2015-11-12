@@ -16,7 +16,7 @@ Material::~Material() {
   delete log;
 }
 
-bool Material::initialize(ID3D11Device* device) {
+bool Material::initialize(ID3D11Device* device, string fileName) {
   std::string defaultPath = "c:/Prog/default.hlsl";
 
   VShader* vShader = new VShader();
@@ -49,6 +49,7 @@ bool Material::initialize(ID3D11Device* device) {
 }
 
 void Material::shutdown() {
+  models.clear();
   for (auto sh : _shaders) {
     sh->shutdown();
     delete sh;
