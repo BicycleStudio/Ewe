@@ -5,11 +5,11 @@
 #include "DXPShader.h"
 
 using namespace graphic::direct_x;
-using namespace direct_x;
+using namespace utils::direct_x;
 
 Material::Material() {
   log = new utils::Logger(typeid(*this).name());
-  _inputayout = 0;
+  _inputayout = nullptr;
   _vertexStride = 0;
 }
 

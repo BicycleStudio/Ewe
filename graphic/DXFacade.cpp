@@ -3,19 +3,19 @@
 
 static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
 
-using namespace direct_x;
+using namespace utils::direct_x;
 using graphic::direct_x::GraphicFacade;
 
 GraphicFacade::GraphicFacade() {
   log = new utils::Logger(typeid(*this).name());
-  _device = 0;
-  _immediateContext = 0;
-  _swapChain = 0;
+  _device = nullptr;
+  _immediateContext = nullptr;
+  _swapChain = nullptr;
 
-  _renderTargetView = 0;
-  _backBuffer = 0;
-  _depthStencilView = 0;
-  _depthStencil = 0;
+  _renderTargetView = nullptr;
+  _backBuffer = nullptr;
+  _depthStencilView = nullptr;
+  _depthStencil = nullptr;
 }
 
 GraphicFacade::~GraphicFacade() {

@@ -18,7 +18,6 @@ namespace graphic {
 
     protected:
       bool _compileFromFile(ID3D11Device*, string fileName, string funcName, ID3DBlob** shaderBlob);
-      Shader();
 
       string              _target;
       utils::Logger*      log;

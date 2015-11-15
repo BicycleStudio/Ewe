@@ -5,10 +5,7 @@
 #pragma comment (lib, "d3dcompiler.lib")
 
 using namespace graphic::direct_x;
-using namespace direct_x;
-
-Shader::Shader(){
-}
+using namespace utils::direct_x;
 
 bool Shader::_compileFromFile(ID3D11Device* device, string fileName, string funcName, ID3DBlob** shaderBlob) {
   UINT flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;

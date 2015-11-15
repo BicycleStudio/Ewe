@@ -2,7 +2,7 @@
 #include "DXSupport.h"
 
 using namespace graphic::direct_x;
-using namespace direct_x;
+using namespace utils::direct_x;
 
 PShader::PShader() {
   log = new utils::Logger(typeid(*this).name());

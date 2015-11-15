@@ -1,12 +1,12 @@
 #include "DXBuffer.h"
 #include "DXSupport.h"
 
-using namespace direct_x;
+using namespace utils::direct_x;
 using namespace graphic::direct_x;
 
 Buffer::Buffer() {
   log = new utils::Logger(typeid(*this).name());
-  _buffer = 0;
+  _buffer = nullptr;
 }
 
 Buffer::~Buffer() {
