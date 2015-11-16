@@ -31,7 +31,10 @@ bool VShader::compileFromFile(ID3D11Device* device, string fileName, string func
   return true;
 }
 
-bool VShader::createInputLayout(ID3D11Device* device, const D3D11_INPUT_ELEMENT_DESC* layout, UINT arraySize, ID3D11InputLayout** inputLayout) {
+bool VShader::createInputLayout(ID3D11Device* device, 
+  const D3D11_INPUT_ELEMENT_DESC* layout, 
+  UINT arraySize, 
+  ID3D11InputLayout** inputLayout) {
   CHECK_HRESULT(device->CreateInputLayout(layout, arraySize, _shaderBlob->GetBufferPointer(), _shaderBlob->GetBufferSize(), inputLayout),
     log->error("Create InputLayout for material failed."));
 

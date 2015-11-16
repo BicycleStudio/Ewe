@@ -18,12 +18,13 @@ namespace graphic {
 
       void shutdown();
       bool initialize(ID3D11Device*, D3D11_BUFFER_DESC&, D3D11_SUBRESOURCE_DATA&);
-      bool initialize(ID3D11Device*, UINT* indexes, int countInds);
-      bool initialize(ID3D11Device*, Vertex* verts, int vertSize, int countVerts);
+      bool initializeVertexBuffer(ID3D11Device*, void* verts, int vertSize, int countVerts);
+      bool initializeIndexBuffer(ID3D11Device*, UINT* inds, int countInds);
       ID3D11Buffer* get();
 
     private:
       ID3D11Buffer*   _buffer;
+      bool inline _initialize(ID3D11Device*, void* verts, int vertSize, int countVerts, DWORD flag);
     };
 
   }

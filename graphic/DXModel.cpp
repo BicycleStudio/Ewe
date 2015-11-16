@@ -39,12 +39,12 @@ bool Model::initialize(ID3D11Device* device, string fileName) {
   
   fclose(fp);
 
-  if(!_vertexs.initialize(device, vertexs, sizeof(Vertex), mdlHeader.countVerts)) {
+  if(!_vertexs.initializeVertexBuffer(device, vertexs, sizeof(Vertex), mdlHeader.countVerts)) {
     delete vertexs;
     delete indexes;
     return false;
   }
-  if(!_indexs.initialize(device, indexes, _countIndex)) {
+  if (!_indexs.initializeIndexBuffer(device, indexes, _countIndex)) {
     delete vertexs;
     delete indexes;
     return false;
