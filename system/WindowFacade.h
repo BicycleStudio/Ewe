@@ -3,24 +3,27 @@
 
 #include <ThreadManager.h>
 #include <Windows.h>
-#include <Logger.h>
+#include <Singleton.h>
 
 #include <Logger.h>
 
 namespace window_facade {
 
-  class WindowFacade : public thread_manager::ThreadSubjectWithKill {
+  class WindowFacade : public thread_manager::ThreadSubjectWithKill, public patterns::Singleton<WindowFacade> {
+    WindowFacade();
+    WindowFacade(const WindowFacade&);
+    friend class patterns::Singleton<WindowFacade>;
+
     utils::Logger* log;
 
     void _processCommand(command_manager::Command& c);
   public:
-    static WindowFacade* getInstance();
     ~WindowFacade();
     command_manager::ID id();
-    void stop();
-    void start();
-    void pause();
-    void resume();
+    void stop() override final;
+    void start() override final;
+    void pause() override final;
+    void resume() override final;
 
     // This methods only for self call! WndProc hack
     // pp_ prefix means pseudoprivate
@@ -32,8 +35,6 @@ namespace window_facade {
     void pp_sendResize(int, int);
 
   private:
-    WindowFacade();
-    WindowFacade(WindowFacade&);
     void _generateCommandProcessors();
     void _sendDestroyAll();
 
