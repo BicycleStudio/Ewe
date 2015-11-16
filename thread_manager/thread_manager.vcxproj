@@ -82,9 +82,11 @@
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="ThreadManager.h" />
+    <ClInclude Include="ThreadSubject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ThreadManager.cpp" />
+    <ClCompile Include="ThreadSubject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
