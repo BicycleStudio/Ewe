@@ -21,11 +21,6 @@ ID WindowFacade::id() {
   return ID::WINDOW_FACADE;
 }
 
-WindowFacade* WindowFacade::getInstance() {
-  static WindowFacade* facade = new WindowFacade();
-  return facade;
-}
-
 WindowFacade::WindowFacade() {
   log = new utils::Logger(typeid(*this).name());
 
