@@ -20,7 +20,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -40,8 +40,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;..\utils;..\patterns;..\thread_manager;..\data;..\command_manager;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;..\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\utils;..\patterns;..\thread_manager;..\data;..\command_manager;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,19 +80,32 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DXBuffer.h" />
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="DependenciesDX.h" />
     <ClInclude Include="DependenciesGL.h" />
-    <ClInclude Include="DirectXFacade.h" />
+    <ClInclude Include="DXFacade.h" />
+    <ClInclude Include="DXMaterial.h" />
+    <ClInclude Include="DXPShader.h" />
+    <ClInclude Include="DXShader.h" />
+    <ClInclude Include="DXVShader.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="IGraphicFacade.h" />
     <ClInclude Include="GraphicInformer.h" />
     <ClInclude Include="GraphicSupport.h" />
+    <ClInclude Include="DXModel.h" />
     <ClInclude Include="OpenGLFacade.h" />
+    <ClInclude Include="DXVertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DirectXFacade.cpp" />
+    <ClCompile Include="DXBuffer.cpp" />
+    <ClCompile Include="DXFacade.cpp" />
+    <ClCompile Include="DXMaterial.cpp" />
+    <ClCompile Include="DXPShader.cpp" />
+    <ClCompile Include="DXShader.cpp" />
+    <ClCompile Include="DXVShader.cpp" />
     <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="DXModel.cpp" />
     <ClCompile Include="OpenGLFacade.cpp" />
   </ItemGroup>
   <ItemGroup>

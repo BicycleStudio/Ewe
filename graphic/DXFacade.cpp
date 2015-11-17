@@ -1,22 +1,21 @@
-#include "DirectXFacade.h"
-
-#define CHECK_HRESULT_FATAL(hres,msg) { if(FAILED(hres)) { log->fatal(msg); return false; } }
-#define SAFE_RELEASE(d3dPonter) { if(d3dPonter) { d3dPonter->Release(); d3dPonter = 0; } }
+#include "DXFacade.h"
+#include "DXSupport.h"
 
 static const float sceneColor[4]{ 0.5f, 0.75f, 0.85f, 1.0f };
 
+using namespace utils::direct_x;
 using graphic::direct_x::GraphicFacade;
 
 GraphicFacade::GraphicFacade() {
   log = new utils::Logger(typeid(*this).name());
-  _device = 0;
-  _immediateContext = 0;
-  _swapChain = 0;
+  _device = nullptr;
+  _immediateContext = nullptr;
+  _swapChain = nullptr;
 
-  _renderTargetView = 0;
-  _backBuffer = 0;
-  _depthStencilView = 0;
-  _depthStencil = 0;
+  _renderTargetView = nullptr;
+  _backBuffer = nullptr;
+  _depthStencilView = nullptr;
+  _depthStencil = nullptr;
 }
 
 GraphicFacade::~GraphicFacade() {
@@ -86,15 +85,25 @@ bool GraphicFacade::_createDeviceSwapChain(HWND renderHwnd) {
       D3D11_SDK_VERSION, &sd, &_swapChain, &_device, &featureLevel_, &_immediateContext);
     if (SUCCEEDED(hres))			break;
   }
-  CHECK_HRESULT_FATAL(hres, "DX 11 can't initialize on this machine");
+  CHECK_HRESULT(hres, log->fatal("DX 11 can't initialize on this machine"));
 
   return true;
 }
 
 void GraphicFacade::_shutdown() {
-  if (_initialized)
+  if(_initialized)
     _clearContext();
   _initialized = false;
+
+  for(auto mdl : _models) {
+    mdl->shutdown();
+    delete mdl;
+  } _models.clear();
+  for(auto mtl : _materials) {
+    mtl->shutdown();
+    delete mtl;
+  } _materials.clear();
+
   SAFE_RELEASE(_swapChain);
   SAFE_RELEASE(_immediateContext);
   SAFE_RELEASE(_device);
@@ -122,10 +131,10 @@ void GraphicFacade::_setRenderTargets() {
 }
 
 bool GraphicFacade::_createRenderTargetView() {
-  CHECK_HRESULT_FATAL(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer),
-    "Can't get buffer from swapChain.");
-  CHECK_HRESULT_FATAL(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView),
-    "Can't create renderTargetView from backBuffer.");
+  CHECK_HRESULT(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer),
+    log->fatal("Can't get buffer from swapChain."));
+  CHECK_HRESULT(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView),
+    log->fatal("Can't create renderTargetView from backBuffer."));
 
   return true;
 }
@@ -140,15 +149,15 @@ bool GraphicFacade::_createDepthStencilView() {
   descDepth.Usage = D3D11_USAGE_DEFAULT;	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
   descDepth.CPUAccessFlags = 0;	descDepth.MiscFlags = 0;
   
-  CHECK_HRESULT_FATAL(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil),
-    "Can't create depthStencil.");
+  CHECK_HRESULT(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil),
+    log->fatal("Can't create depthStencil."));
 
   D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
   ZeroMemory(&descDSV, sizeof(descDSV));	descDSV.Format = descDepth.Format;
   descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;	descDSV.Texture2D.MipSlice = 0;
   
-  CHECK_HRESULT_FATAL(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView),
-    "Can't create depthStencilView from depthStencil.");
+  CHECK_HRESULT(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView),
+    log->fatal("Can't create depthStencilView from depthStencil."));
 
   return true;
 }
@@ -156,6 +165,15 @@ bool GraphicFacade::_createDepthStencilView() {
 void GraphicFacade::_beginScene() {
   _immediateContext->ClearRenderTargetView(_renderTargetView, sceneColor);
   _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+  _immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void GraphicFacade::_drawContent() {
+  for(auto material : _materials) {
+    material->set(_immediateContext);
+    for(auto model : material->models)
+      model->draw(_immediateContext, material);
+  }
 }
 
 void GraphicFacade::_endScene() {
@@ -168,8 +186,8 @@ bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   if (_sizeY == 0) _sizeY = 1;
   _clearContext();
 
-  CHECK_HRESULT_FATAL(_swapChain->ResizeBuffers(1, _sizeX, _sizeY, DXGI_FORMAT_UNKNOWN, 0),
-    "Can't resize buffers.");
+  CHECK_HRESULT(_swapChain->ResizeBuffers(1, _sizeX, _sizeY, DXGI_FORMAT_UNKNOWN, 0),
+    log->fatal("Can't resize buffers."));
 
   if (!_createRenderTargetView()) return false;
   if (!_createDepthStencilView()) return false;
@@ -177,5 +195,16 @@ bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   _setRenderTargets();
 
   // TODO: set projection matrix
+  return true;
+}
+
+bool GraphicFacade::_addModel(const char* fileName) {
+  Model* model = new Model();
+  if(!model->initialize(_device, fileName)) {
+    delete model;
+    return false;
+  }
+
+  _models.push_back(model);
   return true;
 }
