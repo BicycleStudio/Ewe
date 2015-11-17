@@ -23,8 +23,10 @@ namespace graphic {
       ID3D11Buffer* get();
 
     private:
+      inline D3D11_SUBRESOURCE_DATA subres_data(void* verts);
+      inline D3D11_BUFFER_DESC buffer_desc(int vertSize, int countVerts, DWORD flag);
+      
       ID3D11Buffer*   _buffer;
-      bool inline _initialize(ID3D11Device*, void* verts, int vertSize, int countVerts, DWORD flag);
     };
 
   }

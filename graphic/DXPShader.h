@@ -14,9 +14,9 @@ namespace graphic {
       PShader();
       ~PShader();
 
-      bool compileFromFile(ID3D11Device*, string fileName, string funcName);
-      void shutdown();
-      void set(ID3D11DeviceContext*);
+      bool compileFromFile(ID3D11Device*, string fileName, string funcName) override final;
+      void shutdown() override final;
+      void set(ID3D11DeviceContext*) override final;
 
     private:
       ID3D11PixelShader*       _shader;

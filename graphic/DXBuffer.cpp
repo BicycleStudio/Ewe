@@ -22,26 +22,31 @@ bool Buffer::initialize(ID3D11Device* device, D3D11_BUFFER_DESC& bd, D3D11_SUBRE
 }
 
 bool Buffer::initializeVertexBuffer(ID3D11Device* device, void* verts, int vertSize, int countVerts){
-  return _initialize(device, verts, vertSize, countVerts, D3D11_BIND_VERTEX_BUFFER);
+  auto bd = buffer_desc(vertSize, countVerts, D3D11_BIND_VERTEX_BUFFER);
+  auto data = subres_data(verts);
+  return initialize(device, bd, data);
 }
 
-bool Buffer::initializeIndexBuffer(ID3D11Device* device, UINT* verts, int countInds){
-  return _initialize(device, verts, sizeof(UINT), countInds, D3D11_BIND_INDEX_BUFFER);
+bool Buffer::initializeIndexBuffer(ID3D11Device* device, UINT* inds, int countInds){
+  auto bd = buffer_desc(sizeof(UINT), countInds, D3D11_BIND_INDEX_BUFFER);
+  auto data = subres_data(inds);
+  return !initialize(device, bd, data);
 }
 
-bool Buffer::_initialize(ID3D11Device* device, void* verts, int vertSize, int countVerts, DWORD flag){
+inline D3D11_BUFFER_DESC Buffer::buffer_desc(int vertSize, int countVerts, DWORD flag) {
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));
   bd.Usage = D3D11_USAGE_DEFAULT;
   bd.ByteWidth = vertSize* countVerts;
   bd.BindFlags = flag;
+  return bd;
+}
 
-  D3D11_SUBRESOURCE_DATA data;
-  ZeroMemory(&data, sizeof(data));
-  data.pSysMem = verts;
-
-  if (!initialize(device, bd, data)) return false;
-  return true;
+inline D3D11_SUBRESOURCE_DATA Buffer::subres_data(void* verts) {
+  D3D11_SUBRESOURCE_DATA d;
+  ZeroMemory(&d, sizeof(d));
+  d.pSysMem = verts;
+  return d;
 }
 
 void Buffer::shutdown() {
