@@ -4,7 +4,7 @@
 #define __DX_GRAPHIC
 
 #if defined(__DX_GRAPHIC)
-#include "DirectXFacade.h"
+#include "DXFacade.h"
 using namespace graphic::direct_x;
 #elif defined(__GL_GRAPHIC)
 #include "OpenGLFacade.h"
