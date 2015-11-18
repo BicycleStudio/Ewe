@@ -17,14 +17,18 @@ namespace sound {
       ~SoundFacade();
 
     protected:
-      bool _initialize(int hwnd);
-      void _shutdown();
+      bool _initialize(int hwnd) override final;
+      void _shutdown() override final;
 
-      void _pause();
-      void _resume();
+      void _pause() override final;
+      void _resume() override final;
+
+      void _initBackgroundAudio(const char*) override final;
 
     private:
+      // audios except background
       std::vector<Audio> _audios;
+      Audio _background;
     };
     
   }

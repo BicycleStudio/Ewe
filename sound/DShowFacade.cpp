@@ -40,3 +40,8 @@ bool SoundFacade::_initialize(int hwnd) {
 
   return true;
 }
+
+void SoundFacade::_initBackgroundAudio(const char *fileName){
+ if (!_background.initialize(fileName))
+    log->error("Can't init background audio from file.");
+}

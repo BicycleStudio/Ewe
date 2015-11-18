@@ -28,6 +28,9 @@ void sound::Sound::_processCommand (command_manager::Command& c) {
     _initialized = true;
     log->info("Sound init [OK]");
     break;
+  case CommandType::INIT_BACKGROUND_AUDIO:
+    _initBackgroundAudio(c.argStr[0].c_str());
+    break;
   default: break;
   }
   return;
