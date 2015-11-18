@@ -1,8 +1,8 @@
 #ifndef SOUND_DEPENDENCIES_H_
 #define SOUND_DEPENDENCIES_H_
 
-#define __DX_SOUND
-//#define __DX_SHOW
+//#define __DX_SOUND
+#define __DX_SHOW
 
 #if defined(__DX_SOUND)
 #include "DSoundFacade.h"
