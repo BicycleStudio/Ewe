@@ -12,6 +12,7 @@ Audio::Audio() {
   _graphBuilder = 0;
   _mediaControl = 0;
   _mediaEvent = 0;
+  _initialized = false;
 }
 
 Audio::~Audio() {
@@ -19,6 +20,10 @@ Audio::~Audio() {
 }
 
 void Audio::shutdown() {
+  if (!_initialized)
+    return;
+
+  _initialized = false;
   if (_mediaControl)
     stop();
   SAFE_RELEASE(_mediaEvent);
@@ -49,6 +54,7 @@ bool Audio::initialize(std::string fileName) {
   CHECK_HRESULT_ERROR(_graphBuilder->RenderFile(wFilename, 0),
     "Can't render file " + fileName + ".");
   
+  _initialized = true;
   return true;
 }
 
@@ -68,4 +74,8 @@ bool Audio::stop() {
   CHECK_HRESULT_ERROR(_mediaControl->Stop(), "Can't stop mediaControl.");
 
   return true;
+}
+
+bool Audio::initialized(){
+  return _initialized;
 }

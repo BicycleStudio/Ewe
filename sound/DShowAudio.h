@@ -22,10 +22,14 @@ namespace sound {
       bool run();
       bool stop();
 
+      bool initialized();
+
     private:
       IGraphBuilder* _graphBuilder;
       IMediaControl* _mediaControl;
       IMediaEvent*   _mediaEvent;
+
+      bool _initialized;
     };
 
   }

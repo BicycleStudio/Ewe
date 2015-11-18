@@ -8,7 +8,6 @@ using sound::direct_show::SoundFacade;
 
 SoundFacade::SoundFacade() {
   log = new utils::Logger(typeid(*this).name());
-  _background = nullptr;
 }
 
 SoundFacade::~SoundFacade() {
@@ -18,11 +17,7 @@ SoundFacade::~SoundFacade() {
 void SoundFacade::_shutdown() {
   for (auto& a : _audios)
     a.shutdown();
-  if (_background){
-    _background->shutdown();
-    delete _background;
-    _background = nullptr;
-  }
+  _background.shutdown();
   CoUninitialize();
 }
 
@@ -30,8 +25,8 @@ void SoundFacade::_pause() {
   if (_initialized) {
     for (auto& a : _audios)
       CHECK_RESULT_WARN(a.pause(), "mediaControl of audio  pause.");
-    if (_background)
-      CHECK_RESULT_WARN(_background->pause(), "mediaControl of bgAudio  pause.");
+    if (_background.initialized())
+      CHECK_RESULT_WARN(_background.pause(), "mediaControl of bgAudio  pause.");
   }
 }
 
@@ -39,8 +34,8 @@ void SoundFacade::_resume() {
   if (_initialized) {
     for (auto& a : _audios)
       CHECK_RESULT_WARN(a.run(), "mediaControl of audio run.");
-    if (_background)
-      CHECK_RESULT_WARN(_background->run(), "mediaControl of bgAudio run.");
+    if (_background.initialized())
+      CHECK_RESULT_WARN(_background.run(), "mediaControl of bgAudio run.");
   }
 }
 
@@ -51,13 +46,13 @@ bool SoundFacade::_initialize(int hwnd) {
 }
 
 void SoundFacade::_initBackgroundAudio(const char *fileName){
-  _background = new Audio();
-  if (!_background->initialize(fileName)){
+  if (_background.initialized())
+    _background.shutdown();
+
+  if (!_background.initialize(fileName)){
     log->error("Can't init bgAudio from file.");
-    delete _background;
-    _background = nullptr;
     return;
   }
 
-  CHECK_RESULT_WARN(_background->run(), "mediaControl of bgAudio run.");
+  CHECK_RESULT_WARN(_background.run(), "mediaControl of bgAudio run.");
 }

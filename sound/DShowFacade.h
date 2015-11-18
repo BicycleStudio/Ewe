@@ -28,7 +28,7 @@ namespace sound {
     private:
       // audios except background
       std::vector<Audio> _audios;
-      Audio* _background;
+      Audio _background;
     };
     
   }
