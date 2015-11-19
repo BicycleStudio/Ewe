@@ -23,7 +23,8 @@ namespace command_manager {
     PAUSE,
     RESUME,
     INITIALIZE,
-    RESIZE
+    RESIZE,
+    INIT_BACKGROUND_AUDIO
   };
 
   class Command {

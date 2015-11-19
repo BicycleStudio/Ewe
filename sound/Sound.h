@@ -11,16 +11,16 @@ namespace sound {
   {
     utils::Logger* log;
 
-    void _processCommand(command_manager::Command& c);
+    void _processCommand(command_manager::Command& c) override final;
   public:
-    command_manager::ID id();
+    command_manager::ID id() override final;
     Sound();
     ~Sound();
 
-    void stop();
-    void start();
-    void pause();
-    void resume();
+    void stop() override final;
+    void start() override final;
+    void pause() override final;
+    void resume() override final;
   };
 
 }

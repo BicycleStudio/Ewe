@@ -10,6 +10,9 @@ namespace sound {
 
     virtual void _pause() = 0;
     virtual void _resume() = 0;
+
+    virtual void _initBackgroundAudio(const char*) = 0;
+
     bool _initialized;
   };
 
