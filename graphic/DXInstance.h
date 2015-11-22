@@ -20,6 +20,9 @@ namespace graphic {
       bool initialize(Model* model, ID3D11Device*, int cbSlot);
       void shutdown();
 
+      int getSlot();
+      ID3D11Buffer* getBuffer();
+
     private:
       XMFLOAT4X4  _world;
       Buffer      _cBuffer;

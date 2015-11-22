@@ -25,3 +25,10 @@ bool Instance::initialize(Model* model, ID3D11Device* device, int cbSlot) {
   return true;
 }
 
+int Instance::getSlot() {
+  return _cBufferSlot;
+}
+
+ID3D11Buffer* Instance::getBuffer() {
+  return _cBuffer.get();
+}
