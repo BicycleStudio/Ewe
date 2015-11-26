@@ -1,3 +1,10 @@
+cbuffer ConstantBuffer : register( b0 )
+{
+    matrix matWorld;
+    matrix matView;
+    matrix matProjection;
+}
+
 struct VInput {
   float3 position   : POSITION;
 };
@@ -7,7 +14,9 @@ struct VOutput {
 
 VOutput vsDefault(VInput input) {
   VOutput output = (VOutput) 0;
-  output.position = float4(input.position, 1.0f);
+  output.position = mul( input.position, matWorld );
+  output.position = mul( output.position, matView );
+  output.position = mul( output.position, matProjection );
  
   return output;
 }

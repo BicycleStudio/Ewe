@@ -16,6 +16,7 @@ GraphicFacade::GraphicFacade() {
   _backBuffer = nullptr;
   _depthStencilView = nullptr;
   _depthStencil = nullptr;
+  _constantBuffer = nullptr;
 }
 
 GraphicFacade::~GraphicFacade() {
@@ -36,6 +37,8 @@ bool GraphicFacade::_initializeGraphic(int hwnd, int sizeX, int sizeY) {
 
   _setRenderTargets();
   // 6. set projection matrix
+  if (!_initializeConstantBuffer()) return false;
+  if (!_initializeMatrixes()) return false;
 
   return true;
 }
@@ -118,6 +121,30 @@ void GraphicFacade::_clearContext() {
   SAFE_RELEASE(_depthStencil);
 }
 
+bool GraphicFacade::_initializeConstantBuffer(){
+	HRESULT hr = S_OK;
+
+	Buffer *bf = new Buffer;
+	bf->initializeConstantBuffer(_device, sizeof(ConstantBuffer));
+	_constantBuffer = bf->get();
+
+	_immediateContext->VSSetConstantBuffers(0, 1, &_constantBuffer);
+	return true;
+}
+
+bool GraphicFacade::_initializeMatrixes(){
+	_matrixWorld = XMMatrixIdentity();
+
+	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	_matrixView = XMMatrixLookAtLH(Eye, At, Up);
+
+	_matrixProjection = XMMatrixPerspectiveFovLH(XM_PIDIV4, _sizeX / (FLOAT)_sizeY, 0.01f, 100.0f);
+
+	return true;
+}
+
 void GraphicFacade::_setRenderTargets() {
   D3D11_VIEWPORT vp;
   vp.Width = (FLOAT)_sizeX;
@@ -166,14 +193,30 @@ void GraphicFacade::_beginScene() {
   _immediateContext->ClearRenderTargetView(_renderTargetView, sceneColor);
   _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
   _immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+  Material *mat = new Material;
+  mat->initialize(_device, "resources/materials/default.mtl");
+  _materials.push_back(mat);
+
 }
 
 void GraphicFacade::_drawContent() {
+	_updateConstantBuffer();
+  
   for(auto material : _materials) {
     material->set(_immediateContext);
     for(auto model : material->models)
       model->draw(_immediateContext, material);
   }
+}
+
+void GraphicFacade::_updateConstantBuffer(){
+
+	ConstantBuffer cb;
+	cb.mWorld = XMMatrixTranspose(_matrixWorld);
+	cb.mView = XMMatrixTranspose(_matrixView);
+	cb.mProjection = XMMatrixTranspose(_matrixProjection);
+	_immediateContext->UpdateSubresource(_constantBuffer, 0, NULL, &cb, 0, 0);
 }
 
 void GraphicFacade::_endScene() {

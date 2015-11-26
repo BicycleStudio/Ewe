@@ -19,7 +19,8 @@ namespace graphic {
       void shutdown();
       bool initialize(ID3D11Device*, D3D11_BUFFER_DESC&, D3D11_SUBRESOURCE_DATA&);
       bool initializeVertexBuffer(ID3D11Device*, void* verts, int vertSize, int countVerts);
-      bool initializeIndexBuffer(ID3D11Device*, UINT* inds, int countInds);
+	  bool initializeIndexBuffer(ID3D11Device*, UINT* inds, int countInds);
+	  bool initializeConstantBuffer(ID3D11Device*, UINT scructSize);
       ID3D11Buffer* get();
 
     private:
