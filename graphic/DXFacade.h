@@ -32,38 +32,41 @@ namespace graphic {
     private:
       bool _createDeviceSwapChain(HWND renderHwnd);
       bool _createRenderTargetView();
-	  bool _createDepthStencilView();
-	  bool _initializeMatrixes();
-	  bool _initializeConstantBuffer();
-	  void _updateConstantBuffer();
+      bool _createDepthStencilView();
+      bool _initializeMatrixes();
+      bool _initializeConstantBuffer();
+      void _updateWorldConstantBuffer();
+      void _updateModelConstantBuffer();
       void _clearContext();
       void _setRenderTargets();
 
-	  struct ConstantBuffer {
-		  XMMATRIX mWorld;
-		  XMMATRIX mView;
-		  XMMATRIX mProjection;
-	  };
+    struct WorldConstantBuffer {
+      XMMATRIX mView;
+      XMMATRIX mProjection;
+    };
+
+    struct ModelConstantBuffer {
+      XMMATRIX mWorld;
+    };
 
       ID3D11Device*           _device;
       ID3D11DeviceContext*    _immediateContext;
       IDXGISwapChain*         _swapChain;
       ID3D11RenderTargetView* _renderTargetView;
-	  ID3D11Texture2D*        _backBuffer;
+      ID3D11Texture2D*        _backBuffer;
       ID3D11DepthStencilView* _depthStencilView;
-	  ID3D11Texture2D*        _depthStencil;
-	  ID3D11Buffer*			  _constantBuffer;
+      ID3D11Texture2D*        _depthStencil;
+      ID3D11Buffer*           _constantBuffer;
 
-	  ID3D11VertexShader*     _pVertexShader;
-	  ID3D11PixelShader*      _pPixelShader;
-	  ID3D11InputLayout*      _pVertexLayout;
+      ID3D11VertexShader*     _pVertexShader;
+      ID3D11PixelShader*      _pPixelShader;
+      ID3D11InputLayout*      _pVertexLayout;
 
       vector<Material*>       _materials;
       vector<Model*>          _models;
 
-	  XMMATRIX                _matrixWorld;
-	  XMMATRIX                _matrixView;
-	  XMMATRIX                _matrixProjection;
+      XMMATRIX                _matrixView;
+      XMMATRIX                _matrixProjection;
     };
 
   }

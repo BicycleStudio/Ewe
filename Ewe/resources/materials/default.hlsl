@@ -1,8 +1,7 @@
 cbuffer ConstantBuffer : register( b0 )
 {
-    matrix matWorld;
-    matrix matView;
-    matrix matProjection;
+  matrix matView;
+  matrix matProjection;
 }
 
 struct VInput {
@@ -14,8 +13,7 @@ struct VOutput {
 
 VOutput vsDefault(VInput input) {
   VOutput output = (VOutput) 0;
-  output.position = mul( input.position, matWorld );
-  output.position = mul( output.position, matView );
+  output.position = mul( input.position, matView );
   output.position = mul( output.position, matProjection );
  
   return output;

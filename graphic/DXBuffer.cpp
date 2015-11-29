@@ -34,19 +34,17 @@ bool Buffer::initializeIndexBuffer(ID3D11Device* device, UINT* inds, int countIn
 }
 
 bool Buffer::initializeConstantBuffer(ID3D11Device* device, UINT scructSize){
-	auto bd = buffer_desc(1, scructSize, D3D11_BIND_INDEX_BUFFER);
-	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bd.MiscFlags = 0;
+  auto bd = buffer_desc(1, scructSize, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC);
+  bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	
 	auto data = subres_data(&scructSize);
 	return !initialize(device, bd, data);
 }
 
-inline D3D11_BUFFER_DESC Buffer::buffer_desc(int vertSize, int countVerts, DWORD flag) {
+inline D3D11_BUFFER_DESC Buffer::buffer_desc(int vertSize, int countVerts, DWORD flag, D3D11_USAGE usage) {
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));
-  bd.Usage = D3D11_USAGE_DEFAULT;
+  bd.Usage = usage;
   bd.ByteWidth = vertSize* countVerts;
   bd.BindFlags = flag;
   return bd;

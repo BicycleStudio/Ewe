@@ -122,26 +122,14 @@ void GraphicFacade::_clearContext() {
 }
 
 bool GraphicFacade::_initializeConstantBuffer(){
-	HRESULT hr = S_OK;
-
 	Buffer *bf = new Buffer;
-	bf->initializeConstantBuffer(_device, sizeof(ConstantBuffer));
+  bf->initializeConstantBuffer(_device, sizeof(WorldConstantBuffer));
 	_constantBuffer = bf->get();
-
-	_immediateContext->VSSetConstantBuffers(0, 1, &_constantBuffer);
 	return true;
 }
 
 bool GraphicFacade::_initializeMatrixes(){
-	_matrixWorld = XMMatrixIdentity();
-
-	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
-	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	_matrixView = XMMatrixLookAtLH(Eye, At, Up);
-
 	_matrixProjection = XMMatrixPerspectiveFovLH(XM_PIDIV4, _sizeX / (FLOAT)_sizeY, 0.01f, 100.0f);
-
 	return true;
 }
 
@@ -153,6 +141,7 @@ void GraphicFacade::_setRenderTargets() {
   vp.MaxDepth = 1.0f;
   vp.TopLeftX = 0;
   vp.TopLeftY = 0;
+
   _immediateContext->RSSetViewports(1, &vp);
   _immediateContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 }
@@ -201,22 +190,36 @@ void GraphicFacade::_beginScene() {
 }
 
 void GraphicFacade::_drawContent() {
-	_updateConstantBuffer();
+	_updateWorldConstantBuffer();
   
   for(auto material : _materials) {
     material->set(_immediateContext);
-    for(auto model : material->models)
+    for (auto model : material->models){
+      _updateModelConstantBuffer();
       model->draw(_immediateContext, material);
+    }
   }
 }
 
-void GraphicFacade::_updateConstantBuffer(){
+void GraphicFacade::_updateModelConstantBuffer(){
+  Buffer *bf = new Buffer;
+  bf->initializeConstantBuffer(_device, sizeof(ModelConstantBuffer));
+  ID3D11Buffer* modelCBuffer = bf->get();
 
-	ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose(_matrixWorld);
-	cb.mView = XMMatrixTranspose(_matrixView);
-	cb.mProjection = XMMatrixTranspose(_matrixProjection);
-	_immediateContext->UpdateSubresource(_constantBuffer, 0, NULL, &cb, 0, 0);
+  WorldConstantBuffer mb;
+  //do something with model
+  //mb.mWorld = model.matrix
+
+  _immediateContext->VSSetConstantBuffers(1, 1, &modelCBuffer);
+  _immediateContext->UpdateSubresource(modelCBuffer, 0, NULL, &mb, 0, 0);
+}
+void GraphicFacade::_updateWorldConstantBuffer(){
+  WorldConstantBuffer cb;
+  //_matrixView = camera->getMatrix();
+  cb.mView = XMMatrixIdentity();
+
+  _immediateContext->VSSetConstantBuffers(0, 1, &_constantBuffer);
+  _immediateContext->UpdateSubresource(_constantBuffer, 0, NULL, &cb, 0, 0);
 }
 
 void GraphicFacade::_endScene() {
