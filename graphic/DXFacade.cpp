@@ -122,15 +122,15 @@ void GraphicFacade::_clearContext() {
 }
 
 bool GraphicFacade::_initializeConstantBuffer(){
-	Buffer *bf = new Buffer;
+  Buffer *bf = new Buffer;
   bf->initializeConstantBuffer(_device, sizeof(WorldConstantBuffer));
-	_constantBuffer = bf->get();
-	return true;
+  _constantBuffer = bf->get();
+  return true;
 }
 
 bool GraphicFacade::_initializeMatrixes(){
-	_matrixProjection = XMMatrixPerspectiveFovLH(XM_PIDIV4, _sizeX / (FLOAT)_sizeY, 0.01f, 100.0f);
-	return true;
+  _matrixProjection = XMMatrixPerspectiveFovLH(XM_PIDIV4, _sizeX / (FLOAT)_sizeY, 0.01f, 100.0f);
+  return true;
 }
 
 void GraphicFacade::_setRenderTargets() {
@@ -190,7 +190,7 @@ void GraphicFacade::_beginScene() {
 }
 
 void GraphicFacade::_drawContent() {
-	_updateWorldConstantBuffer();
+  _updateWorldConstantBuffer();
   
   for(auto material : _materials) {
     material->set(_immediateContext);
@@ -207,7 +207,7 @@ void GraphicFacade::_updateModelConstantBuffer(){
   ID3D11Buffer* modelCBuffer = bf->get();
 
   WorldConstantBuffer mb;
-  //do something with model
+  //TODO something with model
   //mb.mWorld = model.matrix
 
   _immediateContext->VSSetConstantBuffers(1, 1, &modelCBuffer);
@@ -215,7 +215,7 @@ void GraphicFacade::_updateModelConstantBuffer(){
 }
 void GraphicFacade::_updateWorldConstantBuffer(){
   WorldConstantBuffer cb;
-  //_matrixView = camera->getMatrix();
+  //TODO: _matrixView = camera->getMatrix();
   cb.mView = XMMatrixIdentity();
 
   _immediateContext->VSSetConstantBuffers(0, 1, &_constantBuffer);
@@ -241,6 +241,9 @@ bool GraphicFacade::_resizeBuffers(int sizeX, int sizeY) {
   _setRenderTargets();
 
   // TODO: set projection matrix
+  if (!_initializeConstantBuffer()) return false;
+  if (!_initializeMatrixes()) return false;
+
   return true;
 }
 

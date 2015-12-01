@@ -37,8 +37,8 @@ bool Buffer::initializeConstantBuffer(ID3D11Device* device, UINT scructSize){
   auto bd = buffer_desc(1, scructSize, D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC);
   bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	
-	auto data = subres_data(&scructSize);
-	return !initialize(device, bd, data);
+  auto data = subres_data(&scructSize);
+  return !initialize(device, bd, data);
 }
 
 inline D3D11_BUFFER_DESC Buffer::buffer_desc(int vertSize, int countVerts, DWORD flag, D3D11_USAGE usage) {

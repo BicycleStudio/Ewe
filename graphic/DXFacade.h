@@ -58,14 +58,9 @@ namespace graphic {
       ID3D11Texture2D*        _depthStencil;
       ID3D11Buffer*           _constantBuffer;
 
-      ID3D11VertexShader*     _pVertexShader;
-      ID3D11PixelShader*      _pPixelShader;
-      ID3D11InputLayout*      _pVertexLayout;
-
       vector<Material*>       _materials;
       vector<Model*>          _models;
 
-      XMMATRIX                _matrixView;
       XMMATRIX                _matrixProjection;
     };
 
