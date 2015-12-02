@@ -182,11 +182,6 @@ void GraphicFacade::_beginScene() {
   _immediateContext->ClearRenderTargetView(_renderTargetView, sceneColor);
   _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
   _immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-  Material *mat = new Material;
-  mat->initialize(_device, "resources/materials/default.mtl");
-  _materials.push_back(mat);
-
 }
 
 void GraphicFacade::_drawContent() {
