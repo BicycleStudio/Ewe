@@ -33,8 +33,21 @@ namespace graphic {
       bool _createDeviceSwapChain(HWND renderHwnd);
       bool _createRenderTargetView();
       bool _createDepthStencilView();
+      bool _initializeMatrixes();
+      bool _initializeConstantBuffer();
+      void _updateWorldConstantBuffer();
+      void _updateModelConstantBuffer();
       void _clearContext();
       void _setRenderTargets();
+
+    struct WorldConstantBuffer {
+      XMMATRIX mView;
+      XMMATRIX mProjection;
+    };
+
+    struct ModelConstantBuffer {
+      XMMATRIX mWorld;
+    };
 
       ID3D11Device*           _device;
       ID3D11DeviceContext*    _immediateContext;
@@ -43,9 +56,12 @@ namespace graphic {
       ID3D11Texture2D*        _backBuffer;
       ID3D11DepthStencilView* _depthStencilView;
       ID3D11Texture2D*        _depthStencil;
+      ID3D11Buffer*           _constantBuffer;
 
       vector<Material*>       _materials;
       vector<Model*>          _models;
+
+      XMMATRIX                _matrixProjection;
     };
 
   }

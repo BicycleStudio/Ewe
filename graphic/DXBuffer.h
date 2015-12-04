@@ -20,11 +20,12 @@ namespace graphic {
       bool initialize(ID3D11Device*, D3D11_BUFFER_DESC&, D3D11_SUBRESOURCE_DATA&);
       bool initializeVertexBuffer(ID3D11Device*, void* verts, int vertSize, int countVerts);
       bool initializeIndexBuffer(ID3D11Device*, UINT* inds, int countInds);
+      bool initializeConstantBuffer(ID3D11Device*, UINT scructSize);
       ID3D11Buffer* get();
 
     private:
       inline D3D11_SUBRESOURCE_DATA subres_data(void* verts);
-      inline D3D11_BUFFER_DESC buffer_desc(int vertSize, int countVerts, DWORD flag);
+      inline D3D11_BUFFER_DESC buffer_desc(int vertSize, int countVerts, DWORD flag, D3D11_USAGE usage = D3D11_USAGE_DEFAULT);
       
       ID3D11Buffer*   _buffer;
     };
