@@ -76,12 +76,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dependencies.h" />
-    <ClInclude Include="DXSupport.h" />
-    <ClInclude Include="Logger.h" />
+    <ClInclude Include="src\Dependencies.h" />
+    <ClInclude Include="src\DXSupport.h" />
+    <ClInclude Include="src\Logger.h" />
+    <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

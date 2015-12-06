@@ -21,82 +21,82 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DependenciesDX.h">
+    <ClInclude Include="src\Dependencies.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphic.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicInformer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicSupport.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\DependenciesDX.h">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphic.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicInformer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicSupport.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGLFacade.h">
+    <ClInclude Include="src\graphicFacade\openGLFacade\DependenciesGL.h">
       <Filter>src\graphicFacade\openGLFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DependenciesGL.h">
+    <ClInclude Include="src\graphicFacade\directXFacade\DXFacade.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\DXBuffer.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\DXModel.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\DXVertex.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\DXMaterial.h">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\shader\DXPShader.h">
+      <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\shader\DXShader.h">
+      <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\directXFacade\shader\DXVShader.h">
+      <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicFacade\openGLFacade\OpenGLFacade.h">
       <Filter>src\graphicFacade\openGLFacade</Filter>
     </ClInclude>
-    <ClInclude Include="IGraphicFacade.h">
+    <ClInclude Include="src\graphicFacade\IGraphicFacade.h">
       <Filter>src\graphicFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DXBuffer.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DXModel.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DXVertex.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DXFacade.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DXMaterial.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DXShader.h">
-      <Filter>src\graphicFacade\directXFacade\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="DXVShader.h">
-      <Filter>src\graphicFacade\directXFacade\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="DXPShader.h">
-      <Filter>src\graphicFacade\directXFacade\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graphic.cpp">
+    <ClCompile Include="src\Graphic.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="OpenGLFacade.cpp">
+    <ClCompile Include="src\graphicFacade\directXFacade\DXFacade.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\directXFacade\DXBuffer.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\directXFacade\DXModel.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\directXFacade\DXMaterial.cpp">
+      <Filter>src\graphicFacade\directXFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\directXFacade\shader\DXPShader.cpp">
+      <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\directXFacade\shader\DXShader.cpp">
+      <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\directXFacade\shader\DXVShader.cpp">
+      <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphicFacade\openGLFacade\OpenGLFacade.cpp">
       <Filter>src\graphicFacade\openGLFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DXBuffer.cpp">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DXModel.cpp">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DXFacade.cpp">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DXMaterial.cpp">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DXShader.cpp">
-      <Filter>src\graphicFacade\directXFacade\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="DXPShader.cpp">
-      <Filter>src\graphicFacade\directXFacade\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="DXVShader.cpp">
-      <Filter>src\graphicFacade\directXFacade\shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,30 +15,30 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IO.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="DependenciesDInput.h">
-      <Filter>src\ioFacade\directInputFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="IOKeys.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="IInputFacade.h">
+    <ClInclude Include="src\ioFacade\IInputFacade.h">
       <Filter>src\ioFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DInputFacade.h">
+    <ClInclude Include="src\Dependencies.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IO.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IOKeys.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ioFacade\dInputFacade\DependenciesDInput.h">
+      <Filter>src\ioFacade\directInputFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ioFacade\dInputFacade\DInputFacade.h">
       <Filter>src\ioFacade\directInputFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IO.cpp">
+    <ClCompile Include="src\IO.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="DInputFacade.cpp">
+    <ClCompile Include="src\ioFacade\dInputFacade\DInputFacade.cpp">
       <Filter>src\ioFacade\directInputFacade</Filter>
     </ClCompile>
   </ItemGroup>
