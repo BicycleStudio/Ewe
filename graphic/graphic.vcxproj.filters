@@ -16,6 +16,9 @@
     <Filter Include="src\graphicFacade\directXFacade\shader">
       <UniqueIdentifier>{d5b293cc-8bff-42b9-98ff-7bf314d87c31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\graphicFacade\directXFacade\model">
+      <UniqueIdentifier>{fc0c1ced-c6ac-4fa5-a1ac-47248459231a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -48,9 +51,6 @@
     <ClInclude Include="DXBuffer.h">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DXModel.h">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClInclude>
     <ClInclude Include="DXVertex.h">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClInclude>
@@ -69,6 +69,12 @@
     <ClInclude Include="DXPShader.h">
       <Filter>src\graphicFacade\directXFacade\shader</Filter>
     </ClInclude>
+    <ClInclude Include="DXModel.h">
+      <Filter>src\graphicFacade\directXFacade\model</Filter>
+    </ClInclude>
+    <ClInclude Include="DXInstance.h">
+      <Filter>src\graphicFacade\directXFacade\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphic.cpp">
@@ -78,9 +84,6 @@
       <Filter>src\graphicFacade\openGLFacade</Filter>
     </ClCompile>
     <ClCompile Include="DXBuffer.cpp">
-      <Filter>src\graphicFacade\directXFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DXModel.cpp">
       <Filter>src\graphicFacade\directXFacade</Filter>
     </ClCompile>
     <ClCompile Include="DXFacade.cpp">
@@ -97,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="DXVShader.cpp">
       <Filter>src\graphicFacade\directXFacade\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="DXModel.cpp">
+      <Filter>src\graphicFacade\directXFacade\model</Filter>
+    </ClCompile>
+    <ClCompile Include="DXInstance.cpp">
+      <Filter>src\graphicFacade\directXFacade\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

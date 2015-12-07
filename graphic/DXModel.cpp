@@ -67,5 +67,9 @@ void Model::draw(ID3D11DeviceContext* context, Material* material) {
   context->IASetVertexBuffers(0, 1, &vbuf, &stride_, &offset_);
   context->IASetIndexBuffer(_indexs.get(), DXGI_FORMAT_R32_UINT, 0);
 
+  //TODO : Set instance buffer and draw the same vertex&index buffers.
+  // foreach (Instance in _instances) {
+  // material->setConstantBuffer(context, _instances.getBuffer(), _instances.getSlot());
   context->DrawIndexed(_countIndex, 0, 0);
+  //}
 }

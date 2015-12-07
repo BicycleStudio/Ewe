@@ -85,6 +85,7 @@
     <ClInclude Include="DependenciesDX.h" />
     <ClInclude Include="DependenciesGL.h" />
     <ClInclude Include="DXFacade.h" />
+    <ClInclude Include="DXInstance.h" />
     <ClInclude Include="DXMaterial.h" />
     <ClInclude Include="DXPShader.h" />
     <ClInclude Include="DXShader.h" />
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClCompile Include="DXBuffer.cpp" />
     <ClCompile Include="DXFacade.cpp" />
+    <ClCompile Include="DXInstance.cpp" />
     <ClCompile Include="DXMaterial.cpp" />
     <ClCompile Include="DXPShader.cpp" />
     <ClCompile Include="DXShader.cpp" />
