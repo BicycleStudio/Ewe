@@ -30,14 +30,8 @@ namespace thread_manager {
   }
 
   void ThreadManager::start() {
-    // don't replace to for(auto c : _subjects)
-    for (auto c = _subjects.begin(); c != _subjects.end(); c++) {
-      auto value = *c;
-      _threads.push_back(thread([&value]() { value->start(); }));
-
-      auto a = milliseconds(threadManagerSleep);
-      sleep_for(a);
-    }
+    for(auto& c : _subjects)
+      _threads.push_back(thread([&c]() { c->start(); }));
   }
 
   void ThreadManager::stop() {
