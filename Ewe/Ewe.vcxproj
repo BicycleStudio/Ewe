@@ -19,7 +19,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\utils;..\thread_manager;..\patterns;..\graphic;..\logic;..\io;..\sound</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\utils\src;..\thread_manager\src;..\patterns\src;..\graphic\src;..\logic\src;..\io\src;..\sound\src;..\system\src;..\command_manager\src;..\data\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -68,10 +68,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dependencies.h" />
+    <ClInclude Include="src\Dependencies.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

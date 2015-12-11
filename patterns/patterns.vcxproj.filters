@@ -1,70 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="creational">
-      <UniqueIdentifier>{fb89f7b1-cd2f-4058-8941-bb47ce8e705a}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{4ebff8a5-6364-4364-b70f-2898e79451f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="structural">
-      <UniqueIdentifier>{b9e4b738-379e-4f4a-9af7-cd4622292dc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="behavioral">
+    <Filter Include="src\behavioral">
       <UniqueIdentifier>{7633636e-b826-4283-a944-f2b6178f2b5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\creational">
+      <UniqueIdentifier>{fb89f7b1-cd2f-4058-8941-bb47ce8e705a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\structural">
+      <UniqueIdentifier>{b9e4b738-379e-4f4a-9af7-cd4622292dc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Builder.h">
-      <Filter>creational</Filter>
+    <ClInclude Include="src\behavioral\Command.h">
+      <Filter>src\behavioral</Filter>
     </ClInclude>
-    <ClInclude Include="Factory.h">
-      <Filter>creational</Filter>
+    <ClInclude Include="src\behavioral\Memento.h">
+      <Filter>src\behavioral</Filter>
     </ClInclude>
-    <ClInclude Include="Prototype.h">
-      <Filter>creational</Filter>
+    <ClInclude Include="src\behavioral\Observer.h">
+      <Filter>src\behavioral</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>creational</Filter>
+    <ClInclude Include="src\behavioral\State.h">
+      <Filter>src\behavioral</Filter>
     </ClInclude>
-    <ClInclude Include="Adapter.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\behavioral\Strategy.h">
+      <Filter>src\behavioral</Filter>
     </ClInclude>
-    <ClInclude Include="Decorator.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\behavioral\Visitor.h">
+      <Filter>src\behavioral</Filter>
     </ClInclude>
-    <ClInclude Include="Flyweight.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\creational\Builder.h">
+      <Filter>src\creational</Filter>
     </ClInclude>
-    <ClInclude Include="Bridge.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\creational\Factory.h">
+      <Filter>src\creational</Filter>
     </ClInclude>
-    <ClInclude Include="Composite.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\creational\Prototype.h">
+      <Filter>src\creational</Filter>
     </ClInclude>
-    <ClInclude Include="Facade.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\creational\Singleton.h">
+      <Filter>src\creational</Filter>
     </ClInclude>
-    <ClInclude Include="Proxy.h">
-      <Filter>structural</Filter>
+    <ClInclude Include="src\structural\Adapter.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>behavioral</Filter>
+    <ClInclude Include="src\structural\Bridge.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
-    <ClInclude Include="Memento.h">
-      <Filter>behavioral</Filter>
+    <ClInclude Include="src\structural\Composite.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>behavioral</Filter>
+    <ClInclude Include="src\structural\Decorator.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>behavioral</Filter>
+    <ClInclude Include="src\structural\Facade.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
-    <ClInclude Include="Strategy.h">
-      <Filter>behavioral</Filter>
+    <ClInclude Include="src\structural\Flyweight.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
-    <ClInclude Include="Visitor.h">
-      <Filter>behavioral</Filter>
+    <ClInclude Include="src\structural\Proxy.h">
+      <Filter>src\structural</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="patterns.cpp" />
+    <ClCompile Include="src\patterns.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.md" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#include <Singleton.h>
+#include <creational\Singleton.h>
 
 class SingletonImpl : public patterns::Singleton<SingletonImpl>{
 private:

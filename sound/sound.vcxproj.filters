@@ -18,52 +18,52 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sound.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="DependenciesDSound.h">
-      <Filter>src\soundFacade\directSoundFacade</Filter>
-    </ClInclude>
-    <ClInclude Include="DependenciesDShow.h">
+    <ClInclude Include="src\soundFacade\directShowFacade\DependenciesDShow.h">
       <Filter>src\soundFacade\directShowFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DShowAudio.h">
+    <ClInclude Include="src\soundFacade\directShowFacade\DShowAudio.h">
       <Filter>src\soundFacade\directShowFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DShowFacade.h">
+    <ClInclude Include="src\soundFacade\directShowFacade\DShowFacade.h">
       <Filter>src\soundFacade\directShowFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DSoundFacade.h">
+    <ClInclude Include="src\soundFacade\directSoundFacade\DSoundAudio.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
-    <ClInclude Include="DSoundAudio.h">
+    <ClInclude Include="src\soundFacade\directSoundFacade\DSoundFacade.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
-    <ClInclude Include="ISoundFacade.h">
+    <ClInclude Include="src\soundFacade\directSoundFacade\DependenciesDSound.h">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClInclude>
+    <ClInclude Include="src\soundFacade\ISoundFacade.h">
       <Filter>src\soundFacade</Filter>
     </ClInclude>
-    <ClInclude Include="WavFormat.h">
+    <ClInclude Include="src\Sound.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dependencies.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\soundFacade\directSoundFacade\WavFormat.h">
       <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sound.cpp">
+    <ClCompile Include="src\soundFacade\directShowFacade\DShowAudio.cpp">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\soundFacade\directShowFacade\DShowFacade.cpp">
+      <Filter>src\soundFacade\directShowFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\soundFacade\directSoundFacade\DSoundAudio.cpp">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\soundFacade\directSoundFacade\DSoundFacade.cpp">
+      <Filter>src\soundFacade\directSoundFacade</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sound.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="DShowAudio.cpp">
-      <Filter>src\soundFacade\directShowFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DShowFacade.cpp">
-      <Filter>src\soundFacade\directShowFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DSoundFacade.cpp">
-      <Filter>src\soundFacade\directSoundFacade</Filter>
-    </ClCompile>
-    <ClCompile Include="DSoundAudio.cpp">
-      <Filter>src\soundFacade\directSoundFacade</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

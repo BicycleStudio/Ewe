@@ -20,7 +20,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -51,7 +51,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\utils;..\patterns;..\thread_manager;..\data;..\command_manager;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\utils\src;..\patterns\src;..\thread_manager\src;..\data\src;..\command_manager\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,33 +80,33 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DXBuffer.h" />
-    <ClInclude Include="Dependencies.h" />
-    <ClInclude Include="DependenciesDX.h" />
-    <ClInclude Include="DependenciesGL.h" />
-    <ClInclude Include="DXFacade.h" />
-    <ClInclude Include="DXMaterial.h" />
-    <ClInclude Include="DXPShader.h" />
-    <ClInclude Include="DXShader.h" />
-    <ClInclude Include="DXVShader.h" />
-    <ClInclude Include="Graphic.h" />
-    <ClInclude Include="IGraphicFacade.h" />
-    <ClInclude Include="GraphicInformer.h" />
-    <ClInclude Include="GraphicSupport.h" />
-    <ClInclude Include="DXModel.h" />
-    <ClInclude Include="OpenGLFacade.h" />
-    <ClInclude Include="DXVertex.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\DXBuffer.h" />
+    <ClInclude Include="src\Dependencies.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\DependenciesDX.h" />
+    <ClInclude Include="src\graphicFacade\openGLFacade\DependenciesGL.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\DXFacade.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\DXMaterial.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\shader\DXPShader.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\shader\DXShader.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\shader\DXVShader.h" />
+    <ClInclude Include="src\Graphic.h" />
+    <ClInclude Include="src\graphicFacade\IGraphicFacade.h" />
+    <ClInclude Include="src\GraphicInformer.h" />
+    <ClInclude Include="src\GraphicSupport.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\DXModel.h" />
+    <ClInclude Include="src\graphicFacade\openGLFacade\OpenGLFacade.h" />
+    <ClInclude Include="src\graphicFacade\directXFacade\DXVertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DXBuffer.cpp" />
-    <ClCompile Include="DXFacade.cpp" />
-    <ClCompile Include="DXMaterial.cpp" />
-    <ClCompile Include="DXPShader.cpp" />
-    <ClCompile Include="DXShader.cpp" />
-    <ClCompile Include="DXVShader.cpp" />
-    <ClCompile Include="Graphic.cpp" />
-    <ClCompile Include="DXModel.cpp" />
-    <ClCompile Include="OpenGLFacade.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\DXBuffer.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\DXFacade.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\DXMaterial.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\shader\DXPShader.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\shader\DXShader.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\shader\DXVShader.cpp" />
+    <ClCompile Include="src\Graphic.cpp" />
+    <ClCompile Include="src\graphicFacade\directXFacade\DXModel.cpp" />
+    <ClCompile Include="src\graphicFacade\openGLFacade\OpenGLFacade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\data\data.vcxproj">

@@ -73,26 +73,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Adapter.h" />
-    <ClInclude Include="Bridge.h" />
-    <ClInclude Include="Builder.h" />
-    <ClInclude Include="Command.h" />
-    <ClInclude Include="Composite.h" />
-    <ClInclude Include="Decorator.h" />
-    <ClInclude Include="Facade.h" />
-    <ClInclude Include="Factory.h" />
-    <ClInclude Include="Flyweight.h" />
-    <ClInclude Include="Memento.h" />
-    <ClInclude Include="Observer.h" />
-    <ClInclude Include="Prototype.h" />
-    <ClInclude Include="Proxy.h" />
-    <ClInclude Include="Singleton.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="Strategy.h" />
-    <ClInclude Include="Visitor.h" />
+    <ClInclude Include="src\structural\Adapter.h" />
+    <ClInclude Include="src\structural\Bridge.h" />
+    <ClInclude Include="src\creational\Builder.h" />
+    <ClInclude Include="src\behavioral\Command.h" />
+    <ClInclude Include="src\structural\Composite.h" />
+    <ClInclude Include="src\structural\Decorator.h" />
+    <ClInclude Include="src\structural\Facade.h" />
+    <ClInclude Include="src\creational\Factory.h" />
+    <ClInclude Include="src\structural\Flyweight.h" />
+    <ClInclude Include="src\behavioral\Memento.h" />
+    <ClInclude Include="src\behavioral\Observer.h" />
+    <ClInclude Include="src\creational\Prototype.h" />
+    <ClInclude Include="src\structural\Proxy.h" />
+    <ClInclude Include="src\creational\Singleton.h" />
+    <ClInclude Include="src\behavioral\State.h" />
+    <ClInclude Include="src\behavioral\Strategy.h" />
+    <ClInclude Include="src\behavioral\Visitor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="patterns.cpp" />
+    <ClCompile Include="src\patterns.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

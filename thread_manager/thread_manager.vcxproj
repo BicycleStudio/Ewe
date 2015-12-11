@@ -51,7 +51,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\utils;..\patterns;..\command_manager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\utils\src;..\patterns\src;..\command_manager\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,13 +80,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dependencies.h" />
-    <ClInclude Include="ThreadManager.h" />
-    <ClInclude Include="ThreadSubject.h" />
+    <ClInclude Include="src\Dependencies.h" />
+    <ClInclude Include="src\ThreadManager.h" />
+    <ClInclude Include="src\ThreadSubject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ThreadManager.cpp" />
-    <ClCompile Include="ThreadSubject.cpp" />
+    <ClCompile Include="src\ThreadManager.cpp" />
+    <ClCompile Include="src\ThreadSubject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
