@@ -3,7 +3,7 @@
 
 #include "DependenciesDShow.h"
 #include <string>
-#include "Logger.h"
+#include <Logger.h>
 
 namespace sound {
 

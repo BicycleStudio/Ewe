@@ -4,7 +4,7 @@
 #include "DependenciesDSound.h"
 #include "..\ISoundFacade.h"
 #include "DSoundAudio.h"
-#include "Logger.h"
+#include <Logger.h>
 
 namespace sound {
 
