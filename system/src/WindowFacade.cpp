@@ -3,11 +3,14 @@
 #include <CommandManager.h>
 #include <iostream>
 
+#include <string>
+
 #define __DX_GRAPHIC
 
 using namespace window_facade;
 using namespace command_manager;
 using namespace utils;
+using namespace std;
 
 static const int windowFacadeSleep = 100;
 static const std::string fullScreenString = "Start fullscreen?";
@@ -141,7 +144,8 @@ bool WindowFacade::_initialize() {
   DWORD		dwStyle_;
   RECT		windowRect_;
    
-  auto wfullscreen = getWstring(fullScreenString);
+  wstring wfullscreen;
+  wfullscreen %= fullScreenString;
   if(MessageBox(NULL, wfullscreen.c_str(), wfullscreen.c_str(), MB_YESNO | MB_ICONQUESTION) == IDYES) {
     _fullscreen = true;
     HDC hDC_ = GetDC(NULL);
@@ -164,7 +168,9 @@ bool WindowFacade::_initialize() {
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
   };
 
-  auto wwndclass = getWstring(_wndClassName);
+  wstring wwndclass;
+  wwndclass %= _wndClassName;
+
   WNDCLASS	wc_;
   wc_.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
   wc_.lpfnWndProc = wndproc_;
@@ -192,7 +198,8 @@ bool WindowFacade::_initialize() {
 
     // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
     if(ChangeDisplaySettings(&dmScreenSettings_, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
-      auto wfullscreenError = getWstring(fullScreenProblemString);
+      wstring wfullscreenError;
+      wfullscreenError %= fullScreenProblemString;
       if(MessageBox(NULL, wfullscreenError.c_str(), wfullscreenError.c_str(), MB_YESNO | MB_ICONEXCLAMATION) == IDYES) {
         _fullscreen = false;
         _width = windowWidth;
@@ -216,7 +223,7 @@ bool WindowFacade::_initialize() {
     dwStyle_ = WS_OVERLAPPEDWINDOW;
   }
   AdjustWindowRectEx(&windowRect_, dwStyle_, FALSE, dwExStyle_);
-  auto wname = getWstring(_name);
+  wstring wname; wname %= _name;
   if(!(_hwnd = CreateWindowEx(dwExStyle_,
     wwndclass.c_str(),
     wname.c_str(),
@@ -301,7 +308,7 @@ void WindowFacade::_shutdown() {
       log->fatal("DestroyWindow was failed");
    _hwnd = NULL;
   }
-  auto wwndclass = getWstring(_wndClassName);
+  wstring wwndclass; wwndclass %= _wndClassName;
   if(!UnregisterClass(wwndclass.c_str(), GetModuleHandle(NULL))) {
     log->fatal("UnregisterClass was failed");
   }
