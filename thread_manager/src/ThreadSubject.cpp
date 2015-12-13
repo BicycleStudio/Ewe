@@ -16,14 +16,40 @@ ThreadSubject::ThreadSubject() {
   this->_commands = make_shared<queue<Command>>();
   this->_willStop = false;
   this->_paused = false;
+
+  static shared_ptr<queue<Command>> _commandsAfterInit = make_shared<queue<Command>>();
+  static bool _threadInit = false;
+
+  _computeCommand = [this]() {
+    while(this->_commands->size() > 0) {
+      auto& c = this->_commands->front();
+      if(c.commandType == CommandType::INITIALIZE) {
+        _processCommand(c);
+        _threadInit = true;
+        while(_commandsAfterInit->size()) {
+          auto& com = _commandsAfterInit->front();
+          _processCommand(com);
+          _commandsAfterInit->pop();
+        }
+        _computeCommand = [this]() {
+          while(this->_commands->size() > 0) {
+            auto& c = this->_commands->front();
+            _processCommand(c);
+            this->_commands->pop();
+          }
+        };
+      }
+      else {
+        if(!_threadInit) _commandsAfterInit->push(c);
+        else _processCommand(c);
+      }
+      this->_commands->pop();
+    }
+  };
 }
 
 void ThreadSubject::_processCommands() {
-  while (this->_commands->size() > 0) {
-    auto& c = this->_commands->front();
-    _processCommand(c);
-    this->_commands->pop();
-  }
+  _computeCommand();
 }
 
 void ThreadSubject::bind(CommandManager* commandManager) {
