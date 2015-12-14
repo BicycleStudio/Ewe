@@ -87,3 +87,7 @@ void ThreadManager::_sendKillWindow() {
   Command cmndKill = Command(ID::THREAD_MANAGER, ID::WINDOW_FACADE, CommandType::KILL);
   _commandManager.push(cmndKill);
 }
+
+CommandManager* ThreadManager::getCommandManager() {
+  return &_commandManager;
+}
