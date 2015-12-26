@@ -2,7 +2,6 @@
 
 #include <CommandManager.h>
 #include <Utils.h>
-using utils::Method;
 
 namespace thread_manager {
 

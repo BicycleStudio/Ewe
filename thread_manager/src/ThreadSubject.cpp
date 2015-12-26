@@ -19,7 +19,6 @@ ThreadSubject::ThreadSubject() {
 
   static shared_ptr<queue<Command>> _commandsAfterInit = make_shared<queue<Command>>();
   static bool _threadInit = false;
-
   static auto standartProcessor = [](ThreadSubject* this_) {
     while(this_->_commands->size() > 0) {
       auto& c = this_->_commands->front();
