@@ -8,7 +8,8 @@ namespace thread_manager {
 
   class ThreadSubject {
   protected:
-    Method _computeCommand;
+    using threadSubjectMethod = void(*)(ThreadSubject*);
+    threadSubjectMethod _computeCommand;
 
     command_manager::CommandManager* _commandManager;
 

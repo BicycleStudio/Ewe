@@ -20,36 +20,38 @@ ThreadSubject::ThreadSubject() {
   static shared_ptr<queue<Command>> _commandsAfterInit = make_shared<queue<Command>>();
   static bool _threadInit = false;
 
-  _computeCommand = [this]() {
-    while(this->_commands->size() > 0) {
-      auto& c = this->_commands->front();
+  static auto standartProcessor = [](ThreadSubject* this_) {
+    while(this_->_commands->size() > 0) {
+      auto& c = this_->_commands->front();
+      this_->_processCommand(c);
+      this_->_commands->pop();
+    }
+  };
+  static auto preInitProcessor = [](ThreadSubject* this_) {
+    while(this_->_commands->size() > 0) {
+      auto& c = this_->_commands->front();
       if(c.commandType == CommandType::INITIALIZE) {
-        _processCommand(c);
+        this_->_processCommand(c);
         _threadInit = true;
         while(_commandsAfterInit->size()) {
           auto& com = _commandsAfterInit->front();
-          _processCommand(com);
+          this_->_processCommand(com);
           _commandsAfterInit->pop();
         }
-        _computeCommand = [this]() {
-          while(this->_commands->size() > 0) {
-            auto& c = this->_commands->front();
-            _processCommand(c);
-            this->_commands->pop();
-          }
-        };
+        this_->_computeCommand = standartProcessor;
       }
       else {
         if(!_threadInit) _commandsAfterInit->push(c);
-        else _processCommand(c);
+        else this_->_processCommand(c);
       }
-      this->_commands->pop();
+      this_->_commands->pop();
     }
   };
+  _computeCommand = preInitProcessor;
 }
 
 void ThreadSubject::_processCommands() {
-  _computeCommand();
+  _computeCommand(this);
 }
 
 void ThreadSubject::bind(CommandManager* commandManager) {
