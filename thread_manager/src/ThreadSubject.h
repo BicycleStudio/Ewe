@@ -1,11 +1,15 @@
 #include <queue>
 
 #include <CommandManager.h>
+#include <Utils.h>
 
 namespace thread_manager {
 
   class ThreadSubject {
   protected:
+    using threadSubjectMethod = void(*)(ThreadSubject*);
+    threadSubjectMethod _computeCommand;
+
     command_manager::CommandManager* _commandManager;
 
     std::shared_ptr<std::queue<command_manager::Command>> _commands;
