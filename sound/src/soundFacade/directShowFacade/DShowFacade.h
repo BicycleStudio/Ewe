@@ -2,7 +2,7 @@
 #define DIRECT_SHOW_FACADE_H_
 
 #include "..\ISoundFacade.h"
-#include "Logger.h"
+#include <Logger.h>
 #include "DShowAudio.h"
 
 namespace sound {
