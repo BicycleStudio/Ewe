@@ -12,6 +12,7 @@ command_manager::ID Sound::id() {
 
 Sound::Sound() {
   log = new utils::Logger(typeid(*this).name());
+  _sleepThread = soundSleep;
 }
 
 Sound::~Sound() {
@@ -44,16 +45,10 @@ void Sound::stop() {
   this->_willStop = true;
 }
 
-void Sound::start() {
-  log->info("Sound thread was started");
+void Sound::processTick() {
+  if(_paused) return;
 
-  while (!this->_willStop) {
-    auto a = std::chrono::milliseconds(soundSleep);
-    std::this_thread::sleep_for (a);
-
-    // TODO: check all audios for end & remove if;
-    _processCommands ();
-  }
+  _processCommands();
 }
 
 void Sound::pause() {

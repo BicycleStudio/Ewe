@@ -41,6 +41,13 @@ void ThreadManager::start() {
     _threads.push_back(thread([&c]() { c->start(); }));
 }
 
+bool ThreadManager::startMono() {
+  for(auto& c : _subjects)
+    if(!c->initialize())
+      return false;
+  return true;
+}
+
 void ThreadManager::pause() {
   for (auto& c : _subjects) c->pause();
 }
@@ -50,37 +57,50 @@ void ThreadManager::resume() {
 }
 
 void ThreadManager::listen() {
-  while (true) {
+  while(true) {
     auto a = milliseconds(threadManagerSleep);
     sleep_for(a);
 
-    _commandManager.process();
-
-    while (this->_commands->size() > 0) {
-      auto& c = this->_commands->front();
-      switch (c.commandType) {
-
-      case CommandType::DESTROY_ALL:
-        this->stop();
-        return;
-
-      case CommandType::KILL:
-        _sendKillWindow();
-        break;
-
-      case CommandType::PAUSE:
-        this->pause();
-        break;
-
-      case CommandType::RESUME:
-        this->resume();
-        break;
-
-      default: break;
-      }
-      this->_commands->pop();
-    }
+    if(!processTick()) return;
   }
+}
+
+void ThreadManager::listenMono() {
+  while(true) {
+    if(!processTick()) return;
+    for(auto& c : _subjects)
+      c->processTick();
+  }
+}
+
+bool ThreadManager::processTick() {
+  _commandManager.process();
+
+  while(this->_commands->size() > 0) {
+    auto& c = this->_commands->front();
+    switch(c.commandType) {
+
+    case CommandType::DESTROY_ALL:
+      this->stop();
+      return false;
+
+    case CommandType::KILL:
+      _sendKillWindow();
+      break;
+
+    case CommandType::PAUSE:
+      this->pause();
+      break;
+
+    case CommandType::RESUME:
+      this->resume();
+      break;
+
+    default: break;
+    }
+    this->_commands->pop();
+  }
+  return true;
 }
 
 void ThreadManager::_sendKillWindow() {

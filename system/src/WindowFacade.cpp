@@ -36,6 +36,7 @@ WindowFacade::WindowFacade() {
   _hwnd = NULL;
   _fullscreen = !windowed;
   _minimized = false;
+  _sleepThread = windowFacadeSleep;
 
   _hDC = 0;
   _hwnd = 0;
@@ -77,28 +78,23 @@ void WindowFacade::_processCommand(command_manager::Command& c) {
   return;
 }
 
-void WindowFacade::start() {
-  log->info("WindowFacade thread was started");
-
-  if (!_initialize()) {
+bool WindowFacade::initialize() {
+  if(!_initialize()) {
     pp_sendKill();
-    return;
+    return false;
   }
   _initialized = true;
-  _sendHwnd();
+  _sendInitialize();
+  return true;
+}
 
+void WindowFacade::processTick() {
   MSG msg_;
-
-  while (!this->_willStop) {
-    auto a = std::chrono::milliseconds(windowFacadeSleep);
-    std::this_thread::sleep_for(a);
-
-    if (PeekMessage(&msg_, NULL, 0, 0, PM_REMOVE)) {
-      TranslateMessage(&msg_);
-      DispatchMessage(&msg_);
-    }
-    _processCommands();
+  if(PeekMessage(&msg_, NULL, 0, 0, PM_REMOVE)) {
+    TranslateMessage(&msg_);
+    DispatchMessage(&msg_);
   }
+  _processCommands();
 }
 
 void WindowFacade::_generateCommandProcessors() {
@@ -327,7 +323,7 @@ bool WindowFacade::pp_getMinimized() {
   return this->_minimized;
 }
 
-void WindowFacade::_sendHwnd() {
+void WindowFacade::_sendInitialize() {
   Command hwndToGraphic = Command(this->id(), ID::GRAPHIC, INITIALIZE);
 #if defined(__DX_GRAPHIC)
   hwndToGraphic.argInt.push_back(reinterpret_cast<int>(_hwnd));
@@ -345,6 +341,9 @@ void WindowFacade::_sendHwnd() {
   Command hwndToSound = Command(this->id(), ID::SOUND, INITIALIZE);
   hwndToSound.argInt.push_back(reinterpret_cast<int>(_hwnd));
   _send(hwndToSound);
+
+  _send(Command(this->id(), ID::WINDOW_FACADE, INITIALIZE));
+  _send(Command(this->id(), ID::LOGIC, INITIALIZE));
 }
 
 void WindowFacade::pp_sendPause() {

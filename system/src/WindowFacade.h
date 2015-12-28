@@ -20,8 +20,9 @@ namespace window_facade {
   public:
     ~WindowFacade();
     command_manager::ID id();
+    bool initialize() override final;
+    void processTick() override final;
     void stop() override final;
-    void start() override final;
     void pause() override final;
     void resume() override final;
 
@@ -39,7 +40,7 @@ namespace window_facade {
     void _sendDestroyAll();
 
   private:
-    void _sendHwnd();
+    void _sendInitialize();
     void _send(command_manager::Command& c);
     bool _initialize();
     bool _additionalInitialize();

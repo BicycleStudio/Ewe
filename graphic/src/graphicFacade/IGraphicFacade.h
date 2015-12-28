@@ -13,9 +13,10 @@ namespace graphic {
     virtual void _shutdown() = 0;
     virtual bool _addModel(const char*) = 0;
 
-    bool _initialized;
     int _sizeX;
     int _sizeY;
+
+    bool _initialized;
   };
 
 }

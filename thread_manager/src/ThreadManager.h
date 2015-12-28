@@ -25,13 +25,16 @@ namespace thread_manager {
   public:
     ThreadManager();
 
+    bool processTick();
     void add(ThreadSubject *);
     void start();
+    bool startMono();
     void stop();
     void pause();
     void resume();
 
     void listen();
+    void listenMono();
   };
 
 }

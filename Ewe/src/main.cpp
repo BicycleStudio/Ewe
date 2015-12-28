@@ -23,8 +23,8 @@ int main ( ) {
   tm.add(&sound);
   tm.add(window);
 
-  tm.start();
+  tm.startMono(); //tm.start();
+  tm.listenMono(); //tm.listen();
 
-  tm.listen ( );
   return 0;
 }
