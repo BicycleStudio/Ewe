@@ -23,8 +23,10 @@ int main ( ) {
   tm.add(&sound);
   tm.add(window);
 
-  tm.startMono(); //tm.start();
-  tm.listenMono(); //tm.listen();
+  if(tm.startMono()) { 
+    // TODO: Init smthing
+    tm.listenMono(); 
+  }
 
   return 0;
 }

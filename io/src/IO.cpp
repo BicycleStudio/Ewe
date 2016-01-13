@@ -9,12 +9,11 @@ static const int ioSleep = 100;
 
 command_manager::ID IO::id() {
   return command_manager::ID::IO;
-  _sleepThread = ioSleep;
 }
 
 IO::IO() { 
   _initialized = false;
-
+  _sleepThread = ioSleep;
   log = new utils::Logger(typeid(*this).name());
 }
 
