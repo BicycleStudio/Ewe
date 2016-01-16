@@ -10,6 +10,8 @@ static const int graphicSleep = 100;
 
 command_manager::ID graphic::Graphic::id() {
   return command_manager::ID::GRAPHIC;
+  _initialized = false;
+  _sleepThread = graphicSleep;
 }
 
 Graphic::Graphic ( ) {
@@ -62,19 +64,12 @@ void Graphic::_processCommand (command_manager::Command& c) {
   return;
 }
 
-void Graphic::start() {
-  log->info("thread was started");
-
-  while (!this->_willStop) {
-    auto a = std::chrono::milliseconds(graphicSleep);
-    std::this_thread::sleep_for (a);
-
-    if (_initialized && !_paused) {
-      _beginScene();
-      _drawContent();
-      _endScene();
-    }
-
-    _processCommands ( );
+void Graphic::processTick() {
+  if (_initialized && !_paused) {
+    _beginScene();
+    _drawContent();
+    _endScene();
   }
+
+  _processCommands ( );
 }

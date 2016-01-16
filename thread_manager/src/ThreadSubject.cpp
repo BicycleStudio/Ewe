@@ -1,6 +1,8 @@
 #include "ThreadSubject.h"
+#include <thread>
 
-static const int threadManagerSleep = 100;
+using std::chrono::milliseconds;
+using std::this_thread::sleep_for;
 
 using std::shared_ptr;
 using std::make_shared;
@@ -16,6 +18,7 @@ ThreadSubject::ThreadSubject() {
   this->_commands = make_shared<queue<Command>>();
   this->_willStop = false;
   this->_paused = false;
+  this->_sleepThread = 50;
 
   static shared_ptr<queue<Command>> _commandsAfterInit = make_shared<queue<Command>>();
   static bool _threadInit = false;
@@ -66,4 +69,18 @@ void ThreadSubjectWithKill::_sendKill() {
     this->id(), ID::WINDOW_FACADE,
     CommandType::KILL);
   _commandManager->push(commandKill);
+}
+
+bool ThreadSubject::initialize() {
+  return true;
+}
+
+void ThreadSubject::start() {
+  if(!initialize()) return;
+  while(!this->_willStop) {
+    auto a = std::chrono::milliseconds(_sleepThread);
+    std::this_thread::sleep_for(a);
+
+    processTick();
+  }
 }

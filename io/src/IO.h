@@ -18,10 +18,10 @@ namespace io {
     IO();
     ~IO();
 
-    void stop();
-    void start();
-    void pause();
-    void resume();
+    void processTick() override final;
+    void stop() override final;
+    void pause() override final;
+    void resume() override final;
   };
 
 }

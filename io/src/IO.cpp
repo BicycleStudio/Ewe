@@ -13,7 +13,7 @@ command_manager::ID IO::id() {
 
 IO::IO() { 
   _initialized = false;
-
+  _sleepThread = ioSleep;
   log = new utils::Logger(typeid(*this).name());
 }
 
@@ -21,28 +21,20 @@ IO::~IO() {
   delete log;
 }
 
-void IO::start() {
-  log->info("IO thread was started");
-
-  while (!this->_willStop) {
-    auto a = std::chrono::milliseconds(ioSleep);
-    std::this_thread::sleep_for(a);
-
-    _processCommands();
+void IO::processTick() {
+  _processCommands();
     
-    if (_paused || !_initialized) 
-      continue;
+  if (_paused || !_initialized) return;
 
-    _update();
+  _update();
 
-    /*
-    How To use system:
-    if (_pressed(IO_KEY_W)) 
-      cout << "W pressed!\n";
-    if (_pressed(IO_KEY_A)) 
-      cout << "A pressed!\n";
-      */
-  }
+  /*
+  How To use system:
+  if (_pressed(IO_KEY_W)) 
+    cout << "W pressed!\n";
+  if (_pressed(IO_KEY_A)) 
+    cout << "A pressed!\n";
+    */
 }
 
 void IO::stop() {

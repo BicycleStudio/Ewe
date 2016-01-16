@@ -17,8 +17,8 @@ namespace sound {
     Sound();
     ~Sound();
 
+    void processTick() override final;
     void stop() override final;
-    void start() override final;
     void pause() override final;
     void resume() override final;
   };

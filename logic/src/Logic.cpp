@@ -12,6 +12,7 @@ command_manager::ID Logic::id() {
 
 Logic::Logic() {
   log = new utils::Logger(typeid(*this).name());
+  _sleepThread = logicSleep;
 }
 
 Logic::~Logic() {
@@ -35,15 +36,10 @@ void Logic::stop() {
   this->_willStop = true;
 }
 
-void Logic::start() {
-  log->info("Logic thread was started");
+void Logic::processTick() {
+  if(_paused) return;
 
-  while (!this->_willStop) {
-    auto a = std::chrono::milliseconds(logicSleep);
-    std::this_thread::sleep_for (a);
-
-    _processCommands ();
-  }
+  _processCommands ();
 }
 
 void Logic::pause() {

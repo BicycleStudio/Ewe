@@ -8,20 +8,20 @@
 
 namespace logic {
 
-class Logic : public thread_manager::ThreadSubject {
-  utils::Logger* log;
+  class Logic : public thread_manager::ThreadSubject {
+    utils::Logger* log;
 
-  void _processCommand (command_manager::Command& c);
-public:
-  command_manager::ID id();
-  Logic();
-  ~Logic();
+    void _processCommand (command_manager::Command& c);
+  public:
+    command_manager::ID id();
+    Logic();
+    ~Logic();
 
-  void stop();
-  void start();
-  void pause();
-  void resume();
-};
+    void processTick() override final;
+    void stop() override final;
+    void pause() override final;
+    void resume() override final;
+  };
 
 }
 
